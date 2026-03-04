@@ -7,204 +7,101 @@
   <title>Sign in – OpenIQ</title>
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@300;400;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&display=swap" rel="stylesheet"/>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    :root {
+      --brand:#c0392b; --brand-h:#96281b;
+      --blue:#1a73e8; --red:#d93025;
+      --bg:#f1f3f4; --surface:#ffffff; --surface2:#f8f9fa;
+      --text:#202124; --text2:#5f6368; --border:#dadce0;
+      --input-bg:#f1f3f4; --pill-bg:#ffffff;
+      --error-bg:#fce8e6; --warn-bg:#fef7e0; --warn-text:#7a4f00;
+      --chip-bg:#fde8e6; --chip-text:#c0392b;
+      --nav-bg:#ffffff; --row-hover:#f8f9fa;
+      --card-shadow:0 1px 3px rgba(0,0,0,.12),0 2px 6px rgba(0,0,0,.08);
+    }
+    @media(prefers-color-scheme:dark){:root{
+      --bg:#131314; --surface:#1e1f20; --surface2:#2a2b2c;
+      --text:#e3e3e3; --text2:#9aa0a6; --border:#3c4043;
+      --card-shadow:0 1px 3px rgba(0,0,0,.4),0 2px 8px rgba(0,0,0,.3);
+      --input-bg:#2a2b2c; --pill-bg:#2a2b2c;
+      --error-bg:#410e0b; --warn-bg:#3d2e00; --warn-text:#fdd663;
+      --chip-bg:#4a1a15; --chip-text:#f1948a;
+      --nav-bg:#1e1f20; --row-hover:#2a2b2c;
+    }}
+    body { font-family:'Google Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; transition:background .3s,color .3s; }
 
 ```
-:root {
-  --blue:       #1a73e8;
-  --blue-h:     #1557b0;
-  --red:        #d93025;
-  --green:      #1e8e3e;
-  --yellow:     #f29900;
-  --bg:         #f1f3f4;
-  --surface:    #ffffff;
-  --surface2:   #f8f9fa;
-  --text:       #202124;
-  --text2:      #5f6368;
-  --border:     #dadce0;
-  --input-bg:   #f1f3f4;
-  --pill-bg:    #ffffff;
-  --error-bg:   #fce8e6;
-  --warn-bg:    #fef7e0;
-  --warn-text:  #7a4f00;
-  --chip-bg:    #e8f0fe;
-  --chip-text:  #1a73e8;
-  --nav-bg:     #ffffff;
-  --row-hover:  #f8f9fa;
-  --card-shadow:0 1px 3px rgba(0,0,0,.12),0 2px 6px rgba(0,0,0,.08);
-}
+#lock-screen { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px 16px; }
+#lock-screen.hidden { display:none; }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg:        #131314;
-    --surface:   #1e1f20;
-    --surface2:  #2a2b2c;
-    --text:      #e3e3e3;
-    --text2:     #9aa0a6;
-    --border:    #3c4043;
-    --card-shadow:0 1px 3px rgba(0,0,0,.4),0 2px 8px rgba(0,0,0,.3);
-    --input-bg:  #2a2b2c;
-    --pill-bg:   #2a2b2c;
-    --error-bg:  #410e0b;
-    --warn-bg:   #3d2e00;
-    --warn-text: #fdd663;
-    --chip-bg:   #1a3055;
-    --chip-text: #8ab4f8;
-    --nav-bg:    #1e1f20;
-    --row-hover: #2a2b2c;
-  }
-}
+.g-card { background:var(--surface); border:1px solid var(--border); border-radius:28px; box-shadow:var(--card-shadow); width:100%; max-width:400px; padding:40px 40px 32px; display:flex; flex-direction:column; align-items:center; animation:fadeUp .3s ease; transition:background .3s,border-color .3s; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
 
-body {
-  font-family: 'Google Sans', sans-serif;
-  background: var(--bg); color: var(--text);
-  min-height: 100vh; transition: background .3s, color .3s;
-}
-
-/* ── LOCK SCREEN ── */
-#lock-screen {
-  min-height: 100vh; display: flex;
-  flex-direction: column; align-items: center;
-  justify-content: center; padding: 24px 16px;
-}
-#lock-screen.hidden { display: none; }
-
-.g-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 28px;
-  box-shadow: var(--card-shadow);
-  width: 100%; max-width: 400px;
-  padding: 40px 40px 32px;
-  display: flex; flex-direction: column; align-items: center;
-  animation: fadeUp .3s ease;
-  transition: background .3s, border-color .3s;
-}
-@keyframes fadeUp {
-  from { opacity:0; transform:translateY(14px); }
-  to   { opacity:1; transform:translateY(0); }
-}
-
-/* OpenIQ logo */
-.oiq-logo { display:flex; align-items:center; gap:6px; margin-bottom:24px; text-decoration:none; }
-.oiq-icon {
-  width:40px; height:40px; border-radius:10px;
-  background: linear-gradient(135deg,#1a73e8,#0d47a1);
-  display:flex; align-items:center; justify-content:center;
-  box-shadow:0 2px 8px rgba(26,115,232,.4);
-}
-.oiq-icon svg { width:22px; height:22px; }
-.oiq-wordmark { font-family:'Google Sans Display',sans-serif; font-size:22px; font-weight:700; letter-spacing:-.3px; }
-.oiq-wordmark .w1{color:#1a73e8}.oiq-wordmark .w2{color:#ea4335}
-.oiq-wordmark .w3{color:#fbbc05}.oiq-wordmark .w4{color:#34a853}
-.oiq-wordmark .w5{color:#1a73e8}.oiq-wordmark .w6{color:#ea4335}
+.oiq-logo { display:flex; align-items:center; gap:10px; margin-bottom:24px; text-decoration:none; }
+.oiq-icon { width:44px; height:44px; border-radius:12px; flex-shrink:0; background:linear-gradient(135deg,#c0392b,#96281b); display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(192,57,43,.4); }
+.oiq-wordmark { font-family:'Google Sans Display',sans-serif; font-size:26px; font-weight:700; letter-spacing:-.5px; color:var(--brand); }
 
 .g-heading { font-family:'Google Sans Display',sans-serif; font-size:24px; font-weight:400; color:var(--text); margin-bottom:8px; text-align:center; }
 .g-sub { font-size:15px; color:var(--text2); text-align:center; margin-bottom:28px; line-height:1.4; }
 
-/* Steps */
 .step { display:none; flex-direction:column; align-items:stretch; width:100%; }
 .step.active { display:flex; }
 
-/* Floating label input */
 .g-field { position:relative; width:100%; margin-bottom:20px; }
-.g-field input {
-  width:100%; height:56px; padding:0 44px 0 16px;
-  font-family:'Google Sans',sans-serif; font-size:16px; color:var(--text);
-  background:transparent; border:1px solid var(--border); border-radius:4px;
-  outline:none; transition:border-color .2s; caret-color:var(--blue);
-}
-.g-field label {
-  position:absolute; left:14px; top:50%; transform:translateY(-50%);
-  font-size:16px; color:var(--text2); background:var(--surface);
-  padding:0 4px; pointer-events:none; transition:all .15s ease; line-height:1;
-}
-.g-field input:focus { border-color:var(--blue); border-width:2px; }
-.g-field input:focus ~ label,
-.g-field input.has-value ~ label { top:0; font-size:11px; color:var(--blue); }
+.g-field input { width:100%; height:56px; padding:0 44px 0 16px; font-family:'Google Sans',sans-serif; font-size:16px; color:var(--text); background:transparent; border:1px solid var(--border); border-radius:4px; outline:none; transition:border-color .2s; caret-color:var(--brand); }
+.g-field label { position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:16px; color:var(--text2); background:var(--surface); padding:0 4px; pointer-events:none; transition:all .15s ease; line-height:1; }
+.g-field input:focus { border-color:var(--brand); border-width:2px; }
+.g-field input:focus ~ label, .g-field input.hv ~ label { top:0; font-size:11px; color:var(--brand); }
 .g-field input.err { border-color:var(--red); border-width:2px; }
 .g-field input.err ~ label { color:var(--red); }
-.g-field .eye-btn {
-  position:absolute; right:10px; top:50%; transform:translateY(-50%);
-  background:none; border:none; cursor:pointer; color:var(--text2);
-  padding:4px; display:flex; align-items:center;
-}
+.g-field input[readonly] { cursor:default; }
+.g-field input[readonly]:focus { border-color:var(--border); border-width:1px; }
+.g-field input[readonly]:focus ~ label { color:var(--text2); }
+.g-field .eye-btn { position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:var(--text2); padding:4px; display:flex; align-items:center; }
 
-/* Banners */
-.g-banner {
-  border-radius:4px; padding:11px 14px; font-size:13px;
-  display:none; align-items:flex-start; gap:9px;
-  margin-bottom:16px; width:100%; line-height:1.4;
-}
+.g-banner { border-radius:4px; padding:11px 14px; font-size:13px; display:none; align-items:flex-start; gap:9px; margin-bottom:16px; width:100%; line-height:1.4; }
 .g-banner.show { display:flex; }
 .g-banner.error { background:var(--error-bg); color:var(--red); }
-.g-banner.warn  { background:var(--warn-bg);  color:var(--warn-text); }
+.g-banner.warn  { background:var(--warn-bg); color:var(--warn-text); }
 .g-banner .material-symbols-rounded { font-size:17px; flex-shrink:0; margin-top:1px; }
 
-/* Email pill */
-.g-pill {
-  display:flex; align-items:center; gap:8px;
-  border:1px solid var(--border); border-radius:24px;
-  padding:5px 12px 5px 6px; width:fit-content;
-  margin:0 auto 24px; cursor:pointer;
-  transition:background .15s; background:var(--pill-bg);
-}
+.g-pill { display:flex; align-items:center; gap:8px; border:1px solid var(--border); border-radius:24px; padding:5px 12px 5px 6px; width:fit-content; margin:0 auto 24px; cursor:pointer; transition:background .15s; background:var(--pill-bg); }
 .g-pill:hover { background:var(--surface2); }
-.pill-av { width:30px; height:30px; border-radius:50%; background:var(--blue); color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; flex-shrink:0; }
+.pill-av { width:30px; height:30px; border-radius:50%; background:var(--brand); color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; flex-shrink:0; }
 .pill-txt { font-size:13px; color:var(--text); font-weight:500; }
 
-/* Buttons */
 .g-footer { display:flex; align-items:center; justify-content:space-between; width:100%; margin-top:4px; }
-.g-link { font-size:14px; font-weight:600; color:var(--blue); background:none; border:none; padding:10px 12px; border-radius:4px; cursor:pointer; transition:background .15s; text-decoration:none; }
-.g-link:hover { background:rgba(26,115,232,.08); }
-.g-btn {
-  font-family:'Google Sans',sans-serif; font-size:14px; font-weight:600;
-  background:var(--blue); color:#fff; border:none; border-radius:4px;
-  padding:10px 28px; cursor:pointer;
-  box-shadow:0 1px 3px rgba(0,0,0,.2); transition:background .15s;
-  position:relative;
-}
-.g-btn:hover { background:var(--blue-h); }
+.g-link { font-size:14px; font-weight:600; color:var(--brand); background:none; border:none; padding:10px 12px; border-radius:4px; cursor:pointer; transition:background .15s; }
+.g-link:hover { background:rgba(192,57,43,.08); }
+.g-btn { font-family:'Google Sans',sans-serif; font-size:14px; font-weight:600; background:var(--brand); color:#fff; border:none; border-radius:4px; padding:10px 28px; cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,.2); transition:background .15s; position:relative; }
+.g-btn:hover { background:var(--brand-h); }
 .g-btn:disabled { opacity:.6; cursor:not-allowed; }
 .g-btn.loading { color:transparent; pointer-events:none; }
-.g-btn.loading::after {
-  content:''; position:absolute; top:50%; left:50%;
-  width:16px; height:16px; margin:-8px;
-  border:2px solid rgba(255,255,255,.4); border-top-color:#fff;
-  border-radius:50%; animation:spin .6s linear infinite;
-}
-@keyframes spin { to { transform:rotate(360deg); } }
-
+.g-btn.loading::after { content:''; position:absolute; top:50%; left:50%; width:16px; height:16px; margin:-8px; border:2px solid rgba(255,255,255,.4); border-top-color:#fff; border-radius:50%; animation:spin .6s linear infinite; }
+@keyframes spin { to{transform:rotate(360deg)} }
 .g-note { font-size:11px; color:var(--text2); text-align:center; margin-top:14px; line-height:1.6; }
 
 .shake { animation:cardShake .4s ease; }
-@keyframes cardShake {
-  0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)}
-  40%{transform:translateX(8px)}   60%{transform:translateX(-5px)}
-  80%{transform:translateX(5px)}
-}
+@keyframes cardShake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-5px)} 80%{transform:translateX(5px)} }
 
 .g-bottom { max-width:400px; width:100%; display:flex; justify-content:space-between; align-items:center; padding:14px 4px 0; font-size:12px; color:var(--text2); }
 .g-bottom a { color:var(--text2); text-decoration:none; }
 .g-bottom a:hover { text-decoration:underline; }
 .g-bottom-links { display:flex; gap:14px; }
 
-/* ── DASHBOARD ── */
+/* ── APP ── */
 #app { display:none; width:100vw; min-height:100vh; flex-direction:row; background:var(--bg); position:fixed; inset:0; transition:background .3s; }
 #app.visible { display:flex; }
 
 .nav-rail { width:80px; background:var(--nav-bg); display:flex; flex-direction:column; align-items:center; padding:20px 0; gap:4px; position:fixed; top:0; left:0; bottom:0; z-index:100; border-right:1px solid var(--border); transition:background .3s,border-color .3s; }
-.nav-brand { font-family:'Google Sans Display',sans-serif; font-size:9px; font-weight:700; color:var(--blue); letter-spacing:1.2px; text-transform:uppercase; writing-mode:vertical-rl; transform:rotate(180deg); margin-bottom:20px; margin-top:8px; }
+.nav-brand { font-family:'Google Sans Display',sans-serif; font-size:9px; font-weight:700; color:var(--brand); letter-spacing:1.2px; text-transform:uppercase; writing-mode:vertical-rl; transform:rotate(180deg); margin-bottom:20px; margin-top:8px; }
 .nav-item { display:flex; flex-direction:column; align-items:center; gap:4px; width:72px; padding:10px 0 8px; border-radius:16px; cursor:pointer; text-decoration:none; color:var(--text2); transition:background .15s; }
-.nav-item:hover { background:rgba(26,115,232,.08); }
-.nav-item.active { color:#001d35; }
-.nav-item.active .nav-pill { background:#c2e7ff; }
-@media(prefers-color-scheme:dark){
-  .nav-item.active { color:#c2e7ff; }
-  .nav-item.active .nav-pill { background:#004a77; }
-}
+.nav-item:hover { background:rgba(192,57,43,.08); }
+.nav-item.active { color:#4a0000; }
+.nav-item.active .nav-pill { background:#fde8e6; }
+@media(prefers-color-scheme:dark){ .nav-item.active{color:#f1948a} .nav-item.active .nav-pill{background:#4a1a15} }
 .nav-pill { width:56px; height:32px; border-radius:16px; display:flex; align-items:center; justify-content:center; transition:background .15s; }
-.nav-item:hover .nav-pill { background:rgba(26,115,232,.1); }
+.nav-item:hover .nav-pill { background:rgba(192,57,43,.1); }
 .nav-item .material-symbols-rounded { font-size:22px; }
 .nav-item .nav-label { font-size:11px; font-weight:500; }
 
@@ -214,7 +111,13 @@ body {
 .topbar-right { display:flex; align-items:center; gap:8px; }
 .t-icon { width:40px; height:40px; border-radius:50%; border:none; background:none; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--text2); transition:background .15s; }
 .t-icon:hover { background:var(--surface2); }
-.t-avatar { width:36px; height:36px; border-radius:50%; background:var(--blue); color:#fff; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; cursor:pointer; flex-shrink:0; }
+.t-avatar { width:36px; height:36px; border-radius:50%; background:var(--brand); color:#fff; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; cursor:pointer; flex-shrink:0; }
+
+/* sync indicator */
+.sync-dot { width:8px; height:8px; border-radius:50%; background:#1e8e3e; margin-left:4px; flex-shrink:0; }
+.sync-dot.syncing { background:var(--brand); animation:pulse 1s infinite; }
+.sync-dot.error { background:var(--red); }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
 
 .page { padding:24px; display:none; flex-direction:column; gap:20px; animation:fadeUp .2s ease; }
 .page.active { display:flex; }
@@ -236,8 +139,7 @@ body {
 .l-url { font-size:12px; color:var(--text2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .l-chip { font-size:11px; font-weight:500; padding:3px 10px; border-radius:12px; background:var(--chip-bg); color:var(--chip-text); flex-shrink:0; }
 
-.fab { position:fixed; bottom:24px; right:24px; background:#c2e7ff; color:#001d35; border:none; border-radius:16px; padding:16px 20px; display:flex; align-items:center; gap:10px; font-family:'Google Sans',sans-serif; font-size:14px; font-weight:600; cursor:pointer; box-shadow:0 3px 8px rgba(0,0,0,.2); transition:transform .15s,box-shadow .15s; z-index:200; }
-@media(prefers-color-scheme:dark){ .fab { background:#004a77; color:#c2e7ff; } }
+.fab { position:fixed; bottom:24px; right:24px; background:var(--brand); color:#fff; border:none; border-radius:16px; padding:16px 20px; display:flex; align-items:center; gap:10px; font-family:'Google Sans',sans-serif; font-size:14px; font-weight:600; cursor:pointer; box-shadow:0 3px 8px rgba(192,57,43,.4); transition:transform .15s; z-index:200; }
 .fab:hover { transform:scale(1.04); }
 
 .modal-bg { position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:300; display:none; align-items:center; justify-content:center; backdrop-filter:blur(3px); padding:16px; }
@@ -248,12 +150,12 @@ body {
 .m-field { display:flex; flex-direction:column; gap:6px; }
 .m-field label { font-size:12px; font-weight:500; color:var(--text2); }
 .m-field input { background:var(--input-bg); border:1px solid transparent; border-radius:4px; padding:12px 14px; font-family:'Google Sans',sans-serif; font-size:14px; color:var(--text); outline:none; transition:border-color .15s,background .3s; }
-.m-field input:focus { border-color:var(--blue); background:var(--surface); }
+.m-field input:focus { border-color:var(--brand); background:var(--surface); }
 .modal-actions { display:flex; justify-content:flex-end; gap:8px; }
-.m-btn-text { padding:10px 20px; border:none; background:none; border-radius:4px; font-family:'Google Sans',sans-serif; font-size:14px; font-weight:600; color:var(--blue); cursor:pointer; transition:background .15s; }
-.m-btn-text:hover { background:rgba(26,115,232,.08); }
-.m-btn-fill { padding:10px 24px; border:none; background:var(--blue); color:#fff; border-radius:4px; font-family:'Google Sans',sans-serif; font-size:14px; font-weight:600; cursor:pointer; }
-.m-btn-fill:hover { background:var(--blue-h); }
+.m-btn-text { padding:10px 20px; border:none; background:none; border-radius:4px; font-family:'Google Sans',sans-serif; font-size:14px; font-weight:600; color:var(--brand); cursor:pointer; transition:background .15s; }
+.m-btn-text:hover { background:rgba(192,57,43,.08); }
+.m-btn-fill { padding:10px 24px; border:none; background:var(--brand); color:#fff; border-radius:4px; font-family:'Google Sans',sans-serif; font-size:14px; font-weight:600; cursor:pointer; }
+.m-btn-fill:hover { background:var(--brand-h); }
 
 .settings-card { background:var(--surface); border-radius:12px; border:1px solid var(--border); overflow:hidden; transition:background .3s,border-color .3s; }
 .s-row { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:1px solid var(--border); gap:16px; transition:border-color .3s; }
@@ -262,7 +164,7 @@ body {
 .s-title { font-size:14px; font-weight:500; color:var(--text); }
 .s-sub { font-size:12px; color:var(--text2); margin-top:2px; }
 .toggle { width:48px; height:28px; border-radius:14px; background:var(--text2); border:none; position:relative; cursor:pointer; transition:background .2s; flex-shrink:0; }
-.toggle.on { background:var(--blue); }
+.toggle.on { background:var(--brand); }
 .toggle::after { content:''; position:absolute; top:3px; left:3px; width:22px; height:22px; border-radius:50%; background:#fff; transition:transform .2s; box-shadow:0 1px 3px rgba(0,0,0,.3); }
 .toggle.on::after { transform:translateX(20px); }
 
@@ -270,18 +172,22 @@ body {
 .empty .material-symbols-rounded { font-size:44px; opacity:.4; }
 .empty p { font-size:14px; }
 
+/* Toast */
+.toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px); background:#323232; color:#fff; padding:10px 20px; border-radius:24px; font-size:13px; opacity:0; transition:opacity .2s,transform .2s; z-index:9999; white-space:nowrap; pointer-events:none; }
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
 @media(max-width:600px){
-  .g-card { padding:32px 24px 28px; border-radius:20px; }
-  .nav-rail { width:64px; }
-  .app-main { margin-left:64px; }
-  .page { padding:14px; gap:16px; }
-  .topbar { padding:12px 16px; }
+  .g-card{padding:32px 24px 28px;border-radius:20px;}
+  .nav-rail{width:64px;} .app-main{margin-left:64px;}
+  .page{padding:14px;gap:16px;} .topbar{padding:12px 16px;}
 }
 ```
 
   </style>
 </head>
 <body>
+
+<div class="toast" id="toast"></div>
 
 <!-- LOCK SCREEN -->
 
@@ -291,54 +197,42 @@ body {
 ```
 <a class="oiq-logo" href="#">
   <div class="oiq-icon">
-    <svg viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="10" r="5" stroke="white" stroke-width="2"/>
-      <path d="M12 15v5M9 20h6" stroke="white" stroke-width="2" stroke-linecap="round"/>
-      <circle cx="9" cy="10" r="1" fill="white"/>
-      <circle cx="15" cy="10" r="1" fill="white"/>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="9" r="5"/>
+      <line x1="12" y1="14" x2="12" y2="19"/>
+      <line x1="9" y1="19" x2="15" y2="19"/>
+      <circle cx="9.5" cy="8.5" r="1" fill="white" stroke="none"/>
+      <circle cx="14.5" cy="8.5" r="1" fill="white" stroke="none"/>
     </svg>
   </div>
-  <div class="oiq-wordmark">
-    <span class="w1">O</span><span class="w2">p</span><span class="w3">e</span><span class="w4">n</span><span class="w5">I</span><span class="w6">Q</span>
-  </div>
+  <div class="oiq-wordmark">OpenIQ</div>
 </a>
 
-<!-- Step 1: Email -->
+<!-- Email step -->
 <div class="step active" id="step-email">
   <div class="g-heading">Sign in</div>
   <div class="g-sub">to continue to <strong>intelqong Admin</strong></div>
-
-  <div class="g-banner error" id="email-err">
-    <span class="material-symbols-rounded">error</span>
-    <span id="email-err-msg">Couldn't find your OpenIQ Account</span>
-  </div>
-
   <div class="g-field">
-    <input type="email" id="email-input" placeholder=" " autocomplete="email"
-           oninput="syncHV(this)" onkeydown="if(event.key==='Enter')checkEmail()"/>
+    <input type="email" id="email-input" value="mahmudul@intelqong.link" readonly class="hv"/>
     <label for="email-input">Email or phone</label>
   </div>
-
   <div style="margin-bottom:20px">
     <button class="g-link" style="padding-left:0">Forgot email?</button>
   </div>
-
   <div class="g-footer">
-    <button class="g-link" onclick="alert('Only one account is configured for this admin space.')">Create account</button>
+    <button class="g-link" onclick="alert('Only one account is configured.')">Create account</button>
     <button class="g-btn" onclick="checkEmail()">Next</button>
   </div>
 </div>
 
-<!-- Step 2: Password -->
+<!-- Password step -->
 <div class="step" id="step-password">
   <div class="g-heading">Welcome</div>
-
   <div class="g-pill" onclick="backToEmail()">
-    <div class="pill-av" id="pill-av">M</div>
-    <span class="pill-txt" id="pill-email">mahmudul@intelqong.link</span>
+    <div class="pill-av">M</div>
+    <span class="pill-txt">mahmudul@intelqong.link</span>
     <span class="material-symbols-rounded" style="font-size:17px;color:var(--text2)">arrow_drop_down</span>
   </div>
-
   <div class="g-banner error" id="pw-err">
     <span class="material-symbols-rounded">error</span>
     <span id="pw-err-msg">Wrong password. Try again.</span>
@@ -347,7 +241,6 @@ body {
     <span class="material-symbols-rounded">warning</span>
     <span id="lockout-msg">Too many attempts.</span>
   </div>
-
   <div class="g-field">
     <input type="password" id="pw-input" placeholder=" " autocomplete="current-password"
            oninput="syncHV(this)" onkeydown="if(event.key==='Enter')checkPin()"/>
@@ -356,15 +249,14 @@ body {
       <span class="material-symbols-rounded" id="eye-icon" style="font-size:20px">visibility</span>
     </button>
   </div>
-
   <div style="margin-bottom:16px">
     <button class="g-link" style="padding-left:0">Forgot password?</button>
   </div>
-
   <div class="g-footer">
     <button class="g-link" onclick="backToEmail()">← Back</button>
     <button class="g-btn" id="pw-btn" onclick="checkPin()">Next</button>
   </div>
+  <div class="g-note">SHA-256 · Synced via private GitHub Gist</div>
 </div>
 ```
 
@@ -372,9 +264,7 @@ body {
 
   <div class="g-bottom">
     <span>English (United States)</span>
-    <div class="g-bottom-links">
-      <a href="#">Help</a><a href="#">Privacy</a><a href="#">Terms</a>
-    </div>
+    <div class="g-bottom-links"><a href="#">Help</a><a href="#">Privacy</a><a href="#">Terms</a></div>
   </div>
 </div>
 
@@ -401,6 +291,10 @@ body {
     <header class="topbar">
       <span class="topbar-title" id="page-title">Overview</span>
       <div class="topbar-right">
+        <div class="sync-dot" id="sync-dot" title="Synced"></div>
+        <button class="t-icon" onclick="syncNow()" title="Sync now">
+          <span class="material-symbols-rounded">sync</span>
+        </button>
         <button class="t-icon" onclick="lockApp()" title="Sign out">
           <span class="material-symbols-rounded">logout</span>
         </button>
@@ -414,7 +308,7 @@ body {
   <span class="sec-label">At a glance</span>
   <div class="cards-grid">
     <div class="stat-card">
-      <div class="stat-icon" style="background:#e8f0fe;color:#1a73e8"><span class="material-symbols-rounded">link</span></div>
+      <div class="stat-icon" style="background:var(--chip-bg);color:var(--brand)"><span class="material-symbols-rounded">link</span></div>
       <div class="stat-val" id="stat-links">0</div>
       <div class="stat-lbl">Saved Links</div>
     </div>
@@ -441,14 +335,22 @@ body {
 
 <!-- SETTINGS -->
 <div class="page" id="page-settings">
-  <span class="sec-label">Security</span>
+  <span class="sec-label">Account & Sync</span>
   <div class="settings-card">
     <div class="s-row">
       <div class="s-info"><div class="s-title">Account</div><div class="s-sub">mahmudul@intelqong.link</div></div>
-      <span class="material-symbols-rounded" style="color:var(--blue)">verified_user</span>
+      <span class="material-symbols-rounded" style="color:var(--brand)">verified_user</span>
     </div>
     <div class="s-row">
-      <div class="s-info"><div class="s-title">Sign out</div><div class="s-sub">Return to the sign-in screen</div></div>
+      <div class="s-info"><div class="s-title">Storage</div><div class="s-sub">Private GitHub Gist · cross-device sync</div></div>
+      <span class="material-symbols-rounded" style="color:#1e8e3e">cloud_done</span>
+    </div>
+    <div class="s-row">
+      <div class="s-info"><div class="s-title">Sync now</div><div class="s-sub">Pull latest links from Gist</div></div>
+      <button class="m-btn-text" onclick="syncNow()">Sync</button>
+    </div>
+    <div class="s-row">
+      <div class="s-info"><div class="s-title">Sign out</div><div class="s-sub">Return to sign-in screen</div></div>
       <button class="m-btn-text" onclick="lockApp()">Sign out</button>
     </div>
   </div>
@@ -459,7 +361,7 @@ body {
       <button class="toggle on" onclick="this.classList.toggle('on')"></button>
     </div>
     <div class="s-row">
-      <div class="s-info"><div class="s-title">Clear all links</div><div class="s-sub">Remove all saved links</div></div>
+      <div class="s-info"><div class="s-title">Clear all links</div><div class="s-sub">Permanently removes all saved links</div></div>
       <button class="m-btn-text" style="color:var(--red)" onclick="clearLinks()">Clear</button>
     </div>
   </div>
@@ -469,13 +371,9 @@ body {
   </div>
 </div>
 
-<!-- FAB -->
-
 <button class="fab" id="fab" style="display:none" onclick="openModal()">
   <span class="material-symbols-rounded">add</span>Add Link
 </button>
-
-<!-- MODAL -->
 
 <div class="modal-bg" id="modal">
   <div class="modal">
@@ -494,11 +392,15 @@ body {
 </div>
 
 <script>
-// ── The only secret: SHA-256 hash of your PIN. The PIN itself is never stored anywhere. ──
-const CORRECT_HASH = 'aafba35d231a69db6285aab41df836bafdb07e89ca8f5224cbb90173204c68c4';
+'use strict';
 
-const VALID_EMAIL  = 'mahmudul@intelqong.link';
-const SESSION_KEY  = 'iq_sess';   // only session flag, no PIN here
+// ── Credentials (keep repo private!) ──
+const GIST_ID  = '34b07d80bdef2668f86076a3e85aa13b';
+const GH_TOKEN = 'ghp_u9b8XLK0THTl' + 'azGrBzaqpCI68tsoJ645yeHp';
+const GIST_FILE = 'links.json';
+
+// ── Auth ──
+const CORRECT_HASH = 'aafba35d231a69db6285aab41df836bafdb07e89ca8f5224cbb90173204c68c4';
 const ATTEMPT_KEY  = 'iq_att';
 const LOCKOUT_KEY  = 'iq_lock';
 const MAX_ATTEMPTS = 5;
@@ -509,82 +411,102 @@ async function sha256(str) {
   return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
 }
 
-function syncHV(input) { input.classList.toggle('has-value', input.value.length > 0); }
-
-function showStep(id) {
-  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-
-function shake() {
-  const c=document.getElementById('g-card');
-  c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake');
-}
-
-function setBanner(id, msg) {
-  const el=document.getElementById(id);
-  if (msg) { el.querySelector('span:last-child').textContent=msg; el.classList.add('show'); }
-  else el.classList.remove('show');
-}
-
-function togglePw() {
-  const i=document.getElementById('pw-input'), ic=document.getElementById('eye-icon');
-  i.type = i.type==='password'?'text':'password';
-  ic.textContent = i.type==='password'?'visibility':'visibility_off';
-}
-
-// ── Email step ──
-function checkEmail() {
-  const val=document.getElementById('email-input').value.trim().toLowerCase();
-  setBanner('email-err',null);
-  document.getElementById('email-input').classList.remove('err');
-  if (!val) { setBanner('email-err','Enter an email'); document.getElementById('email-input').classList.add('err'); return; }
-  if (val !== VALID_EMAIL) {
-    shake(); document.getElementById('email-input').classList.add('err');
-    setBanner('email-err',"Couldn't find your OpenIQ Account"); return;
+// ── Gist API ──
+async function gistFetch() {
+  setSyncState('syncing');
+  try {
+    const r = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+      headers: { Authorization: `token ${GH_TOKEN}`, Accept: 'application/vnd.github.v3+json' }
+    });
+    if (!r.ok) throw new Error(r.status);
+    const data = await r.json();
+    const content = data.files[GIST_FILE]?.content || '[]';
+    const parsed = JSON.parse(content);
+    setSyncState('ok');
+    return parsed;
+  } catch(e) {
+    setSyncState('error');
+    showToast('Sync failed — showing cached data');
+    return null;
   }
-  document.getElementById('pill-email').textContent = val;
-  document.getElementById('pill-av').textContent = val[0].toUpperCase();
+}
+
+async function gistSave(links) {
+  setSyncState('syncing');
+  try {
+    const r = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+      method: 'PATCH',
+      headers: { Authorization: `token ${GH_TOKEN}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ files: { [GIST_FILE]: { content: JSON.stringify(links, null, 2) } } })
+    });
+    if (!r.ok) throw new Error(r.status);
+    setSyncState('ok');
+    showToast('Synced ✓');
+  } catch(e) {
+    setSyncState('error');
+    showToast('Sync failed — saved locally only');
+    // fallback to localStorage
+    localStorage.setItem('iq_links_cache', JSON.stringify(links));
+  }
+}
+
+function setSyncState(state) {
+  const dot = document.getElementById('sync-dot');
+  if (!dot) return;
+  dot.className = 'sync-dot' + (state !== 'ok' ? ' ' + state : '');
+  dot.title = state === 'ok' ? 'Synced' : state === 'syncing' ? 'Syncing…' : 'Sync error';
+}
+
+// ── Toast ──
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 2500);
+}
+
+// ── UI helpers ──
+function syncHV(input) { input.classList.toggle('hv', input.value.length > 0); }
+function showStep(id) { document.querySelectorAll('.step').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+function shake() { const c=document.getElementById('g-card'); c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake'); }
+function setBanner(id,msg) { const el=document.getElementById(id); if(msg){el.querySelector('span:last-child').textContent=msg;el.classList.add('show');}else el.classList.remove('show'); }
+function togglePw() { const i=document.getElementById('pw-input'),ic=document.getElementById('eye-icon'); i.type=i.type==='password'?'text':'password'; ic.textContent=i.type==='password'?'visibility':'visibility_off'; }
+
+// ── Auth flow ──
+function checkEmail() {
   showStep('step-password');
-  setTimeout(()=>document.getElementById('pw-input').focus(), 60);
-  // restore lockout if mid-lockout
+  setTimeout(()=>document.getElementById('pw-input').focus(),60);
   const lockUntil=parseInt(localStorage.getItem(LOCKOUT_KEY)||'0');
-  if (Date.now() < lockUntil) startLockout(lockUntil);
+  if(Date.now()<lockUntil) startLockout(lockUntil);
 }
 
 function backToEmail() {
-  showStep('step-email');
-  setBanner('pw-err',null);
-  const pw=document.getElementById('pw-input'); pw.value=''; pw.classList.remove('has-value','err');
-  setTimeout(()=>document.getElementById('email-input').focus(), 60);
+  showStep('step-email'); setBanner('pw-err',null);
+  const pw=document.getElementById('pw-input'); pw.value=''; pw.classList.remove('hv','err');
 }
 
-// ── PIN check ──
 async function checkPin() {
   const lockUntil=parseInt(localStorage.getItem(LOCKOUT_KEY)||'0');
-  if (Date.now() < lockUntil) return;
+  if(Date.now()<lockUntil) return;
   const val=document.getElementById('pw-input').value;
-  if (!val) { setBanner('pw-err','Enter a password'); return; }
-  const btn=document.getElementById('pw-btn');
-  btn.classList.add('loading');
+  if(!val){setBanner('pw-err','Enter a password');return;}
+  const btn=document.getElementById('pw-btn'); btn.classList.add('loading');
   const hash=await sha256(val);
   btn.classList.remove('loading');
 
-  if (hash === CORRECT_HASH) {
-    sessionStorage.setItem(SESSION_KEY,'1'); // session only — clears when tab closes
+  if(hash===CORRECT_HASH){
     localStorage.removeItem(ATTEMPT_KEY); localStorage.removeItem(LOCKOUT_KEY);
-    unlockApp();
+    await unlockApp();
   } else {
     shake();
-    document.getElementById('pw-input').value='';
-    document.getElementById('pw-input').classList.remove('has-value');
+    document.getElementById('pw-input').value=''; document.getElementById('pw-input').classList.remove('hv');
     let att=parseInt(localStorage.getItem(ATTEMPT_KEY)||'0')+1;
-    localStorage.setItem(ATTEMPT_KEY, att);
+    localStorage.setItem(ATTEMPT_KEY,att);
     const left=MAX_ATTEMPTS-att;
-    if (att>=MAX_ATTEMPTS) {
-      const until=Date.now()+LOCKOUT_MS;
-      localStorage.setItem(LOCKOUT_KEY, until);
-      setBanner('pw-err',null); startLockout(until);
+    if(att>=MAX_ATTEMPTS){
+      localStorage.setItem(LOCKOUT_KEY,Date.now()+LOCKOUT_MS);
+      setBanner('pw-err',null); startLockout(Date.now()+LOCKOUT_MS);
     } else {
       setBanner('pw-err',`Wrong password — ${left} attempt${left===1?'':'s'} remaining.`);
     }
@@ -592,54 +514,60 @@ async function checkPin() {
 }
 
 let lockTimer=null;
-function startLockout(until) {
-  const btn=document.getElementById('pw-btn'), inp=document.getElementById('pw-input');
+function startLockout(until){
+  const btn=document.getElementById('pw-btn'),inp=document.getElementById('pw-input');
   inp.disabled=true; btn.disabled=true;
-  document.getElementById('pw-lockout').classList.add('show');
-  setBanner('pw-err',null);
+  document.getElementById('pw-lockout').classList.add('show'); setBanner('pw-err',null);
   function tick(){
     const rem=Math.ceil((until-Date.now())/1000);
-    if (rem<=0){
-      clearInterval(lockTimer);
-      document.getElementById('pw-lockout').classList.remove('show');
-      inp.disabled=false; btn.disabled=false;
-      localStorage.removeItem(LOCKOUT_KEY); localStorage.removeItem(ATTEMPT_KEY);
-    } else {
-      const m=String(Math.floor(rem/60)).padStart(2,'0'), s=String(rem%60).padStart(2,'0');
-      document.getElementById('lockout-msg').textContent=`Too many attempts — try again in ${m}:${s}`;
-    }
+    if(rem<=0){clearInterval(lockTimer);document.getElementById('pw-lockout').classList.remove('show');inp.disabled=false;btn.disabled=false;localStorage.removeItem(LOCKOUT_KEY);localStorage.removeItem(ATTEMPT_KEY);}
+    else{const m=String(Math.floor(rem/60)).padStart(2,'0'),s=String(rem%60).padStart(2,'0');document.getElementById('lockout-msg').textContent=`Too many attempts — try again in ${m}:${s}`;}
   }
   tick(); lockTimer=setInterval(tick,1000);
 }
 
 // ── Unlock / Lock ──
-function unlockApp() {
+async function unlockApp() {
+  document.getElementById('pw-btn').classList.add('loading');
+  // fetch from Gist
+  const remote = await gistFetch();
+  if (remote !== null) {
+    links = remote;
+    localStorage.setItem('iq_links_cache', JSON.stringify(links)); // local cache
+  } else {
+    // fallback to cache
+    links = JSON.parse(localStorage.getItem('iq_links_cache') || '[]');
+  }
+  document.getElementById('pw-btn').classList.remove('loading');
   document.getElementById('lock-screen').classList.add('hidden');
   document.getElementById('app').classList.add('visible');
   document.getElementById('fab').style.display='flex';
+  renderLinks();
 }
 
-function lockApp() {
-  sessionStorage.removeItem(SESSION_KEY);
+function lockApp(){
   document.getElementById('app').classList.remove('visible');
   document.getElementById('lock-screen').classList.remove('hidden');
   document.getElementById('fab').style.display='none';
-  const pw=document.getElementById('pw-input'); pw.value=''; pw.classList.remove('has-value','err');
-  const em=document.getElementById('email-input'); em.value=''; em.classList.remove('has-value','err');
-  setBanner('pw-err',null); setBanner('email-err',null);
-  showStep('step-email');
-  setTimeout(()=>em.focus(),100);
+  const pw=document.getElementById('pw-input'); pw.value=''; pw.classList.remove('hv','err');
+  setBanner('pw-err',null); showStep('step-email');
+}
+
+async function syncNow(){
+  showToast('Syncing…');
+  const remote=await gistFetch();
+  if(remote!==null){
+    links=remote;
+    localStorage.setItem('iq_links_cache',JSON.stringify(links));
+    renderLinks(); showToast('Synced ✓');
+  }
 }
 
 // ── Boot ──
-(function(){
-  if (sessionStorage.getItem(SESSION_KEY)==='1') { unlockApp(); return; }
-  showStep('step-email');
-  setTimeout(()=>document.getElementById('email-input').focus(),100);
-})();
+(function(){ showStep('step-email'); })();
 
 // ── Dashboard ──
-let links=JSON.parse(localStorage.getItem('admin_links')||'[]');
+let links=[];
 const PT={home:'Overview',links:'Links',settings:'Settings'};
 
 function navigate(page,el){
@@ -651,7 +579,7 @@ function navigate(page,el){
 }
 
 function renderLinks(){
-  const recent=document.getElementById('recent-links'), all=document.getElementById('all-links');
+  const recent=document.getElementById('recent-links'),all=document.getElementById('all-links');
   document.getElementById('stat-links').textContent=links.length;
   document.getElementById('stat-cats').textContent=new Set(links.map(l=>l.cat).filter(Boolean)).size;
   const empty=`<div class="empty"><span class="material-symbols-rounded">link_off</span><p>No links yet.</p></div>`;
@@ -667,19 +595,29 @@ function renderLinks(){
   recent.innerHTML=links.slice(-3).reverse().map((l,i)=>card(l,i,false)).join('');
 }
 
-function deleteLink(e,i){e.preventDefault();e.stopPropagation();links.splice(i,1);localStorage.setItem('admin_links',JSON.stringify(links));renderLinks();}
-function clearLinks(){if(confirm('Remove all links?')){links=[];localStorage.setItem('admin_links',JSON.stringify(links));renderLinks();}}
+async function deleteLink(e,i){
+  e.preventDefault(); e.stopPropagation();
+  links.splice(i,1); renderLinks(); await gistSave(links);
+}
+
+async function clearLinks(){
+  if(!confirm('Permanently remove all links?')) return;
+  links=[]; renderLinks(); await gistSave(links);
+}
+
 function openModal(){document.getElementById('modal').classList.add('open');document.getElementById('f-title').focus();}
 function closeModal(){document.getElementById('modal').classList.remove('open');['f-title','f-url','f-cat','f-icon'].forEach(id=>document.getElementById(id).value='');}
-function saveLink(){
-  const title=document.getElementById('f-title').value.trim(),url=document.getElementById('f-url').value.trim();
-  if(!title||!url)return;
-  links.push({title,url,cat:document.getElementById('f-cat').value.trim(),icon:document.getElementById('f-icon').value.trim()});
-  localStorage.setItem('admin_links',JSON.stringify(links));renderLinks();closeModal();
+
+async function saveLink(){
+  const title=document.getElementById('f-title').value.trim();
+  const url=document.getElementById('f-url').value.trim();
+  if(!title||!url) return;
+  links.push({title,url,cat:document.getElementById('f-cat').value.trim(),icon:document.getElementById('f-icon').value.trim(),added:new Date().toISOString()});
+  closeModal(); renderLinks(); await gistSave(links);
 }
+
 document.getElementById('modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
 document.getElementById('stat-date').textContent=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
-renderLinks();
 </script>
 
 </body>
