@@ -2,505 +2,427 @@
 
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin — intelqong.link</title>
-  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@400;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&display=swap" rel="stylesheet"/>
+  <title>Sign in – intelqong</title>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@300;400;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&display=swap" rel="stylesheet"/>
   <style>
-    :root {
-      --md-primary: #006874;
-      --md-on-primary: #ffffff;
-      --md-primary-container: #97f0ff;
-      --md-on-primary-container: #001f24;
-      --md-secondary: #4a6267;
-      --md-secondary-container: #cde7ec;
-      --md-on-secondary-container: #051f23;
-      --md-tertiary: #525e7d;
-      --md-tertiary-container: #dae2ff;
-      --md-surface: #f5fafb;
-      --md-surface-variant: #dbe4e6;
-      --md-on-surface: #171c1d;
-      --md-on-surface-variant: #3f4849;
-      --md-outline: #6f797a;
-      --md-outline-variant: #bfc8ca;
-      --md-background: #f5fafb;
-      --md-error: #ba1a1a;
-      --md-error-container: #ffdad6;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 ```
-  --elevation-1: 0 1px 2px rgba(0,0,0,.08), 0 1px 3px 1px rgba(0,0,0,.06);
-  --elevation-2: 0 1px 2px rgba(0,0,0,.1), 0 2px 6px 2px rgba(0,0,0,.08);
-  --elevation-3: 0 4px 8px 3px rgba(0,0,0,.08), 0 1px 3px rgba(0,0,0,.12);
-
-  --radius-xs: 4px;
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 28px;
-  --radius-full: 50px;
+:root {
+  --blue:   #1a73e8;
+  --blue-h: #1557b0;
+  --red:    #d93025;
+  --green:  #1e8e3e;
+  --yellow: #f29900;
+  --surface: #fff;
+  --bg:     #f1f3f4;
+  --text:   #202124;
+  --text2:  #5f6368;
+  --border: #dadce0;
+  --focus:  #1a73e8;
+  --error:  #d93025;
+  --radius: 4px;
+  --card-r: 28px;
 }
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   font-family: 'Google Sans', sans-serif;
-  background: var(--md-background);
-  color: var(--md-on-surface);
+  background: var(--bg);
   min-height: 100vh;
   display: flex;
-  overflow-x: hidden;
-}
-
-/* ── NAV RAIL ── */
-.nav-rail {
-  width: 80px;
-  background: var(--md-surface);
-  display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 20px 0;
-  gap: 4px;
-  position: fixed;
-  top: 0; left: 0; bottom: 0;
-  z-index: 100;
-  border-right: 1px solid var(--md-outline-variant);
-}
-
-.nav-rail .brand {
-  font-family: 'Google Sans Display', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--md-primary);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  margin-bottom: 24px;
-  margin-top: 8px;
-}
-
-.nav-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  width: 56px;
-  padding: 12px 0 10px;
-  border-radius: var(--radius-lg);
-  cursor: pointer;
-  transition: background .2s;
-  text-decoration: none;
-  color: var(--md-on-surface-variant);
-  position: relative;
-}
-
-.nav-item:hover { background: rgba(0,104,116,.08); }
-
-.nav-item.active {
-  color: var(--md-on-primary-container);
-}
-
-.nav-item.active .nav-indicator {
-  background: var(--md-primary-container);
-}
-
-.nav-indicator {
-  width: 56px;
-  height: 32px;
-  border-radius: var(--radius-full);
-  display: flex;
   align-items: center;
   justify-content: center;
-  transition: background .2s;
+  padding: 20px;
 }
 
-.nav-item:hover .nav-indicator { background: rgba(0,104,116,.12); }
-
-.nav-item span.label {
-  font-size: 11px;
-  font-weight: 500;
-}
-
-.nav-item .material-symbols-rounded { font-size: 22px; }
-
-/* ── MAIN CONTENT ── */
-.main {
-  margin-left: 80px;
-  flex: 1;
+/* ── LOCK SCREEN ── */
+#lock-screen {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-}
-
-/* ── TOP APP BAR ── */
-.topbar {
-  background: var(--md-surface);
-  padding: 16px 28px;
-  display: flex;
   align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--md-outline-variant);
-  position: sticky;
-  top: 0;
-  z-index: 90;
+  gap: 0;
+  animation: fadeUp .35s ease;
 }
+#lock-screen.hidden { display: none; }
 
-.topbar-title {
-  font-family: 'Google Sans Display', sans-serif;
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--md-on-surface);
-}
-
-.topbar-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.icon-btn {
-  width: 40px; height: 40px;
-  border-radius: var(--radius-full);
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  color: var(--md-on-surface-variant);
-  transition: background .2s;
-}
-.icon-btn:hover { background: rgba(0,0,0,.08); }
-
-.avatar {
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  background: var(--md-primary);
-  color: var(--md-on-primary);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 14px; font-weight: 700;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-/* ── PAGE BODY ── */
-.page {
-  padding: 28px;
-  flex: 1;
-  display: none;
-  flex-direction: column;
-  gap: 24px;
-  animation: fadeIn .25s ease;
-}
-.page.active { display: flex; }
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── SECTION LABEL ── */
-.section-label {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--md-on-surface-variant);
-  letter-spacing: .5px;
-  text-transform: uppercase;
-  margin-bottom: -12px;
-}
-
-/* ── CARDS GRID ── */
-.cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 16px;
-}
-
-/* ── STAT CARD ── */
-.stat-card {
-  background: var(--md-surface);
-  border-radius: var(--radius-xl);
-  padding: 20px;
-  box-shadow: var(--elevation-1);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  transition: box-shadow .2s, transform .2s;
-  cursor: default;
-}
-.stat-card:hover { box-shadow: var(--elevation-2); transform: translateY(-2px); }
-
-.stat-icon {
-  width: 48px; height: 48px;
-  border-radius: var(--radius-md);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 24px;
-}
-
-.stat-value {
-  font-family: 'Google Sans Display', sans-serif;
-  font-size: 32px;
-  font-weight: 700;
-  line-height: 1;
-  color: var(--md-on-surface);
-}
-
-.stat-label {
-  font-size: 13px;
-  color: var(--md-on-surface-variant);
-  font-weight: 500;
-}
-
-/* ── LINK CARD ── */
-.links-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.link-card {
-  background: var(--md-surface);
-  border-radius: var(--radius-lg);
-  padding: 16px 20px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  box-shadow: var(--elevation-1);
-  text-decoration: none;
-  color: inherit;
-  transition: box-shadow .2s, transform .2s, background .15s;
-  cursor: pointer;
-}
-.link-card:hover {
-  box-shadow: var(--elevation-2);
-  transform: translateX(4px);
-  background: color-mix(in srgb, var(--md-primary-container) 30%, var(--md-surface));
-}
-
-.link-favicon {
-  width: 40px; height: 40px;
-  border-radius: var(--radius-sm);
-  background: var(--md-primary-container);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px;
-  flex-shrink: 0;
-}
-
-.link-info { flex: 1; min-width: 0; }
-
-.link-title {
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--md-on-surface);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.link-url {
-  font-size: 12px;
-  color: var(--md-on-surface-variant);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.link-chip {
-  font-size: 11px;
-  font-weight: 500;
-  padding: 4px 10px;
-  border-radius: var(--radius-full);
-  background: var(--md-secondary-container);
-  color: var(--md-on-secondary-container);
-  flex-shrink: 0;
-}
-
-/* ── FAB ── */
-.fab {
-  position: fixed;
-  bottom: 28px;
-  right: 28px;
-  background: var(--md-primary-container);
-  color: var(--md-on-primary-container);
-  border: none;
-  border-radius: var(--radius-lg);
-  padding: 16px 20px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-family: 'Google Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: var(--elevation-3);
-  transition: box-shadow .2s, transform .2s;
-  z-index: 200;
-}
-.fab:hover { transform: scale(1.04); box-shadow: var(--elevation-3); }
-
-/* ── MODAL ── */
-.modal-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,.4);
-  z-index: 300;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(2px);
-}
-.modal-overlay.open { display: flex; }
-
-.modal {
-  background: var(--md-surface);
-  border-radius: var(--radius-xl);
-  padding: 28px;
+.g-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-r);
   width: 100%;
-  max-width: 440px;
+  max-width: 450px;
+  padding: 48px 48px 36px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  box-shadow: var(--elevation-3);
-  animation: scaleIn .2s ease;
-}
-@keyframes scaleIn {
-  from { transform: scale(.95); opacity: 0; }
-  to   { transform: scale(1);   opacity: 1; }
+  align-items: center;
+  gap: 0;
 }
 
-.modal-title {
+/* Google logo */
+.g-logo {
+  display: flex; gap: 2px; margin-bottom: 24px;
+}
+.g-logo span {
   font-family: 'Google Sans Display', sans-serif;
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 28px; font-weight: 700; line-height: 1;
+}
+.g-logo .g1{color:#4285f4}.g-logo .g2{color:#ea4335}
+.g-logo .g3{color:#fbbc05}.g-logo .g4{color:#4285f4}
+.g-logo .g5{color:#34a853}.g-logo .g6{color:#ea4335}
+
+.g-heading {
+  font-family: 'Google Sans Display', sans-serif;
+  font-size: 24px; font-weight: 400;
+  color: var(--text); margin-bottom: 10px; text-align: center;
 }
 
-.modal-fields { display: flex; flex-direction: column; gap: 12px; }
-
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+.g-sub {
+  font-size: 16px; color: var(--text2);
+  text-align: center; margin-bottom: 32px;
 }
 
-.field label {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--md-on-surface-variant);
-  text-transform: uppercase;
-  letter-spacing: .5px;
-}
+/* ── STEP: email ── */
+.step { display: none; flex-direction: column; align-items: stretch; width: 100%; gap: 0; }
+.step.active { display: flex; }
 
-.field input, .field select {
-  background: var(--md-surface-variant);
-  border: 2px solid transparent;
-  border-radius: var(--radius-sm);
-  padding: 12px 14px;
-  font-family: 'Google Sans', sans-serif;
-  font-size: 14px;
-  color: var(--md-on-surface);
-  outline: none;
-  transition: border-color .2s;
-}
-.field input:focus, .field select:focus {
-  border-color: var(--md-primary);
-}
-
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-}
-
-.btn-text {
-  padding: 10px 20px;
-  border: none;
-  background: transparent;
-  border-radius: var(--radius-full);
-  font-family: 'Google Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--md-primary);
-  cursor: pointer;
-  transition: background .2s;
-}
-.btn-text:hover { background: rgba(0,104,116,.1); }
-
-.btn-filled {
-  padding: 10px 24px;
-  border: none;
-  background: var(--md-primary);
-  color: var(--md-on-primary);
-  border-radius: var(--radius-full);
-  font-family: 'Google Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background .2s, transform .1s;
-}
-.btn-filled:hover { background: #00545e; }
-.btn-filled:active { transform: scale(.97); }
-
-/* ── EMPTY STATE ── */
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 60px 20px;
-  color: var(--md-on-surface-variant);
-  text-align: center;
-}
-.empty-state .material-symbols-rounded { font-size: 48px; opacity: .5; }
-.empty-state p { font-size: 15px; }
-
-/* ── SETTINGS PAGE ── */
-.settings-section {
-  background: var(--md-surface);
-  border-radius: var(--radius-xl);
-  overflow: hidden;
-  box-shadow: var(--elevation-1);
-}
-
-.settings-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 18px 24px;
-  border-bottom: 1px solid var(--md-outline-variant);
-  gap: 16px;
-}
-.settings-item:last-child { border-bottom: none; }
-
-.settings-item-info { flex: 1; }
-.settings-item-title { font-size: 15px; font-weight: 500; }
-.settings-item-sub { font-size: 13px; color: var(--md-on-surface-variant); margin-top: 2px; }
-
-.toggle {
-  width: 52px; height: 32px;
-  border-radius: var(--radius-full);
-  background: var(--md-outline);
+/* floating label input */
+.g-field {
   position: relative;
-  cursor: pointer;
-  transition: background .25s;
-  flex-shrink: 0;
-  border: none;
+  width: 100%;
+  margin-bottom: 24px;
 }
-.toggle.on { background: var(--md-primary); }
-.toggle::after {
-  content: '';
+
+.g-field input {
+  width: 100%;
+  padding: 17px 48px 17px 16px;
+  font-family: 'Google Sans', sans-serif;
+  font-size: 16px; color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  outline: none;
+  background: transparent;
+  transition: border-color .2s, box-shadow .2s;
+  caret-color: var(--focus);
+}
+
+.g-field input:focus {
+  border-color: var(--focus);
+  border-width: 2px;
+  box-shadow: none;
+}
+
+.g-field input.error {
+  border-color: var(--error);
+  border-width: 2px;
+}
+
+.g-field label {
   position: absolute;
-  top: 4px; left: 4px;
-  width: 24px; height: 24px;
-  border-radius: 50%;
-  background: white;
-  transition: transform .25s;
+  left: 15px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px; color: var(--text2);
+  background: var(--surface);
+  padding: 0 4px;
+  transition: all .15s ease;
+  pointer-events: none;
 }
+
+.g-field input:focus ~ label,
+.g-field input:not(:placeholder-shown) ~ label {
+  top: 0; font-size: 12px;
+  color: var(--focus);
+}
+
+.g-field input.error ~ label { color: var(--error); }
+
+.g-field .eye-btn {
+  position: absolute; right: 12px; top: 50%;
+  transform: translateY(-50%);
+  background: none; border: none; cursor: pointer;
+  color: var(--text2); padding: 4px;
+  display: flex; align-items: center;
+}
+
+.g-field-hint {
+  font-size: 12px; color: var(--text2);
+  margin-top: -18px; margin-bottom: 16px;
+  padding-left: 4px;
+}
+.g-field-hint.error-hint { color: var(--error); }
+
+/* email pill (step 2) */
+.g-email-pill {
+  display: flex; align-items: center; gap: 8px;
+  border: 1px solid var(--border); border-radius: 24px;
+  padding: 6px 14px 6px 8px;
+  width: fit-content;
+  margin: 0 auto 28px;
+  cursor: pointer;
+  transition: background .15s;
+}
+.g-email-pill:hover { background: #f8f9fa; }
+.g-email-pill .pill-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: #1a73e8; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; flex-shrink: 0;
+}
+.g-email-pill .pill-text { font-size: 14px; color: var(--text); font-weight: 500; }
+.g-email-pill .material-symbols-rounded { font-size: 18px; color: var(--text2); }
+
+/* footer links row */
+.g-footer {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  width: 100%; margin-top: 8px;
+}
+
+.g-link {
+  font-size: 14px; font-weight: 500;
+  color: var(--blue); text-decoration: none;
+  padding: 10px 12px; border-radius: var(--radius);
+  transition: background .15s; cursor: pointer; border: none; background: none;
+}
+.g-link:hover { background: rgba(26,115,232,.08); }
+
+.g-btn {
+  font-family: 'Google Sans', sans-serif;
+  font-size: 14px; font-weight: 600;
+  background: var(--blue); color: #fff;
+  border: none; border-radius: 4px;
+  padding: 10px 28px; cursor: pointer;
+  transition: background .15s, box-shadow .15s;
+  box-shadow: 0 1px 2px rgba(0,0,0,.2);
+}
+.g-btn:hover { background: var(--blue-h); box-shadow: 0 2px 6px rgba(0,0,0,.25); }
+.g-btn:active { box-shadow: none; }
+
+/* error banner */
+.g-error {
+  background: #fce8e6;
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  font-size: 14px; color: var(--error);
+  display: none; align-items: flex-start; gap: 10px;
+  margin-bottom: 16px; width: 100%;
+}
+.g-error.show { display: flex; }
+.g-error .material-symbols-rounded { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+
+/* lockout */
+.g-lockout {
+  background: #fef7e0; border-radius: var(--radius);
+  padding: 12px 16px; font-size: 14px; color: #7a4f00;
+  display: none; align-items: flex-start; gap: 10px;
+  margin-bottom: 16px; width: 100%;
+}
+.g-lockout.show { display: flex; }
+.g-lockout .material-symbols-rounded { font-size: 18px; flex-shrink: 0; margin-top: 1px; color: var(--yellow); }
+
+/* forgot / setup note */
+.g-note {
+  font-size: 12px; color: var(--text2);
+  text-align: center; margin-top: 16px;
+  line-height: 1.6;
+}
+
+/* ── FIRST TIME: setup steps ── */
+.setup-badge {
+  background: #e8f0fe; border-radius: 12px;
+  padding: 10px 16px; font-size: 13px; color: #1a73e8;
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 24px; width: 100%;
+}
+
+/* ── DIVIDER ── */
+.g-divider {
+  width: 100%; height: 1px;
+  background: var(--border); margin: 8px 0 24px;
+}
+
+/* ── BOTTOM NAV ── */
+.g-bottom {
+  max-width: 450px; width: 100%;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 8px 0;
+  font-size: 12px; color: var(--text2);
+}
+.g-bottom a { color: var(--text2); text-decoration: none; }
+.g-bottom a:hover { text-decoration: underline; }
+.g-bottom-links { display: flex; gap: 16px; }
+
+/* loading spinner on btn */
+.g-btn.loading { position: relative; color: transparent; pointer-events: none; }
+.g-btn.loading::after {
+  content: '';
+  position: absolute; top: 50%; left: 50%;
+  width: 16px; height: 16px; margin: -8px;
+  border: 2px solid rgba(255,255,255,.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin .6s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* shake animation for wrong password */
+.shake { animation: cardShake .4s ease; }
+@keyframes cardShake {
+  0%,100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+
+/* ══════════════════════════════
+   DASHBOARD
+══════════════════════════════ */
+#app {
+  display: none; width: 100vw; min-height: 100vh;
+  flex-direction: row; background: #f1f3f4;
+  position: fixed; inset: 0;
+}
+#app.visible { display: flex; }
+
+.nav-rail {
+  width: 80px; background: #fff;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 20px 0; gap: 4px;
+  position: fixed; top: 0; left: 0; bottom: 0;
+  z-index: 100; border-right: 1px solid #dadce0;
+}
+.nav-brand {
+  font-family: 'Google Sans Display', sans-serif;
+  font-size: 10px; font-weight: 700; color: #1a73e8;
+  letter-spacing: 1px; text-transform: uppercase;
+  writing-mode: vertical-rl; transform: rotate(180deg);
+  margin-bottom: 20px; margin-top: 8px;
+}
+.nav-item {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  width: 72px; padding: 10px 0 8px; border-radius: 16px;
+  cursor: pointer; text-decoration: none; color: #5f6368;
+  transition: background .15s;
+}
+.nav-item:hover { background: rgba(26,115,232,.08); }
+.nav-item.active { color: #001d35; }
+.nav-item.active .nav-pill { background: #c2e7ff; }
+.nav-pill {
+  width: 56px; height: 32px; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s;
+}
+.nav-item:hover .nav-pill { background: rgba(26,115,232,.1); }
+.nav-item .material-symbols-rounded { font-size: 22px; }
+.nav-item .nav-label { font-size: 11px; font-weight: 500; }
+
+.app-main { margin-left: 80px; flex: 1; display: flex; flex-direction: column; overflow-y: auto; }
+
+.topbar {
+  background: #fff; padding: 12px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid #dadce0; position: sticky; top: 0; z-index: 90;
+}
+.topbar-title { font-family: 'Google Sans Display', sans-serif; font-size: 22px; font-weight: 400; color: #202124; }
+.topbar-right { display: flex; align-items: center; gap: 8px; }
+.t-icon {
+  width: 40px; height: 40px; border-radius: 50%; border: none;
+  background: none; cursor: pointer; display: flex; align-items: center;
+  justify-content: center; color: #5f6368; transition: background .15s;
+}
+.t-icon:hover { background: #f1f3f4; }
+.t-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: #1a73e8; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+}
+
+.page { padding: 24px; display: none; flex-direction: column; gap: 20px; animation: fadeUp .2s ease; }
+.page.active { display: flex; }
+
+.sec-label { font-size: 11px; font-weight: 600; color: #5f6368; letter-spacing: .8px; text-transform: uppercase; }
+
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 12px; }
+
+.stat-card {
+  background: #fff; border-radius: 12px; padding: 20px;
+  border: 1px solid #dadce0; display: flex; flex-direction: column; gap: 10px;
+  transition: box-shadow .15s;
+}
+.stat-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+.stat-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+.stat-val { font-family: 'Google Sans Display', sans-serif; font-size: 28px; font-weight: 400; color: #202124; }
+.stat-lbl { font-size: 13px; color: #5f6368; }
+
+.links-list { display: flex; flex-direction: column; gap: 6px; }
+.link-row {
+  background: #fff; border-radius: 8px; border: 1px solid #dadce0;
+  padding: 14px 18px; display: flex; align-items: center; gap: 14px;
+  text-decoration: none; color: inherit; transition: box-shadow .15s, background .15s;
+}
+.link-row:hover { box-shadow: 0 1px 6px rgba(0,0,0,.1); background: #f8f9fa; }
+.l-fav { width: 36px; height: 36px; border-radius: 8px; background: #e8f0fe; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.l-info { flex: 1; min-width: 0; }
+.l-title { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.l-url { font-size: 12px; color: #5f6368; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.l-chip { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 12px; background: #e8f0fe; color: #1a73e8; flex-shrink: 0; }
+
+.fab {
+  position: fixed; bottom: 24px; right: 24px;
+  background: #c2e7ff; color: #001d35; border: none;
+  border-radius: 16px; padding: 16px 20px;
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Google Sans', sans-serif; font-size: 14px; font-weight: 600;
+  cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,.2);
+  transition: transform .15s, box-shadow .15s; z-index: 200;
+}
+.fab:hover { transform: scale(1.04); box-shadow: 0 4px 12px rgba(0,0,0,.25); }
+
+.modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 300; display: none; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
+.modal-bg.open { display: flex; }
+.modal { background: #fff; border-radius: 28px; padding: 28px; width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 18px; box-shadow: 0 8px 24px rgba(0,0,0,.2); animation: fadeUp .2s ease; }
+.modal-title { font-family: 'Google Sans Display', sans-serif; font-size: 20px; font-weight: 400; }
+.modal-fields { display: flex; flex-direction: column; gap: 16px; }
+.m-field { display: flex; flex-direction: column; gap: 6px; }
+.m-field label { font-size: 12px; font-weight: 500; color: #5f6368; }
+.m-field input { background: #f1f3f4; border: 1px solid transparent; border-radius: 4px; padding: 12px 14px; font-family: 'Google Sans', sans-serif; font-size: 14px; color: #202124; outline: none; transition: border-color .15s; }
+.m-field input:focus { border-color: #1a73e8; background: #fff; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 8px; }
+.m-btn-text { padding: 10px 20px; border: none; background: none; border-radius: 4px; font-family: 'Google Sans', sans-serif; font-size: 14px; font-weight: 600; color: #1a73e8; cursor: pointer; transition: background .15s; }
+.m-btn-text:hover { background: rgba(26,115,232,.08); }
+.m-btn-fill { padding: 10px 24px; border: none; background: #1a73e8; color: #fff; border-radius: 4px; font-family: 'Google Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; }
+.m-btn-fill:hover { background: #1557b0; }
+
+.empty { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 48px; color: #5f6368; text-align: center; }
+.empty .material-symbols-rounded { font-size: 44px; opacity: .4; }
+.empty p { font-size: 14px; }
+
+.settings-card { background: #fff; border-radius: 12px; border: 1px solid #dadce0; overflow: hidden; }
+.s-row { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid #dadce0; gap: 16px; }
+.s-row:last-child { border-bottom: none; }
+.s-info { flex: 1; }
+.s-title { font-size: 14px; font-weight: 500; }
+.s-sub { font-size: 12px; color: #5f6368; margin-top: 2px; }
+.toggle { width: 48px; height: 28px; border-radius: 14px; background: #5f6368; border: none; position: relative; cursor: pointer; transition: background .2s; flex-shrink: 0; }
+.toggle.on { background: #1a73e8; }
+.toggle::after { content: ''; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff; transition: transform .2s; }
 .toggle.on::after { transform: translateX(20px); }
 
-/* ── RESPONSIVE ── */
-@media (max-width: 640px) {
+@media(max-width:600px){
+  .g-card { padding: 36px 24px 28px; border-radius: 20px; }
   .nav-rail { width: 64px; }
-  .main { margin-left: 64px; }
-  .page { padding: 16px; }
-  .topbar { padding: 14px 16px; }
+  .app-main { margin-left: 64px; }
+  .page { padding: 14px; }
 }
 ```
 
@@ -508,287 +430,558 @@ body {
 </head>
 <body>
 
-<!-- NAV RAIL -->
+<!-- ══════════════════════════════════════
+     LOCK SCREEN  (Google-style login)
+══════════════════════════════════════ -->
 
-<nav class="nav-rail">
-  <div class="brand">Admin</div>
-
-  <a class="nav-item active" onclick="navigate('home', this)">
-    <div class="nav-indicator">
-      <span class="material-symbols-rounded">home</span>
-    </div>
-    <span class="label">Home</span>
-  </a>
-
-  <a class="nav-item" onclick="navigate('links', this)">
-    <div class="nav-indicator">
-      <span class="material-symbols-rounded">link</span>
-    </div>
-    <span class="label">Links</span>
-  </a>
-
-  <a class="nav-item" onclick="navigate('settings', this)">
-    <div class="nav-indicator">
-      <span class="material-symbols-rounded">settings</span>
-    </div>
-    <span class="label">Settings</span>
-  </a>
-</nav>
-
-<!-- MAIN -->
-
-<div class="main">
-
-  <!-- TOP BAR -->
-
-  <header class="topbar">
-    <span class="topbar-title" id="page-title">Overview</span>
-    <div class="topbar-actions">
-      <button class="icon-btn" title="Notifications">
-        <span class="material-symbols-rounded">notifications</span>
-      </button>
-      <div class="avatar" title="intelQong">iQ</div>
-    </div>
-  </header>
-
-  <!-- HOME PAGE -->
-
-  <div class="page active" id="page-home">
-    <p class="section-label">At a glance</p>
-    <div class="cards-grid">
-      <div class="stat-card">
-        <div class="stat-icon" style="background:var(--md-primary-container); color:var(--md-primary)">
-          <span class="material-symbols-rounded">link</span>
-        </div>
-        <div class="stat-value" id="stat-links">0</div>
-        <div class="stat-label">Saved Links</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon" style="background:var(--md-tertiary-container); color:var(--md-tertiary)">
-          <span class="material-symbols-rounded">category</span>
-        </div>
-        <div class="stat-value" id="stat-cats">0</div>
-        <div class="stat-label">Categories</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon" style="background:var(--md-secondary-container); color:var(--md-secondary)">
-          <span class="material-symbols-rounded">calendar_today</span>
-        </div>
-        <div class="stat-value" id="stat-date">—</div>
-        <div class="stat-label">Today</div>
-      </div>
-    </div>
+<div id="lock-screen">
+  <div class="g-card" id="g-card">
 
 ```
-<p class="section-label">Recent links</p>
-<div id="recent-links" class="links-list">
-  <div class="empty-state">
-    <span class="material-symbols-rounded">link_off</span>
-    <p>No links yet — add some from the Links tab!</p>
+<!-- Google logo -->
+<div class="g-logo">
+  <span class="g1">G</span><span class="g2">o</span><span class="g3">o</span>
+  <span class="g4">g</span><span class="g5">l</span><span class="g6">e</span>
+</div>
+
+<!-- ── STEP 1: Email ── -->
+<div class="step active" id="step-email">
+  <div class="g-heading">Sign in</div>
+  <div class="g-sub">to continue to <strong>intelqong Admin</strong></div>
+
+  <div class="g-error" id="email-error">
+    <span class="material-symbols-rounded">error</span>
+    <span id="email-error-msg">Couldn't find your intelqong Account</span>
+  </div>
+
+  <div class="g-field">
+    <input type="email" id="email-input" placeholder=" " autocomplete="email" onkeydown="if(event.key==='Enter')checkEmail()"/>
+    <label for="email-input">Email or phone</label>
+  </div>
+
+  <div style="width:100%;margin-bottom:24px">
+    <a class="g-link" href="#" style="padding-left:0;font-size:14px">Forgot email?</a>
+  </div>
+
+  <div class="g-footer">
+    <button class="g-link" onclick="showCreateAccount()">Create account</button>
+    <button class="g-btn" id="email-next-btn" onclick="checkEmail()">Next</button>
+  </div>
+</div>
+
+<!-- ── STEP 2: Password (PIN) ── -->
+<div class="step" id="step-password">
+  <div class="g-heading">Welcome</div>
+
+  <div class="g-email-pill" onclick="backToEmail()" id="email-pill">
+    <div class="pill-avatar" id="pill-initial">M</div>
+    <span class="pill-text" id="pill-email">mahmudul@intelqong.link</span>
+    <span class="material-symbols-rounded">arrow_drop_down</span>
+  </div>
+
+  <div class="g-error" id="pw-error">
+    <span class="material-symbols-rounded">error</span>
+    <span id="pw-error-msg">Wrong password. Try again or click Forgot password to reset it.</span>
+  </div>
+
+  <div class="g-lockout" id="pw-lockout">
+    <span class="material-symbols-rounded">warning</span>
+    <span id="lockout-msg">Too many attempts. Try again in 5:00</span>
+  </div>
+
+  <div class="g-field">
+    <input type="password" id="pw-input" placeholder=" " autocomplete="current-password" onkeydown="if(event.key==='Enter')checkPin()"/>
+    <label for="pw-input">Enter your password</label>
+    <button class="eye-btn" onclick="togglePw()" tabindex="-1">
+      <span class="material-symbols-rounded" id="eye-icon" style="font-size:20px">visibility</span>
+    </button>
+  </div>
+
+  <div style="width:100%;margin-bottom:20px">
+    <a class="g-link" href="#" style="padding-left:0;font-size:14px">Forgot password?</a>
+  </div>
+
+  <div class="g-footer">
+    <button class="g-link" onclick="backToEmail()">← Back</button>
+    <button class="g-btn" id="pw-next-btn" onclick="checkPin()">Next</button>
+  </div>
+
+  <div class="g-note">Your PIN is hashed with SHA-256 before being checked.</div>
+</div>
+
+<!-- ── STEP 3: First-time setup — create PIN ── -->
+<div class="step" id="step-setup1">
+  <div class="g-heading">Create your PIN</div>
+  <div class="g-sub">Choose a password for your admin space</div>
+
+  <div class="setup-badge">
+    <span class="material-symbols-rounded" style="font-size:18px;color:#1a73e8">info</span>
+    First time setup — you're creating a new PIN
+  </div>
+
+  <div class="g-field">
+    <input type="password" id="new-pin-input" placeholder=" " onkeydown="if(event.key==='Enter')goToConfirm()"/>
+    <label>New password</label>
+    <button class="eye-btn" onclick="toggleNewPin()" tabindex="-1">
+      <span class="material-symbols-rounded" style="font-size:20px">visibility</span>
+    </button>
+  </div>
+
+  <div class="g-field-hint">Use something you'll remember. It will be hashed — not stored in plain text.</div>
+
+  <div class="g-footer">
+    <div></div>
+    <button class="g-btn" onclick="goToConfirm()">Next</button>
+  </div>
+</div>
+
+<!-- ── STEP 4: Confirm PIN ── -->
+<div class="step" id="step-setup2">
+  <div class="g-heading">Confirm your PIN</div>
+  <div class="g-sub">Enter your new password one more time</div>
+
+  <div class="g-error" id="confirm-error">
+    <span class="material-symbols-rounded">error</span>
+    <span>Passwords don't match. Try again.</span>
+  </div>
+
+  <div class="g-field">
+    <input type="password" id="confirm-pin-input" placeholder=" " onkeydown="if(event.key==='Enter')confirmPin()"/>
+    <label>Confirm password</label>
+  </div>
+
+  <div class="g-footer">
+    <button class="g-link" onclick="showStep('step-setup1')">← Back</button>
+    <button class="g-btn" onclick="confirmPin()">Create</button>
   </div>
 </div>
 ```
 
   </div>
 
-  <!-- LINKS PAGE -->
+  <!-- bottom links -->
 
-  <div class="page" id="page-links">
-    <p class="section-label">All links</p>
-    <div id="all-links" class="links-list">
-      <div class="empty-state">
-        <span class="material-symbols-rounded">link_off</span>
-        <p>No links yet. Tap + Add Link to get started.</p>
-      </div>
+  <div class="g-bottom">
+    <div>English (United States)</div>
+    <div class="g-bottom-links">
+      <a href="#">Help</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
     </div>
   </div>
+</div>
 
-  <!-- SETTINGS PAGE -->
+<!-- ══════════════════════════════════════
+     DASHBOARD APP
+══════════════════════════════════════ -->
 
-  <div class="page" id="page-settings">
-    <p class="section-label">Preferences</p>
-    <div class="settings-section">
-      <div class="settings-item">
-        <div class="settings-item-info">
-          <div class="settings-item-title">admin.intelqong.link</div>
-          <div class="settings-item-sub">Your personal admin space</div>
-        </div>
-        <span class="material-symbols-rounded" style="color:var(--md-primary)">verified</span>
+<div id="app">
+  <nav class="nav-rail">
+    <div class="nav-brand">Admin</div>
+    <a class="nav-item active" onclick="navigate('home',this)">
+      <div class="nav-pill"><span class="material-symbols-rounded">home</span></div>
+      <span class="nav-label">Home</span>
+    </a>
+    <a class="nav-item" onclick="navigate('links',this)">
+      <div class="nav-pill"><span class="material-symbols-rounded">link</span></div>
+      <span class="nav-label">Links</span>
+    </a>
+    <a class="nav-item" onclick="navigate('settings',this)">
+      <div class="nav-pill"><span class="material-symbols-rounded">settings</span></div>
+      <span class="nav-label">Settings</span>
+    </a>
+  </nav>
+
+  <div class="app-main">
+    <header class="topbar">
+      <span class="topbar-title" id="page-title">Overview</span>
+      <div class="topbar-right">
+        <button class="t-icon" onclick="lockApp()" title="Sign out">
+          <span class="material-symbols-rounded">logout</span>
+        </button>
+        <div class="t-avatar">M</div>
       </div>
-      <div class="settings-item">
-        <div class="settings-item-info">
-          <div class="settings-item-title">Dark mode</div>
-          <div class="settings-item-sub">Coming soon</div>
-        </div>
-        <button class="toggle" onclick="this.classList.toggle('on')"></button>
-      </div>
-      <div class="settings-item">
-        <div class="settings-item-info">
-          <div class="settings-item-title">Show categories</div>
-          <div class="settings-item-sub">Display category chips on links</div>
-        </div>
-        <button class="toggle on" onclick="this.classList.toggle('on')"></button>
-      </div>
-      <div class="settings-item">
-        <div class="settings-item-info">
-          <div class="settings-item-title">Clear all links</div>
-          <div class="settings-item-sub">Remove all saved links from storage</div>
-        </div>
-        <button class="btn-text" onclick="clearLinks()" style="color:var(--md-error)">Clear</button>
-      </div>
+    </header>
+
+```
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <span class="sec-label">At a glance</span>
+  <div class="cards-grid">
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#e8f0fe;color:#1a73e8"><span class="material-symbols-rounded">link</span></div>
+      <div class="stat-val" id="stat-links">0</div>
+      <div class="stat-lbl">Saved Links</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#e6f4ea;color:#1e8e3e"><span class="material-symbols-rounded">category</span></div>
+      <div class="stat-val" id="stat-cats">0</div>
+      <div class="stat-lbl">Categories</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#fef7e0;color:#f29900"><span class="material-symbols-rounded">calendar_today</span></div>
+      <div class="stat-val" id="stat-date">—</div>
+      <div class="stat-lbl">Today</div>
     </div>
   </div>
+  <span class="sec-label">Recent</span>
+  <div id="recent-links" class="links-list"></div>
+</div>
 
-</div><!-- /main -->
+<!-- LINKS -->
+<div class="page" id="page-links">
+  <span class="sec-label">All links</span>
+  <div id="all-links" class="links-list"></div>
+</div>
+
+<!-- SETTINGS -->
+<div class="page" id="page-settings">
+  <span class="sec-label">Security</span>
+  <div class="settings-card">
+    <div class="s-row">
+      <div class="s-info"><div class="s-title">Account</div><div class="s-sub">mahmudul@intelqong.link</div></div>
+      <span class="material-symbols-rounded" style="color:#1a73e8">verified_user</span>
+    </div>
+    <div class="s-row">
+      <div class="s-info"><div class="s-title">Change password</div><div class="s-sub">Reset your admin PIN</div></div>
+      <button class="m-btn-text" onclick="resetPin()">Reset</button>
+    </div>
+    <div class="s-row">
+      <div class="s-info"><div class="s-title">Sign out</div><div class="s-sub">Return to sign-in screen</div></div>
+      <button class="m-btn-text" onclick="lockApp()">Sign out</button>
+    </div>
+  </div>
+  <span class="sec-label">Preferences</span>
+  <div class="settings-card">
+    <div class="s-row">
+      <div class="s-info"><div class="s-title">Show categories</div><div class="s-sub">Display category chips on links</div></div>
+      <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+    </div>
+    <div class="s-row">
+      <div class="s-info"><div class="s-title">Clear all links</div><div class="s-sub">Remove all saved links</div></div>
+      <button class="m-btn-text" style="color:#d93025" onclick="clearLinks()">Clear</button>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+</div>
 
 <!-- FAB -->
 
 <button class="fab" id="fab" onclick="openModal()">
-  <span class="material-symbols-rounded">add</span>
-  Add Link
+  <span class="material-symbols-rounded">add</span>Add Link
 </button>
 
 <!-- ADD LINK MODAL -->
 
-<div class="modal-overlay" id="modal">
+<div class="modal-bg" id="modal">
   <div class="modal">
-    <div class="modal-title">Add Link</div>
+    <div class="modal-title">Add a link</div>
     <div class="modal-fields">
-      <div class="field">
-        <label>Title</label>
-        <input type="text" id="f-title" placeholder="e.g. GitHub"/>
-      </div>
-      <div class="field">
-        <label>URL</label>
-        <input type="url" id="f-url" placeholder="https://"/>
-      </div>
-      <div class="field">
-        <label>Category</label>
-        <input type="text" id="f-cat" placeholder="e.g. Dev, Social, Tools"/>
-      </div>
-      <div class="field">
-        <label>Icon (emoji)</label>
-        <input type="text" id="f-icon" placeholder="🔗" maxlength="2"/>
-      </div>
+      <div class="m-field"><label>Title</label><input type="text" id="f-title" placeholder="e.g. GitHub"/></div>
+      <div class="m-field"><label>URL</label><input type="url" id="f-url" placeholder="https://"/></div>
+      <div class="m-field"><label>Category</label><input type="text" id="f-cat" placeholder="e.g. Dev, Social, Tools"/></div>
+      <div class="m-field"><label>Icon (emoji)</label><input type="text" id="f-icon" placeholder="🔗" maxlength="2"/></div>
     </div>
     <div class="modal-actions">
-      <button class="btn-text" onclick="closeModal()">Cancel</button>
-      <button class="btn-filled" onclick="saveLink()">Save</button>
+      <button class="m-btn-text" onclick="closeModal()">Cancel</button>
+      <button class="m-btn-fill" onclick="saveLink()">Save</button>
     </div>
   </div>
 </div>
 
 <script>
-  // ── STATE ──
-  let links = JSON.parse(localStorage.getItem('admin_links') || '[]');
+// ════════════════════════════════════════
+//  CONSTANTS
+// ════════════════════════════════════════
+const VALID_EMAIL  = 'mahmudul@intelqong.link';
+const PIN_KEY      = 'iq_pin_hash';
+const SESSION_KEY  = 'iq_session';
+const ATTEMPT_KEY  = 'iq_attempts';
+const LOCKOUT_KEY  = 'iq_lockout';
+const MAX_ATTEMPTS = 5;
+const LOCKOUT_MS   = 5 * 60 * 1000;
 
-  // ── NAVIGATION ──
-  const titles = { home: 'Overview', links: 'Links', settings: 'Settings' };
-  const fab = document.getElementById('fab');
+// ════════════════════════════════════════
+//  CRYPTO
+// ════════════════════════════════════════
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
 
-  function navigate(page, el) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    document.getElementById('page-' + page).classList.add('active');
-    el.classList.add('active');
-    document.getElementById('page-title').textContent = titles[page];
-    fab.style.display = (page === 'settings') ? 'none' : 'flex';
-  }
+// ════════════════════════════════════════
+//  UI HELPERS
+// ════════════════════════════════════════
+function showStep(id) {
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
 
-  // ── RENDER ──
-  function renderLinks() {
-    const recent = document.getElementById('recent-links');
-    const all    = document.getElementById('all-links');
-    const statLinks = document.getElementById('stat-links');
-    const statCats  = document.getElementById('stat-cats');
+function showEmailError(msg) {
+  const el = document.getElementById('email-error');
+  if(msg) { document.getElementById('email-error-msg').textContent = msg; el.classList.add('show'); document.getElementById('email-input').classList.add('error'); }
+  else { el.classList.remove('show'); document.getElementById('email-input').classList.remove('error'); }
+}
 
-    statLinks.textContent = links.length;
-    const cats = new Set(links.map(l => l.cat).filter(Boolean));
-    statCats.textContent = cats.size;
+function showPwError(msg) {
+  const el = document.getElementById('pw-error');
+  if(msg) { document.getElementById('pw-error-msg').textContent = msg; el.classList.add('show'); document.getElementById('pw-input').classList.add('error'); }
+  else { el.classList.remove('show'); document.getElementById('pw-input').classList.remove('error'); }
+}
 
-    if (links.length === 0) {
-      const empty = `<div class="empty-state">
-        <span class="material-symbols-rounded">link_off</span>
-        <p>No links yet — add some from the Links tab!</p>
-      </div>`;
-      recent.innerHTML = empty;
-      all.innerHTML = empty.replace('Links tab', '+ Add Link button');
-      return;
+function setLoading(btnId, on) {
+  document.getElementById(btnId).classList.toggle('loading', on);
+}
+
+function shakeCard() {
+  const c = document.getElementById('g-card');
+  c.classList.remove('shake');
+  void c.offsetWidth;
+  c.classList.add('shake');
+}
+
+function togglePw() {
+  const input = document.getElementById('pw-input');
+  const icon  = document.getElementById('eye-icon');
+  if(input.type==='password'){ input.type='text'; icon.textContent='visibility_off'; }
+  else { input.type='password'; icon.textContent='visibility'; }
+}
+
+function toggleNewPin() {
+  const input = document.getElementById('new-pin-input');
+  input.type = input.type==='password'?'text':'password';
+}
+
+// ════════════════════════════════════════
+//  EMAIL STEP
+// ════════════════════════════════════════
+function checkEmail() {
+  const val = document.getElementById('email-input').value.trim().toLowerCase();
+  showEmailError(null);
+  if(!val) { showEmailError('Enter an email'); return; }
+  if(val !== VALID_EMAIL) { shakeCard(); showEmailError("Couldn't find your intelqong Account"); return; }
+
+  // valid — go to password or setup
+  document.getElementById('pill-email').textContent = val;
+  document.getElementById('pill-initial').textContent = val[0].toUpperCase();
+
+  const hasPin = !!localStorage.getItem(PIN_KEY);
+  showStep(hasPin ? 'step-password' : 'step-setup1');
+  setTimeout(()=> document.getElementById(hasPin ? 'pw-input' : 'new-pin-input').focus(), 50);
+}
+
+function backToEmail() {
+  showStep('step-email');
+  showPwError(null);
+  document.getElementById('pw-input').value = '';
+  setTimeout(()=>document.getElementById('email-input').focus(),50);
+}
+
+function showCreateAccount() {
+  alert('Only one account is configured for this admin space.');
+}
+
+// ════════════════════════════════════════
+//  PASSWORD / PIN CHECK
+// ════════════════════════════════════════
+async function checkPin() {
+  // Lockout check
+  const lockUntil = parseInt(localStorage.getItem(LOCKOUT_KEY)||'0');
+  if(Date.now() < lockUntil) return;
+
+  const val = document.getElementById('pw-input').value;
+  if(!val) { showPwError('Enter a password'); return; }
+
+  setLoading('pw-next-btn', true);
+  const hash = await sha256(val);
+  setLoading('pw-next-btn', false);
+
+  if(hash === localStorage.getItem(PIN_KEY)) {
+    localStorage.setItem(SESSION_KEY, '1');
+    localStorage.removeItem(ATTEMPT_KEY);
+    localStorage.removeItem(LOCKOUT_KEY);
+    unlockApp();
+  } else {
+    shakeCard();
+    let att = parseInt(localStorage.getItem(ATTEMPT_KEY)||'0') + 1;
+    localStorage.setItem(ATTEMPT_KEY, att);
+    const left = MAX_ATTEMPTS - att;
+    if(att >= MAX_ATTEMPTS) {
+      const until = Date.now() + LOCKOUT_MS;
+      localStorage.setItem(LOCKOUT_KEY, until);
+      document.getElementById('pw-error').classList.remove('show');
+      startLockoutUI(until);
+    } else {
+      showPwError(`Wrong password. ${left} attempt${left===1?'':'s'} remaining.`);
     }
-
-    const html = links.map((l, i) => `
-      <a class="link-card" href="${l.url}" target="_blank" rel="noopener">
-        <div class="link-favicon">${l.icon || '🔗'}</div>
-        <div class="link-info">
-          <div class="link-title">${l.title}</div>
-          <div class="link-url">${l.url}</div>
-        </div>
-        ${l.cat ? `<span class="link-chip">${l.cat}</span>` : ''}
-        <button class="icon-btn" onclick="deleteLink(event,${i})" title="Remove">
-          <span class="material-symbols-rounded" style="font-size:18px">delete</span>
-        </button>
-      </a>`).join('');
-
-    all.innerHTML = html;
-    recent.innerHTML = links.slice(-3).reverse().map((l, i) => `
-      <a class="link-card" href="${l.url}" target="_blank" rel="noopener">
-        <div class="link-favicon">${l.icon || '🔗'}</div>
-        <div class="link-info">
-          <div class="link-title">${l.title}</div>
-          <div class="link-url">${l.url}</div>
-        </div>
-        ${l.cat ? `<span class="link-chip">${l.cat}</span>` : ''}
-      </a>`).join('');
+    document.getElementById('pw-input').value = '';
   }
+}
 
-  function deleteLink(e, i) {
-    e.preventDefault(); e.stopPropagation();
-    links.splice(i, 1);
-    localStorage.setItem('admin_links', JSON.stringify(links));
-    renderLinks();
-  }
+let lockTimer = null;
+function startLockoutUI(until) {
+  const el    = document.getElementById('pw-lockout');
+  const msg   = document.getElementById('lockout-msg');
+  const input = document.getElementById('pw-input');
+  const btn   = document.getElementById('pw-next-btn');
+  el.classList.add('show');
+  input.disabled = true; btn.disabled = true;
+  showPwError(null);
 
-  function clearLinks() {
-    if (confirm('Remove all saved links?')) {
-      links = [];
-      localStorage.setItem('admin_links', JSON.stringify(links));
-      renderLinks();
+  function tick(){
+    const rem = Math.ceil((until - Date.now()) / 1000);
+    if(rem <= 0){
+      clearInterval(lockTimer);
+      el.classList.remove('show');
+      input.disabled = false; btn.disabled = false;
+      localStorage.removeItem(LOCKOUT_KEY); localStorage.removeItem(ATTEMPT_KEY);
+    } else {
+      const m = String(Math.floor(rem/60)).padStart(2,'0');
+      const s = String(rem%60).padStart(2,'0');
+      msg.textContent = `Too many failed attempts. Try again in ${m}:${s}`;
     }
   }
+  tick(); lockTimer = setInterval(tick, 1000);
+}
 
-  // ── MODAL ──
-  function openModal() {
-    document.getElementById('modal').classList.add('open');
-    document.getElementById('f-title').focus();
+// ════════════════════════════════════════
+//  FIRST-TIME SETUP
+// ════════════════════════════════════════
+function goToConfirm() {
+  const val = document.getElementById('new-pin-input').value;
+  if(!val || val.length < 4) { alert('Please enter at least 4 characters.'); return; }
+  showStep('step-setup2');
+  setTimeout(()=>document.getElementById('confirm-pin-input').focus(), 50);
+}
+
+async function confirmPin() {
+  const p1 = document.getElementById('new-pin-input').value;
+  const p2 = document.getElementById('confirm-pin-input').value;
+  const errEl = document.getElementById('confirm-error');
+  if(p1 !== p2) { errEl.classList.add('show'); shakeCard(); document.getElementById('confirm-pin-input').value=''; return; }
+  errEl.classList.remove('show');
+  const hash = await sha256(p1);
+  localStorage.setItem(PIN_KEY, hash);
+  localStorage.setItem(SESSION_KEY, '1');
+  localStorage.removeItem(ATTEMPT_KEY); localStorage.removeItem(LOCKOUT_KEY);
+  unlockApp();
+}
+
+// ════════════════════════════════════════
+//  UNLOCK / LOCK
+// ════════════════════════════════════════
+function unlockApp() {
+  document.getElementById('lock-screen').classList.add('hidden');
+  document.getElementById('app').classList.add('visible');
+  document.getElementById('fab').style.display = 'flex';
+}
+
+function lockApp() {
+  localStorage.removeItem(SESSION_KEY);
+  document.getElementById('app').classList.remove('visible');
+  document.getElementById('lock-screen').classList.remove('hidden');
+  document.getElementById('pw-input').value = '';
+  document.getElementById('email-input').value = '';
+  showPwError(null);
+  const lockUntil = parseInt(localStorage.getItem(LOCKOUT_KEY)||'0');
+  if(localStorage.getItem(PIN_KEY)){
+    showStep('step-email');
   }
-  function closeModal() {
-    document.getElementById('modal').classList.remove('open');
-    ['f-title','f-url','f-cat','f-icon'].forEach(id => document.getElementById(id).value = '');
+  setTimeout(()=>document.getElementById('email-input').focus(), 100);
+}
+
+function resetPin() {
+  if(!confirm('Reset your password? You will need to set a new one.')) return;
+  localStorage.removeItem(PIN_KEY); localStorage.removeItem(SESSION_KEY);
+  document.getElementById('app').classList.remove('visible');
+  document.getElementById('lock-screen').classList.remove('hidden');
+  document.getElementById('new-pin-input').value = '';
+  document.getElementById('confirm-pin-input').value = '';
+  showStep('step-setup1');
+}
+
+// ════════════════════════════════════════
+//  BOOT
+// ════════════════════════════════════════
+(function boot(){
+  const hasPin   = !!localStorage.getItem(PIN_KEY);
+  const unlocked = !!localStorage.getItem(SESSION_KEY);
+  if(unlocked && hasPin) {
+    unlockApp();
+  } else if(!hasPin) {
+    // check lockout on pw screen just in case
+    showStep('step-email');
+    setTimeout(()=>document.getElementById('email-input').focus(),100);
+  } else {
+    showStep('step-email');
+    setTimeout(()=>document.getElementById('email-input').focus(),100);
+    const lockUntil = parseInt(localStorage.getItem(LOCKOUT_KEY)||'0');
+    if(Date.now() < lockUntil) {
+      // user will need to enter email first, then see lockout on pw screen
+    }
   }
+  document.getElementById('fab').style.display = 'none';
+})();
 
-  function saveLink() {
-    const title = document.getElementById('f-title').value.trim();
-    const url   = document.getElementById('f-url').value.trim();
-    const cat   = document.getElementById('f-cat').value.trim();
-    const icon  = document.getElementById('f-icon').value.trim();
-    if (!title || !url) return;
-    links.push({ title, url, cat, icon });
-    localStorage.setItem('admin_links', JSON.stringify(links));
-    renderLinks();
-    closeModal();
-  }
+// ════════════════════════════════════════
+//  DASHBOARD
+// ════════════════════════════════════════
+let links = JSON.parse(localStorage.getItem('admin_links')||'[]');
+const fab = document.getElementById('fab');
+const pageTitles = {home:'Overview',links:'Links',settings:'Settings'};
 
-  // close modal on overlay click
-  document.getElementById('modal').addEventListener('click', e => {
-    if (e.target === e.currentTarget) closeModal();
-  });
+function navigate(page, el) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  el.classList.add('active');
+  document.getElementById('page-title').textContent = pageTitles[page];
+  fab.style.display = page==='settings'?'none':'flex';
+}
 
-  // ── DATE ──
-  document.getElementById('stat-date').textContent =
-    new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+function renderLinks() {
+  const recent = document.getElementById('recent-links');
+  const all    = document.getElementById('all-links');
+  document.getElementById('stat-links').textContent = links.length;
+  document.getElementById('stat-cats').textContent  = new Set(links.map(l=>l.cat).filter(Boolean)).size;
 
-  // ── INIT ──
-  renderLinks();
+  const empty = `<div class="empty"><span class="material-symbols-rounded">link_off</span><p>No links yet.</p></div>`;
+  if(!links.length){ recent.innerHTML = all.innerHTML = empty; return; }
+
+  const card = (l,i,del) => `
+    <a class="link-row" href="${l.url}" target="_blank" rel="noopener">
+      <div class="l-fav">${l.icon||'🔗'}</div>
+      <div class="l-info">
+        <div class="l-title">${l.title}</div>
+        <div class="l-url">${l.url}</div>
+      </div>
+      ${l.cat?`<span class="l-chip">${l.cat}</span>`:''}
+      ${del?`<button class="t-icon" onclick="deleteLink(event,${i})" style="flex-shrink:0"><span class="material-symbols-rounded" style="font-size:18px">delete</span></button>`:''}
+    </a>`;
+
+  all.innerHTML    = links.map((l,i)=>card(l,i,true)).join('');
+  recent.innerHTML = links.slice(-3).reverse().map((l,i)=>card(l,i,false)).join('');
+}
+
+function deleteLink(e,i){ e.preventDefault(); e.stopPropagation(); links.splice(i,1); localStorage.setItem('admin_links',JSON.stringify(links)); renderLinks(); }
+function clearLinks(){ if(confirm('Remove all links?')){ links=[]; localStorage.setItem('admin_links',JSON.stringify(links)); renderLinks(); } }
+function openModal(){ document.getElementById('modal').classList.add('open'); document.getElementById('f-title').focus(); }
+function closeModal(){ document.getElementById('modal').classList.remove('open'); ['f-title','f-url','f-cat','f-icon'].forEach(id=>document.getElementById(id).value=''); }
+function saveLink(){
+  const title=document.getElementById('f-title').value.trim();
+  const url  =document.getElementById('f-url').value.trim();
+  if(!title||!url) return;
+  links.push({title,url,cat:document.getElementById('f-cat').value.trim(),icon:document.getElementById('f-icon').value.trim()});
+  localStorage.setItem('admin_links',JSON.stringify(links));
+  renderLinks(); closeModal();
+}
+
+document.getElementById('modal').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeModal(); });
+document.getElementById('stat-date').textContent = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
+renderLinks();
 </script>
 
 </body>
