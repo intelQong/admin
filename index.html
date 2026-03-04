@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin — intelqong.link</title>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@400;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --md-primary: #006874;
+      --md-on-primary: #ffffff;
+      --md-primary-container: #97f0ff;
+      --md-on-primary-container: #001f24;
+      --md-secondary: #4a6267;
+      --md-secondary-container: #cde7ec;
+      --md-on-secondary-container: #051f23;
+      --md-tertiary: #525e7d;
+      --md-tertiary-container: #dae2ff;
+      --md-surface: #f5fafb;
+      --md-surface-variant: #dbe4e6;
+      --md-on-surface: #171c1d;
+      --md-on-surface-variant: #3f4849;
+      --md-outline: #6f797a;
+      --md-outline-variant: #bfc8ca;
+      --md-background: #f5fafb;
+      --md-error: #ba1a1a;
+      --md-error-container: #ffdad6;
+
+```
+  --elevation-1: 0 1px 2px rgba(0,0,0,.08), 0 1px 3px 1px rgba(0,0,0,.06);
+  --elevation-2: 0 1px 2px rgba(0,0,0,.1), 0 2px 6px 2px rgba(0,0,0,.08);
+  --elevation-3: 0 4px 8px 3px rgba(0,0,0,.08), 0 1px 3px rgba(0,0,0,.12);
+
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 28px;
+  --radius-full: 50px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Google Sans', sans-serif;
+  background: var(--md-background);
+  color: var(--md-on-surface);
+  min-height: 100vh;
+  display: flex;
+  overflow-x: hidden;
+}
+
+/* ── NAV RAIL ── */
+.nav-rail {
+  width: 80px;
+  background: var(--md-surface);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+  gap: 4px;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 100;
+  border-right: 1px solid var(--md-outline-variant);
+}
+
+.nav-rail .brand {
+  font-family: 'Google Sans Display', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--md-primary);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  margin-bottom: 24px;
+  margin-top: 8px;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 56px;
+  padding: 12px 0 10px;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: background .2s;
+  text-decoration: none;
+  color: var(--md-on-surface-variant);
+  position: relative;
+}
+
+.nav-item:hover { background: rgba(0,104,116,.08); }
+
+.nav-item.active {
+  color: var(--md-on-primary-container);
+}
+
+.nav-item.active .nav-indicator {
+  background: var(--md-primary-container);
+}
+
+.nav-indicator {
+  width: 56px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .2s;
+}
+
+.nav-item:hover .nav-indicator { background: rgba(0,104,116,.12); }
+
+.nav-item span.label {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.nav-item .material-symbols-rounded { font-size: 22px; }
+
+/* ── MAIN CONTENT ── */
+.main {
+  margin-left: 80px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ── TOP APP BAR ── */
+.topbar {
+  background: var(--md-surface);
+  padding: 16px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--md-outline-variant);
+  position: sticky;
+  top: 0;
+  z-index: 90;
+}
+
+.topbar-title {
+  font-family: 'Google Sans Display', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--md-on-surface);
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon-btn {
+  width: 40px; height: 40px;
+  border-radius: var(--radius-full);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--md-on-surface-variant);
+  transition: background .2s;
+}
+.icon-btn:hover { background: rgba(0,0,0,.08); }
+
+.avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--md-primary);
+  color: var(--md-on-primary);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ── PAGE BODY ── */
+.page {
+  padding: 28px;
+  flex: 1;
+  display: none;
+  flex-direction: column;
+  gap: 24px;
+  animation: fadeIn .25s ease;
+}
+.page.active { display: flex; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── SECTION LABEL ── */
+.section-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--md-on-surface-variant);
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  margin-bottom: -12px;
+}
+
+/* ── CARDS GRID ── */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+/* ── STAT CARD ── */
+.stat-card {
+  background: var(--md-surface);
+  border-radius: var(--radius-xl);
+  padding: 20px;
+  box-shadow: var(--elevation-1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: box-shadow .2s, transform .2s;
+  cursor: default;
+}
+.stat-card:hover { box-shadow: var(--elevation-2); transform: translateY(-2px); }
+
+.stat-icon {
+  width: 48px; height: 48px;
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+}
+
+.stat-value {
+  font-family: 'Google Sans Display', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--md-on-surface);
+}
+
+.stat-label {
+  font-size: 13px;
+  color: var(--md-on-surface-variant);
+  font-weight: 500;
+}
+
+/* ── LINK CARD ── */
+.links-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.link-card {
+  background: var(--md-surface);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: var(--elevation-1);
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow .2s, transform .2s, background .15s;
+  cursor: pointer;
+}
+.link-card:hover {
+  box-shadow: var(--elevation-2);
+  transform: translateX(4px);
+  background: color-mix(in srgb, var(--md-primary-container) 30%, var(--md-surface));
+}
+
+.link-favicon {
+  width: 40px; height: 40px;
+  border-radius: var(--radius-sm);
+  background: var(--md-primary-container);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.link-info { flex: 1; min-width: 0; }
+
+.link-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--md-on-surface);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.link-url {
+  font-size: 12px;
+  color: var(--md-on-surface-variant);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.link-chip {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  background: var(--md-secondary-container);
+  color: var(--md-on-secondary-container);
+  flex-shrink: 0;
+}
+
+/* ── FAB ── */
+.fab {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  background: var(--md-primary-container);
+  color: var(--md-on-primary-container);
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Google Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--elevation-3);
+  transition: box-shadow .2s, transform .2s;
+  z-index: 200;
+}
+.fab:hover { transform: scale(1.04); box-shadow: var(--elevation-3); }
+
+/* ── MODAL ── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.4);
+  z-index: 300;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(2px);
+}
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--md-surface);
+  border-radius: var(--radius-xl);
+  padding: 28px;
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: var(--elevation-3);
+  animation: scaleIn .2s ease;
+}
+@keyframes scaleIn {
+  from { transform: scale(.95); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+.modal-title {
+  font-family: 'Google Sans Display', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.modal-fields { display: flex; flex-direction: column; gap: 12px; }
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--md-on-surface-variant);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+.field input, .field select {
+  background: var(--md-surface-variant);
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-family: 'Google Sans', sans-serif;
+  font-size: 14px;
+  color: var(--md-on-surface);
+  outline: none;
+  transition: border-color .2s;
+}
+.field input:focus, .field select:focus {
+  border-color: var(--md-primary);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.btn-text {
+  padding: 10px 20px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-full);
+  font-family: 'Google Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--md-primary);
+  cursor: pointer;
+  transition: background .2s;
+}
+.btn-text:hover { background: rgba(0,104,116,.1); }
+
+.btn-filled {
+  padding: 10px 24px;
+  border: none;
+  background: var(--md-primary);
+  color: var(--md-on-primary);
+  border-radius: var(--radius-full);
+  font-family: 'Google Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s, transform .1s;
+}
+.btn-filled:hover { background: #00545e; }
+.btn-filled:active { transform: scale(.97); }
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 60px 20px;
+  color: var(--md-on-surface-variant);
+  text-align: center;
+}
+.empty-state .material-symbols-rounded { font-size: 48px; opacity: .5; }
+.empty-state p { font-size: 15px; }
+
+/* ── SETTINGS PAGE ── */
+.settings-section {
+  background: var(--md-surface);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--elevation-1);
+}
+
+.settings-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--md-outline-variant);
+  gap: 16px;
+}
+.settings-item:last-child { border-bottom: none; }
+
+.settings-item-info { flex: 1; }
+.settings-item-title { font-size: 15px; font-weight: 500; }
+.settings-item-sub { font-size: 13px; color: var(--md-on-surface-variant); margin-top: 2px; }
+
+.toggle {
+  width: 52px; height: 32px;
+  border-radius: var(--radius-full);
+  background: var(--md-outline);
+  position: relative;
+  cursor: pointer;
+  transition: background .25s;
+  flex-shrink: 0;
+  border: none;
+}
+.toggle.on { background: var(--md-primary); }
+.toggle::after {
+  content: '';
+  position: absolute;
+  top: 4px; left: 4px;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: white;
+  transition: transform .25s;
+}
+.toggle.on::after { transform: translateX(20px); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .nav-rail { width: 64px; }
+  .main { margin-left: 64px; }
+  .page { padding: 16px; }
+  .topbar { padding: 14px 16px; }
+}
+```
+
+  </style>
+</head>
+<body>
+
+<!-- NAV RAIL -->
+
+<nav class="nav-rail">
+  <div class="brand">Admin</div>
+
+  <a class="nav-item active" onclick="navigate('home', this)">
+    <div class="nav-indicator">
+      <span class="material-symbols-rounded">home</span>
+    </div>
+    <span class="label">Home</span>
+  </a>
+
+  <a class="nav-item" onclick="navigate('links', this)">
+    <div class="nav-indicator">
+      <span class="material-symbols-rounded">link</span>
+    </div>
+    <span class="label">Links</span>
+  </a>
+
+  <a class="nav-item" onclick="navigate('settings', this)">
+    <div class="nav-indicator">
+      <span class="material-symbols-rounded">settings</span>
+    </div>
+    <span class="label">Settings</span>
+  </a>
+</nav>
+
+<!-- MAIN -->
+
+<div class="main">
+
+  <!-- TOP BAR -->
+
+  <header class="topbar">
+    <span class="topbar-title" id="page-title">Overview</span>
+    <div class="topbar-actions">
+      <button class="icon-btn" title="Notifications">
+        <span class="material-symbols-rounded">notifications</span>
+      </button>
+      <div class="avatar" title="intelQong">iQ</div>
+    </div>
+  </header>
+
+  <!-- HOME PAGE -->
+
+  <div class="page active" id="page-home">
+    <p class="section-label">At a glance</p>
+    <div class="cards-grid">
+      <div class="stat-card">
+        <div class="stat-icon" style="background:var(--md-primary-container); color:var(--md-primary)">
+          <span class="material-symbols-rounded">link</span>
+        </div>
+        <div class="stat-value" id="stat-links">0</div>
+        <div class="stat-label">Saved Links</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:var(--md-tertiary-container); color:var(--md-tertiary)">
+          <span class="material-symbols-rounded">category</span>
+        </div>
+        <div class="stat-value" id="stat-cats">0</div>
+        <div class="stat-label">Categories</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:var(--md-secondary-container); color:var(--md-secondary)">
+          <span class="material-symbols-rounded">calendar_today</span>
+        </div>
+        <div class="stat-value" id="stat-date">—</div>
+        <div class="stat-label">Today</div>
+      </div>
+    </div>
+
+```
+<p class="section-label">Recent links</p>
+<div id="recent-links" class="links-list">
+  <div class="empty-state">
+    <span class="material-symbols-rounded">link_off</span>
+    <p>No links yet — add some from the Links tab!</p>
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- LINKS PAGE -->
+
+  <div class="page" id="page-links">
+    <p class="section-label">All links</p>
+    <div id="all-links" class="links-list">
+      <div class="empty-state">
+        <span class="material-symbols-rounded">link_off</span>
+        <p>No links yet. Tap + Add Link to get started.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS PAGE -->
+
+  <div class="page" id="page-settings">
+    <p class="section-label">Preferences</p>
+    <div class="settings-section">
+      <div class="settings-item">
+        <div class="settings-item-info">
+          <div class="settings-item-title">admin.intelqong.link</div>
+          <div class="settings-item-sub">Your personal admin space</div>
+        </div>
+        <span class="material-symbols-rounded" style="color:var(--md-primary)">verified</span>
+      </div>
+      <div class="settings-item">
+        <div class="settings-item-info">
+          <div class="settings-item-title">Dark mode</div>
+          <div class="settings-item-sub">Coming soon</div>
+        </div>
+        <button class="toggle" onclick="this.classList.toggle('on')"></button>
+      </div>
+      <div class="settings-item">
+        <div class="settings-item-info">
+          <div class="settings-item-title">Show categories</div>
+          <div class="settings-item-sub">Display category chips on links</div>
+        </div>
+        <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+      </div>
+      <div class="settings-item">
+        <div class="settings-item-info">
+          <div class="settings-item-title">Clear all links</div>
+          <div class="settings-item-sub">Remove all saved links from storage</div>
+        </div>
+        <button class="btn-text" onclick="clearLinks()" style="color:var(--md-error)">Clear</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- FAB -->
+
+<button class="fab" id="fab" onclick="openModal()">
+  <span class="material-symbols-rounded">add</span>
+  Add Link
+</button>
+
+<!-- ADD LINK MODAL -->
+
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-title">Add Link</div>
+    <div class="modal-fields">
+      <div class="field">
+        <label>Title</label>
+        <input type="text" id="f-title" placeholder="e.g. GitHub"/>
+      </div>
+      <div class="field">
+        <label>URL</label>
+        <input type="url" id="f-url" placeholder="https://"/>
+      </div>
+      <div class="field">
+        <label>Category</label>
+        <input type="text" id="f-cat" placeholder="e.g. Dev, Social, Tools"/>
+      </div>
+      <div class="field">
+        <label>Icon (emoji)</label>
+        <input type="text" id="f-icon" placeholder="🔗" maxlength="2"/>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-text" onclick="closeModal()">Cancel</button>
+      <button class="btn-filled" onclick="saveLink()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── STATE ──
+  let links = JSON.parse(localStorage.getItem('admin_links') || '[]');
+
+  // ── NAVIGATION ──
+  const titles = { home: 'Overview', links: 'Links', settings: 'Settings' };
+  const fab = document.getElementById('fab');
+
+  function navigate(page, el) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    el.classList.add('active');
+    document.getElementById('page-title').textContent = titles[page];
+    fab.style.display = (page === 'settings') ? 'none' : 'flex';
+  }
+
+  // ── RENDER ──
+  function renderLinks() {
+    const recent = document.getElementById('recent-links');
+    const all    = document.getElementById('all-links');
+    const statLinks = document.getElementById('stat-links');
+    const statCats  = document.getElementById('stat-cats');
+
+    statLinks.textContent = links.length;
+    const cats = new Set(links.map(l => l.cat).filter(Boolean));
+    statCats.textContent = cats.size;
+
+    if (links.length === 0) {
+      const empty = `<div class="empty-state">
+        <span class="material-symbols-rounded">link_off</span>
+        <p>No links yet — add some from the Links tab!</p>
+      </div>`;
+      recent.innerHTML = empty;
+      all.innerHTML = empty.replace('Links tab', '+ Add Link button');
+      return;
+    }
+
+    const html = links.map((l, i) => `
+      <a class="link-card" href="${l.url}" target="_blank" rel="noopener">
+        <div class="link-favicon">${l.icon || '🔗'}</div>
+        <div class="link-info">
+          <div class="link-title">${l.title}</div>
+          <div class="link-url">${l.url}</div>
+        </div>
+        ${l.cat ? `<span class="link-chip">${l.cat}</span>` : ''}
+        <button class="icon-btn" onclick="deleteLink(event,${i})" title="Remove">
+          <span class="material-symbols-rounded" style="font-size:18px">delete</span>
+        </button>
+      </a>`).join('');
+
+    all.innerHTML = html;
+    recent.innerHTML = links.slice(-3).reverse().map((l, i) => `
+      <a class="link-card" href="${l.url}" target="_blank" rel="noopener">
+        <div class="link-favicon">${l.icon || '🔗'}</div>
+        <div class="link-info">
+          <div class="link-title">${l.title}</div>
+          <div class="link-url">${l.url}</div>
+        </div>
+        ${l.cat ? `<span class="link-chip">${l.cat}</span>` : ''}
+      </a>`).join('');
+  }
+
+  function deleteLink(e, i) {
+    e.preventDefault(); e.stopPropagation();
+    links.splice(i, 1);
+    localStorage.setItem('admin_links', JSON.stringify(links));
+    renderLinks();
+  }
+
+  function clearLinks() {
+    if (confirm('Remove all saved links?')) {
+      links = [];
+      localStorage.setItem('admin_links', JSON.stringify(links));
+      renderLinks();
+    }
+  }
+
+  // ── MODAL ──
+  function openModal() {
+    document.getElementById('modal').classList.add('open');
+    document.getElementById('f-title').focus();
+  }
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+    ['f-title','f-url','f-cat','f-icon'].forEach(id => document.getElementById(id).value = '');
+  }
+
+  function saveLink() {
+    const title = document.getElementById('f-title').value.trim();
+    const url   = document.getElementById('f-url').value.trim();
+    const cat   = document.getElementById('f-cat').value.trim();
+    const icon  = document.getElementById('f-icon').value.trim();
+    if (!title || !url) return;
+    links.push({ title, url, cat, icon });
+    localStorage.setItem('admin_links', JSON.stringify(links));
+    renderLinks();
+    closeModal();
+  }
+
+  // close modal on overlay click
+  document.getElementById('modal').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeModal();
+  });
+
+  // ── DATE ──
+  document.getElementById('stat-date').textContent =
+    new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+  // ── INIT ──
+  renderLinks();
+</script>
+
+</body>
+</html>
