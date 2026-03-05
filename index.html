@@ -222,7 +222,7 @@
       <div class="g-heading">Welcome</div>
       <div class="g-pill" onclick="backToEmail()">
         <div class="pill-av">M</div>
-        <span class="pill-txt">mahmudul@intelqong.link</span>
+        <span class="pill-txt"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8be6eae3e6feeffee7cbe2e5ffeee7fae4e5eca5e7e2e5e0">[email&#160;protected]</a></span>
         <span class="material-symbols-rounded" style="font-size:17px;color:var(--text2)">arrow_drop_down</span>
       </div>
       <div class="g-banner error" id="pw-err">
@@ -326,7 +326,7 @@
       <span class="sec-label">Account & Sync</span>
       <div class="settings-card">
         <div class="s-row">
-          <div class="s-info"><div class="s-title">Account</div><div class="s-sub">mahmudul@intelqong.link</div></div>
+          <div class="s-info"><div class="s-title">Account</div><div class="s-sub"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="caa7aba2a7bfaebfa68aa3a4beafa6bba5a4ade4a6a3a4a1">[email&#160;protected]</a></div></div>
           <span class="material-symbols-rounded" style="color:var(--brand)">verified_user</span>
         </div>
         <div class="s-row">
@@ -340,6 +340,10 @@
         <div class="s-row">
           <div class="s-info"><div class="s-title">Sign out</div><div class="s-sub">Return to sign-in screen</div></div>
           <button class="m-btn-text" onclick="lockApp()">Sign out</button>
+        </div>
+        <div class="s-row">
+          <div class="s-info"><div class="s-title">Reset PIN</div><div class="s-sub">Change your admin password</div></div>
+          <button class="m-btn-text" onclick="openResetPin()">Reset</button>
         </div>
       </div>
       <span class="sec-label">Preferences</span>
@@ -377,7 +381,36 @@
   </div>
 </div>
 
-<script>
+<!-- RESET PIN MODAL -->
+<div class="modal-bg" id="reset-pin-modal">
+  <div class="modal">
+    <div class="modal-title">Reset PIN</div>
+    <div class="g-banner error" id="rp-err" style="margin-bottom:0">
+      <span class="material-symbols-rounded">error</span>
+      <span id="rp-err-msg">Error</span>
+    </div>
+    <div class="modal-fields">
+      <div class="m-field">
+        <label>Current Password</label>
+        <input type="password" id="rp-current" placeholder="Enter current password"/>
+      </div>
+      <div class="m-field">
+        <label>New Password</label>
+        <input type="password" id="rp-new" placeholder="Enter new password"/>
+      </div>
+      <div class="m-field">
+        <label>Confirm New Password</label>
+        <input type="password" id="rp-confirm" placeholder="Confirm new password"/>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="m-btn-text" onclick="closeResetPin()">Cancel</button>
+      <button class="m-btn-fill" id="rp-btn" onclick="submitResetPin()">Update PIN</button>
+    </div>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 'use strict';
 
 // ── Only non-secret config lives here ──
@@ -574,15 +607,51 @@ async function deleteLink(e,i){ e.preventDefault(); e.stopPropagation(); links.s
 async function clearLinks(){ if(!confirm('Permanently remove all links?'))return; links=[]; renderLinks(); await apiSaveLinks(links); }
 function openModal(){ document.getElementById('modal').classList.add('open'); document.getElementById('f-title').focus(); }
 function closeModal(){ document.getElementById('modal').classList.remove('open'); ['f-title','f-url','f-cat','f-icon'].forEach(id=>document.getElementById(id).value=''); }
+
+// ── Reset PIN ──
+function openResetPin(){
+  document.getElementById('reset-pin-modal').classList.add('open');
+  setBanner('rp-err',null);
+  ['rp-current','rp-new','rp-confirm'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('rp-current').focus();
+}
+function closeResetPin(){
+  document.getElementById('reset-pin-modal').classList.remove('open');
+  ['rp-current','rp-new','rp-confirm'].forEach(id=>document.getElementById(id).value='');
+  setBanner('rp-err',null);
+}
+async function submitResetPin(){
+  const current=document.getElementById('rp-current').value;
+  const newPin=document.getElementById('rp-new').value;
+  const confirm=document.getElementById('rp-confirm').value;
+  if(!current||!newPin||!confirm){ setBanner('rp-err','All fields are required.'); return; }
+  if(newPin!==confirm){ setBanner('rp-err','New passwords do not match.'); return; }
+  if(newPin.length<4){ setBanner('rp-err','New password must be at least 4 characters.'); return; }
+  const btn=document.getElementById('rp-btn'); btn.classList.add('loading');
+  try {
+    const currentHash=await sha256(current);
+    // Verify current PIN first
+    const authRes=await apiAuth(currentHash);
+    if(!authRes.ok) throw new Error('wrong_current');
+    const newHash=await sha256(newPin);
+    // Send new hash to Worker
+    const r=await fetch(`${WORKER}/reset-pin`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','X-Pin-Hash':_pinHash},
+      body:JSON.stringify({newHash}),
+    });
+    if(!r.ok) throw new Error('worker_error');
+    _pinHash=newHash;
+    btn.classList.remove('loading');
+    closeResetPin();
+    showToast('PIN updated successfully ✓');
+  } catch(e){
+    btn.classList.remove('loading');
+    if(e.message==='wrong_current') setBanner('rp-err','Current password is incorrect.');
+    else setBanner('rp-err','Failed to update PIN. Try again.');
+  }
+}
 async function saveLink(){
   const title=document.getElementById('f-title').value.trim(), url=document.getElementById('f-url').value.trim();
   if(!title||!url)return;
-  links.push({title,url,cat:document.getElementById('f-cat').value.trim(),icon:document.getElementById('f-icon').value.trim(),added:new Date().toISOString()});
-  closeModal(); renderLinks(); await apiSaveLinks(links);
-}
-
-document.getElementById('modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
-document.getElementById('stat-date').textContent=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
-</script>
-</body>
-</html>
+  links.push({title,url,cat:document.getElementById('f-cat').value.trim(),icon:document.getElementById('f-icon').va
