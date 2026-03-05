@@ -436,6 +436,7 @@ async function apiAuth(hash) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ hash }),
   });
+  if (!r.ok) return { ok: false };
   return r.json();
 }
 
@@ -505,33 +506,40 @@ async function checkPin(){
   const val=document.getElementById('pw-input').value;
   if(!val){ setBanner('pw-err','Enter a password'); return; }
   const btn=document.getElementById('pw-btn'); btn.classList.add('loading');
+  setBanner('pw-err',null);
 
+  let res;
   try {
     const hash = await sha256(val);
-    // Verify against Worker — PIN_HASH lives only in Cloudflare env
-    const res = await apiAuth(hash);
+    res = await apiAuth(hash);
     if(res.ok){
       localStorage.removeItem(ATTEMPT_KEY); localStorage.removeItem(LOCKOUT_KEY);
-      _pinHash = hash; // keep hash in memory for API calls
+      _pinHash = hash;
       btn.classList.remove('loading');
       await unlockApp();
-    } else {
-      throw new Error('invalid');
+      return;
     }
-  } catch {
+  } catch(e) {
+    // Network / Worker unreachable
     btn.classList.remove('loading');
-    shake();
-    document.getElementById('pw-input').value=''; document.getElementById('pw-input').classList.remove('hv');
-    let att=parseInt(localStorage.getItem(ATTEMPT_KEY)||'0')+1;
-    localStorage.setItem(ATTEMPT_KEY,att);
-    const left=MAX_ATTEMPTS-att;
-    if(att>=MAX_ATTEMPTS){
-      const until=Date.now()+LOCKOUT_MS;
-      localStorage.setItem(LOCKOUT_KEY,until);
-      setBanner('pw-err',null); startLockout(until);
-    } else {
-      setBanner('pw-err',`Wrong password — ${left} attempt${left===1?'':'s'} remaining.`);
-    }
+    setBanner('pw-err','Could not reach server. Check your connection.');
+    return;
+  }
+
+  // Wrong password path
+  btn.classList.remove('loading');
+  shake();
+  document.getElementById('pw-input').value='';
+  document.getElementById('pw-input').classList.remove('hv');
+  let att=parseInt(localStorage.getItem(ATTEMPT_KEY)||'0')+1;
+  localStorage.setItem(ATTEMPT_KEY,att);
+  const left=MAX_ATTEMPTS-att;
+  if(att>=MAX_ATTEMPTS){
+    const until=Date.now()+LOCKOUT_MS;
+    localStorage.setItem(LOCKOUT_KEY,until);
+    setBanner('pw-err',null); startLockout(until);
+  } else {
+    setBanner('pw-err',`Wrong password — ${left} attempt${left===1?'':'s'} remaining.`);
   }
 }
 
