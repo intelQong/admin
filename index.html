@@ -95,9 +95,6 @@
 .sc-expired h3 { font-size:18px; color:var(--text); }
 .sc-expired p { font-size:14px; line-height:1.5; }
 
-.sc-branding { font-size:12px; color:var(--text2); display:flex; align-items:center; gap:6px; }
-.sc-brand-name { font-weight:700; color:var(--brand); }
-
 /* ── LOCK SCREEN ── */
 #lock-screen { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px 16px; }
 #lock-screen.hidden { display:none; }
@@ -352,10 +349,6 @@
       <p>This share link has expired or doesn't exist.<br>Ask the sender to share it again.</p>
     </div>
   </div>
-
-  <div class="sc-branding">
-    Shared via <span class="sc-brand-name">Intelqong Admin</span>
-  </div>
 </div>
 
 <!-- ══════════════════════════════
@@ -581,12 +574,10 @@ let _pinHash = null;
 //  SHARE PAGE — auto-detect /share/:token in URL hash
 // ══════════════════════════════
 (function () {
-  // We use URL hash routing: admin.intelqong.link/#/share/TOKEN
-  const hash = location.hash; // e.g. #/share/abc123
+  const hash = location.hash;
   const m = hash.match(/^#\/share\/([a-zA-Z0-9_-]{10,})$/);
   if (!m) return;
 
-  // Hide login, show share page
   document.getElementById('lock-screen').style.display = 'none';
   document.getElementById('share-page').classList.add('visible');
 
@@ -616,7 +607,6 @@ async function loadSharePage(token) {
     document.getElementById('sp-cat').textContent       = l.cat ? '📁 ' + l.cat : '';
     document.title = l.title + ' — Intelqong';
 
-    // Live countdown
     function tick() {
       const rem = Math.max(0, Math.ceil((_spExpiry - Date.now()) / 1000));
       const m   = String(Math.floor(rem / 60)).padStart(2,'0');
@@ -789,7 +779,6 @@ function openPreview(i) {
   document.getElementById('pv-name').textContent     = l.title;
   document.getElementById('pv-url').textContent      = l.url;
   document.getElementById('pv-category').textContent = l.cat?'📁 '+l.cat:'Uncategorised';
-  // Reset share result
   document.getElementById('pv-share-result').classList.remove('show');
   document.getElementById('pv-share-btn').textContent='';
   document.getElementById('pv-share-btn').innerHTML='<span class="material-symbols-rounded" style="font-size:17px">share</span>Share';
@@ -823,14 +812,11 @@ async function pvShare() {
     _pvShareUrl = `${location.origin}${location.pathname}#/share/${data.token}`;
     btn.classList.remove('loading');
 
-    // Show share result box
     document.getElementById('pv-share-url').textContent=_pvShareUrl;
     document.getElementById('pv-share-result').classList.add('show');
 
-    // Auto-copy to clipboard
     navigator.clipboard.writeText(_pvShareUrl).then(()=>showToast('Share link copied! Expires in 5 min ✓'));
 
-    // Countdown in preview
     let expiry=data.expiry;
     function tick(){
       const rem=Math.max(0,Math.ceil((expiry-Date.now())/1000));
