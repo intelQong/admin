@@ -368,10 +368,10 @@
   <span class="material-symbols-rounded">add</span>Add Link
 </button>
 
-<!-- ADD LINK MODAL -->
+<!-- ADD / EDIT LINK MODAL -->
 <div class="modal-bg" id="modal">
   <div class="modal">
-    <div class="modal-title">Add a link</div>
+    <div class="modal-title" id="modal-title-text">Add a link</div>
     <div class="modal-fields">
       <div class="m-field"><label>Title</label><input type="text" id="f-title" placeholder="e.g. GitHub"/></div>
       <div class="m-field"><label>URL</label><input type="url" id="f-url" placeholder="https://"/></div>
@@ -380,7 +380,7 @@
     </div>
     <div class="modal-actions">
       <button class="m-btn-text" onclick="closeModal()">Cancel</button>
-      <button class="m-btn-fill" onclick="saveLink()">Save</button>
+      <button class="m-btn-fill" id="modal-save-btn" onclick="saveLink()">Save</button>
     </div>
   </div>
 </div>
@@ -633,7 +633,8 @@ function renderLinks() {
       <div class="l-fav">${l.icon || '\ud83d\udd17'}</div>
       <div class="l-info"><div class="l-title">${l.title}</div><div class="l-url">${l.url}</div></div>
       ${l.cat ? `<span class="l-chip">${l.cat}</span>` : ''}
-      ${del ? `<button class="t-icon" onclick="deleteLink(event,${i})"><span class="material-symbols-rounded" style="font-size:18px">delete</span></button>` : ''}
+      ${del ? `<button class="t-icon" onclick="editLink(event,${i})" title="Edit"><span class="material-symbols-rounded" style="font-size:18px">edit</span></button>` : ''}
+      ${del ? `<button class="t-icon" onclick="deleteLink(event,${i})" title="Delete"><span class="material-symbols-rounded" style="font-size:18px">delete</span></button>` : ''}
     </a>`;
   all.innerHTML = links.map((l, i) => card(l, i, true)).join('');
   recent.innerHTML = links.slice(-3).reverse().map((l, i) => card(l, i, false)).join('');
@@ -642,14 +643,45 @@ function renderLinks() {
 async function deleteLink(e, i) { e.preventDefault(); e.stopPropagation(); links.splice(i, 1); renderLinks(); await apiSaveLinks(links); }
 async function clearLinks() { if (!confirm('Permanently remove all links?')) return; links = []; renderLinks(); await apiSaveLinks(links); }
 
-function openModal() { document.getElementById('modal').classList.add('open'); document.getElementById('f-title').focus(); }
-function closeModal() { document.getElementById('modal').classList.remove('open'); ['f-title', 'f-url', 'f-cat', 'f-icon'].forEach(id => document.getElementById(id).value = ''); }
+let _editIndex = -1;
+
+function openModal() {
+  _editIndex = -1;
+  document.getElementById('modal-title-text').textContent = 'Add a link';
+  document.getElementById('modal-save-btn').textContent = 'Save';
+  document.getElementById('modal').classList.add('open');
+  document.getElementById('f-title').focus();
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  ['f-title', 'f-url', 'f-cat', 'f-icon'].forEach(id => document.getElementById(id).value = '');
+  _editIndex = -1;
+}
+
+function editLink(e, i) {
+  e.preventDefault(); e.stopPropagation();
+  _editIndex = i;
+  const l = links[i];
+  document.getElementById('f-title').value = l.title || '';
+  document.getElementById('f-url').value   = l.url   || '';
+  document.getElementById('f-cat').value   = l.cat   || '';
+  document.getElementById('f-icon').value  = l.icon  || '';
+  document.getElementById('modal-title-text').textContent = 'Edit link';
+  document.getElementById('modal-save-btn').textContent = 'Update';
+  document.getElementById('modal').classList.add('open');
+  document.getElementById('f-title').focus();
+}
 
 async function saveLink() {
   const title = document.getElementById('f-title').value.trim();
   const url   = document.getElementById('f-url').value.trim();
   if (!title || !url) return;
-  links.push({ title, url, cat: document.getElementById('f-cat').value.trim(), icon: document.getElementById('f-icon').value.trim() });
+  const entry = { title, url, cat: document.getElementById('f-cat').value.trim(), icon: document.getElementById('f-icon').value.trim() };
+  if (_editIndex >= 0) {
+    links[_editIndex] = entry;
+  } else {
+    links.push(entry);
+  }
   closeModal();
   renderLinks();
   await apiSaveLinks(links);
