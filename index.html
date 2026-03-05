@@ -676,4 +676,11 @@ async function submitResetPin(){
 async function saveLink(){
   const title=document.getElementById('f-title').value.trim(), url=document.getElementById('f-url').value.trim();
   if(!title||!url)return;
-  links.push({title,url,cat:document.getElementById('f-cat').value.trim(),icon:document.getElementById('f-icon').va
+  links.push({title,url,cat:document.getElementById('f-cat').value.trim(),icon:document.getElementById('f-icon').value.trim()});
+  closeModal();
+  renderLinks();
+  await apiSaveLinks(links);
+}
+</script>
+</body>
+</html>
