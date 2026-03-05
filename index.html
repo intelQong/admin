@@ -222,7 +222,7 @@
       <div class="g-heading">Welcome</div>
       <div class="g-pill" onclick="backToEmail()">
         <div class="pill-av">M</div>
-        <span class="pill-txt">mahmudul@intelqong.link</span>
+        <span class="pill-txt"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0a676b62677f6e7f664a63647e6f667b65646d2466636461">[email&#160;protected]</a></span>
         <span class="material-symbols-rounded" style="font-size:17px;color:var(--text2)">arrow_drop_down</span>
       </div>
       <div class="g-banner error" id="pw-err">
@@ -248,7 +248,11 @@
         <button class="g-link" onclick="backToEmail()">← Back</button>
         <button class="g-btn" id="pw-btn" onclick="checkPin()">Next</button>
       </div>
-      <div class="g-note">Verified server-side · Synced via private Gist</div>
+      <div class="g-note" style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:16px">
+        <svg width="14" height="14" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 2L3 8v8c0 8.5 5.5 15.5 13 17 7.5-1.5 13-8.5 13-17V8L16 2z" fill="#F38020"/></svg>
+        <span>Protected by Cloudflare</span>
+      </div>
+
     </div>
   </div>
 
@@ -326,7 +330,7 @@
       <span class="sec-label">Account & Sync</span>
       <div class="settings-card">
         <div class="s-row">
-          <div class="s-info"><div class="s-title">Account</div><div class="s-sub">mahmudul@intelqong.link</div></div>
+          <div class="s-info"><div class="s-title">Account</div><div class="s-sub"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="771a161f1a0213021b371e1903121b06181910591b1e191c">[email&#160;protected]</a></div></div>
           <span class="material-symbols-rounded" style="color:var(--brand)">verified_user</span>
         </div>
         <div class="s-row">
@@ -410,7 +414,7 @@
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 'use strict';
 
 // ── Only non-secret config lives here ──
@@ -673,14 +677,4 @@ async function submitResetPin(){
     else setBanner('rp-err','Failed to update PIN. Try again.');
   }
 }
-async function saveLink(){
-  const title=document.getElementById('f-title').value.trim(), url=document.getElementById('f-url').value.trim();
-  if(!title||!url)return;
-  links.push({title,url,cat:document.getElementById('f-cat').value.trim(),icon:document.getElementById('f-icon').value.trim()});
-  closeModal();
-  renderLinks();
-  await apiSaveLinks(links);
-}
-</script>
-</body>
-</html>
+async function saveLink()
