@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sign in – OpenIQ</title>
+  <title>Sign in – Intelqong</title>
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@300;400;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
@@ -35,9 +35,18 @@
     .g-card { background:var(--surface); border:1px solid var(--border); border-radius:28px; box-shadow:var(--card-shadow); width:100%; max-width:400px; padding:40px 40px 32px; display:flex; flex-direction:column; align-items:center; animation:fadeUp .3s ease; transition:background .3s,border-color .3s; }
     @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
 
-    .oiq-logo { display:flex; align-items:center; gap:10px; margin-bottom:24px; text-decoration:none; }
-    .oiq-icon { width:44px; height:44px; border-radius:12px; flex-shrink:0; background:linear-gradient(135deg,#c0392b,#96281b); display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(192,57,43,.4); }
-    .oiq-wordmark { font-family:'Google Sans Display',sans-serif; font-size:26px; font-weight:700; letter-spacing:-.5px; color:var(--brand); }
+    .oiq-logo { display:flex; align-items:center; justify-content:center; margin-bottom:24px; text-decoration:none; }
+    .oiq-wordmark {
+      font-family:'Google Sans Display',sans-serif;
+      font-size:32px; font-weight:700; letter-spacing:-.5px;
+      color:#e74c3c;
+      text-shadow: 0 0 10px rgba(231,76,60,.7), 0 0 24px rgba(231,76,60,.45), 0 0 48px rgba(231,76,60,.25);
+      animation: glow 2.5s ease-in-out infinite alternate;
+    }
+    @keyframes glow {
+      from { text-shadow: 0 0 8px rgba(231,76,60,.6), 0 0 20px rgba(231,76,60,.4), 0 0 40px rgba(231,76,60,.2); }
+      to   { text-shadow: 0 0 14px rgba(231,76,60,.9), 0 0 32px rgba(231,76,60,.6), 0 0 64px rgba(231,76,60,.35); }
+    }
 
     .g-heading { font-family:'Google Sans Display',sans-serif; font-size:24px; font-weight:400; color:var(--text); margin-bottom:8px; text-align:center; }
     .g-sub { font-size:15px; color:var(--text2); text-align:center; margin-bottom:28px; line-height:1.4; }
@@ -92,7 +101,7 @@
     #app.visible { display:flex; }
 
     .nav-rail { width:80px; background:var(--nav-bg); display:flex; flex-direction:column; align-items:center; padding:20px 0; gap:4px; position:fixed; top:0; left:0; bottom:0; z-index:100; border-right:1px solid var(--border); transition:background .3s,border-color .3s; }
-    .nav-brand { font-family:'Google Sans Display',sans-serif; font-size:9px; font-weight:700; color:var(--brand); letter-spacing:1.2px; text-transform:uppercase; writing-mode:vertical-rl; transform:rotate(180deg); margin-bottom:20px; margin-top:8px; }
+    .nav-brand { font-family:'Google Sans Display',sans-serif; font-size:7px; font-weight:700; color:var(--brand); letter-spacing:.8px; text-transform:uppercase; writing-mode:vertical-rl; transform:rotate(180deg); margin-bottom:20px; margin-top:8px; }
     .nav-item { display:flex; flex-direction:column; align-items:center; gap:4px; width:72px; padding:10px 0 8px; border-radius:16px; cursor:pointer; text-decoration:none; color:var(--text2); transition:background .15s; }
     .nav-item:hover { background:rgba(192,57,43,.08); }
     .nav-item.active { color:#4a0000; }
@@ -190,22 +199,13 @@
   <div class="g-card" id="g-card">
 
     <a class="oiq-logo" href="#">
-      <div class="oiq-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="9" r="5"/>
-          <line x1="12" y1="14" x2="12" y2="19"/>
-          <line x1="9" y1="19" x2="15" y2="19"/>
-          <circle cx="9.5" cy="8.5" r="1" fill="white" stroke="none"/>
-          <circle cx="14.5" cy="8.5" r="1" fill="white" stroke="none"/>
-        </svg>
-      </div>
-      <div class="oiq-wordmark">OpenIQ</div>
+      <div class="oiq-wordmark">Intelqong</div>
     </a>
 
     <!-- Email step -->
     <div class="step active" id="step-email">
       <div class="g-heading">Sign in</div>
-      <div class="g-sub">to continue to <strong>intelqong Admin</strong></div>
+      <div class="g-sub">to continue to <strong>Intelqong Admin</strong></div>
       <div class="g-field">
         <input type="email" id="email-input" value="mahmudul@intelqong.link" readonly class="hv"/>
         <label for="email-input">Email or phone</label>
@@ -224,7 +224,7 @@
       <div class="g-heading">Welcome</div>
       <div class="g-pill" onclick="backToEmail()">
         <div class="pill-av">M</div>
-        <span class="pill-txt">mahmudul@intelqong.link</span>
+        <span class="pill-txt"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="315c50595c4455445d71585f45545d405e5f561f5d585f5a">[email&#160;protected]</a></span>
         <span class="material-symbols-rounded" style="font-size:17px;color:var(--text2)">arrow_drop_down</span>
       </div>
       <div class="g-banner error" id="pw-err">
@@ -250,7 +250,7 @@
         <button class="g-link" onclick="backToEmail()">← Back</button>
         <button class="g-btn" id="pw-btn" onclick="checkPin()">Next</button>
       </div>
-      <div class="g-note">SHA-256 · Synced via private GitHub Gist</div>
+      <div class="g-note">SHA-256 · Synced via private GitHub Gist · Intelqong</div>
     </div>
   </div>
 
@@ -263,7 +263,7 @@
 <!-- DASHBOARD -->
 <div id="app">
   <nav class="nav-rail">
-    <div class="nav-brand">OpenIQ</div>
+    <div class="nav-brand">Intelqong</div>
     <a class="nav-item active" onclick="navigate('home',this)">
       <div class="nav-pill"><span class="material-symbols-rounded">home</span></div>
       <span class="nav-label">Home</span>
@@ -328,7 +328,7 @@
       <span class="sec-label">Account & Sync</span>
       <div class="settings-card">
         <div class="s-row">
-          <div class="s-info"><div class="s-title">Account</div><div class="s-sub">mahmudul@intelqong.link</div></div>
+          <div class="s-info"><div class="s-title">Account</div><div class="s-sub"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="cba6aaa3a6beafbea78ba2a5bfaea7baa4a5ace5a7a2a5a0">[email&#160;protected]</a></div></div>
           <span class="material-symbols-rounded" style="color:var(--brand)">verified_user</span>
         </div>
         <div class="s-row">
@@ -379,7 +379,7 @@
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 'use strict';
 
 // ── Credentials (keep repo private!) ──
@@ -600,12 +600,4 @@ async function saveLink(){
   const title=document.getElementById('f-title').value.trim();
   const url=document.getElementById('f-url').value.trim();
   if(!title||!url) return;
-  links.push({title,url,cat:document.getElementById('f-cat').value.trim(),icon:document.getElementById('f-icon').value.trim(),added:new Date().toISOString()});
-  closeModal(); renderLinks(); await gistSave(links);
-}
-
-document.getElementById('modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
-document.getElementById('stat-date').textContent=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
-</script>
-</body>
-</html>
+  links.push({title,url,cat:document.getElementById('f-cat').value.trim(),icon:document.getElementById('f-icon'
