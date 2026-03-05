@@ -482,7 +482,17 @@ async function apiSaveLinks(links) {
 function syncHV(i){ i.classList.toggle('hv', i.value.length > 0); }
 function showStep(id){ document.querySelectorAll('.step').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
 function shake(){ const c=document.getElementById('g-card'); c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake'); }
-function setBanner(id,msg){ const el=document.getElementById(id); if(msg){el.querySelector('span:last-child').textContent=msg;el.classList.add('show');}else el.classList.remove('show'); }
+function setBanner(id,msg){
+  const el=document.getElementById(id);
+  if(!el) return;
+  if(msg){
+    const msgEl=el.querySelector('[id$="-msg"]') || el.querySelector('span:last-child');
+    if(msgEl) msgEl.textContent=msg;
+    el.classList.add('show');
+  } else {
+    el.classList.remove('show');
+  }
+}
 function togglePw(){ const i=document.getElementById('pw-input'),ic=document.getElementById('eye-icon'); i.type=i.type==='password'?'text':'password'; ic.textContent=i.type==='password'?'visibility':'visibility_off'; }
 function setSyncState(s){ const d=document.getElementById('sync-dot'); if(!d)return; d.className='sync-dot'+(s!=='ok'?' '+s:''); d.title=s==='ok'?'Synced':s==='syncing'?'Syncing…':'Sync error'; }
 let _toastT; function showToast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(_toastT); _toastT=setTimeout(()=>t.classList.remove('show'),2500); }
@@ -580,7 +590,11 @@ async function syncNow(){
 }
 
 // ── Boot ──
-(function(){ showStep('step-email'); })();
+(function(){
+  const lu=parseInt(localStorage.getItem(LOCKOUT_KEY)||'0');
+  if(Date.now()>=lu){ localStorage.removeItem(LOCKOUT_KEY); localStorage.removeItem(ATTEMPT_KEY); }
+  showStep('step-email');
+})();
 
 // ── Dashboard ──
 let links=[];
