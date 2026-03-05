@@ -305,7 +305,7 @@
 
 <div id="share-page">
   <!-- Loading state -->
-  <div id="sp-loading" style="color:var(--text2);display:flex;align-items:center;gap:10px">
+  <div id="sp-loading" style="color:var(--text2);display:none;align-items:center;gap:10px">
     <span class="material-symbols-rounded" style="animation:spin 1s linear infinite;font-size:24px">progress_activity</span>
     Loading share…
   </div>
@@ -580,6 +580,7 @@ let _pinHash = null;
 
   document.getElementById('lock-screen').style.display = 'none';
   document.getElementById('share-page').classList.add('visible');
+  document.getElementById('sp-loading').style.display = 'flex';
 
   const token = m[1];
   loadSharePage(token);
