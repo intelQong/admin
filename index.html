@@ -96,7 +96,6 @@
     .g-bottom a:hover { text-decoration:underline; }
     .g-bottom-links { display:flex; gap:14px; }
 
-    /* ── APP ── */
     #app { display:none; width:100vw; min-height:100vh; flex-direction:row; background:var(--bg); position:fixed; inset:0; transition:background .3s; }
     #app.visible { display:flex; }
 
@@ -160,8 +159,10 @@
     .modal-actions { display:flex; justify-content:flex-end; gap:8px; }
     .m-btn-text { padding:10px 20px; border:none; background:none; border-radius:4px; font-family:'Google Sans',sans-serif; font-size:14px; font-weight:600; color:var(--brand); cursor:pointer; transition:background .15s; }
     .m-btn-text:hover { background:rgba(192,57,43,.08); }
-    .m-btn-fill { padding:10px 24px; border:none; background:var(--brand); color:#fff; border-radius:4px; font-family:'Google Sans',sans-serif; font-size:14px; font-weight:600; cursor:pointer; }
+    .m-btn-fill { padding:10px 24px; border:none; background:var(--brand); color:#fff; border-radius:4px; font-family:'Google Sans',sans-serif; font-size:14px; font-weight:600; cursor:pointer; position:relative; }
     .m-btn-fill:hover { background:var(--brand-h); }
+    .m-btn-fill.loading { color:transparent; pointer-events:none; }
+    .m-btn-fill.loading::after { content:''; position:absolute; top:50%; left:50%; width:16px; height:16px; margin:-8px; border:2px solid rgba(255,255,255,.4); border-top-color:#fff; border-radius:50%; animation:spin .6s linear infinite; }
 
     .settings-card { background:var(--surface); border-radius:12px; border:1px solid var(--border); overflow:hidden; transition:background .3s,border-color .3s; }
     .s-row { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:1px solid var(--border); gap:16px; transition:border-color .3s; }
@@ -195,7 +196,6 @@
 <!-- LOCK SCREEN -->
 <div id="lock-screen">
   <div class="g-card" id="g-card">
-
     <a class="oiq-logo" href="#">
       <div class="oiq-wordmark">Intelqong</div>
     </a>
@@ -222,7 +222,7 @@
       <div class="g-heading">Welcome</div>
       <div class="g-pill" onclick="backToEmail()">
         <div class="pill-av">M</div>
-        <span class="pill-txt"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0a676b62677f6e7f664a63647e6f667b65646d2466636461">[email&#160;protected]</a></span>
+        <span class="pill-txt">mahmudul@intelqong.link</span>
         <span class="material-symbols-rounded" style="font-size:17px;color:var(--text2)">arrow_drop_down</span>
       </div>
       <div class="g-banner error" id="pw-err">
@@ -245,14 +245,13 @@
         <button class="g-link" style="padding-left:0">Forgot password?</button>
       </div>
       <div class="g-footer">
-        <button class="g-link" onclick="backToEmail()">← Back</button>
+        <button class="g-link" onclick="backToEmail()">&#8592; Back</button>
         <button class="g-btn" id="pw-btn" onclick="checkPin()">Next</button>
       </div>
       <div class="g-note" style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:16px">
         <svg width="14" height="14" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 2L3 8v8c0 8.5 5.5 15.5 13 17 7.5-1.5 13-8.5 13-17V8L16 2z" fill="#F38020"/></svg>
         <span>Protected by Cloudflare</span>
       </div>
-
     </div>
   </div>
 
@@ -311,7 +310,7 @@
         </div>
         <div class="stat-card">
           <div class="stat-icon" style="background:#fef7e0;color:#f29900"><span class="material-symbols-rounded">calendar_today</span></div>
-          <div class="stat-val" id="stat-date">—</div>
+          <div class="stat-val" id="stat-date">&#8212;</div>
           <div class="stat-lbl">Today</div>
         </div>
       </div>
@@ -327,14 +326,14 @@
 
     <!-- SETTINGS -->
     <div class="page" id="page-settings">
-      <span class="sec-label">Account & Sync</span>
+      <span class="sec-label">Account &amp; Sync</span>
       <div class="settings-card">
         <div class="s-row">
-          <div class="s-info"><div class="s-title">Account</div><div class="s-sub"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="771a161f1a0213021b371e1903121b06181910591b1e191c">[email&#160;protected]</a></div></div>
+          <div class="s-info"><div class="s-title">Account</div><div class="s-sub">mahmudul@intelqong.link</div></div>
           <span class="material-symbols-rounded" style="color:var(--brand)">verified_user</span>
         </div>
         <div class="s-row">
-          <div class="s-info"><div class="s-title">Storage</div><div class="s-sub">Private Gist · Cloudflare Worker proxy · cross-device</div></div>
+          <div class="s-info"><div class="s-title">Storage</div><div class="s-sub">Private Gist &#183; Cloudflare Worker proxy &#183; cross-device</div></div>
           <span class="material-symbols-rounded" style="color:#1e8e3e">cloud_done</span>
         </div>
         <div class="s-row">
@@ -369,6 +368,7 @@
   <span class="material-symbols-rounded">add</span>Add Link
 </button>
 
+<!-- ADD LINK MODAL -->
 <div class="modal-bg" id="modal">
   <div class="modal">
     <div class="modal-title">Add a link</div>
@@ -376,7 +376,7 @@
       <div class="m-field"><label>Title</label><input type="text" id="f-title" placeholder="e.g. GitHub"/></div>
       <div class="m-field"><label>URL</label><input type="url" id="f-url" placeholder="https://"/></div>
       <div class="m-field"><label>Category</label><input type="text" id="f-cat" placeholder="e.g. Dev, Social, Tools"/></div>
-      <div class="m-field"><label>Icon (emoji)</label><input type="text" id="f-icon" placeholder="🔗" maxlength="2"/></div>
+      <div class="m-field"><label>Icon (emoji)</label><input type="text" id="f-icon" placeholder="&#128279;" maxlength="2"/></div>
     </div>
     <div class="modal-actions">
       <button class="m-btn-text" onclick="closeModal()">Cancel</button>
@@ -414,26 +414,22 @@
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 'use strict';
 
-// ── Only non-secret config lives here ──
-const WORKER = 'https://summer-shadow-2ad9.intelqong.workers.dev';
+const WORKER      = 'https://summer-shadow-2ad9.intelqong.workers.dev';
 const ATTEMPT_KEY = 'iq_att';
 const LOCKOUT_KEY = 'iq_lock';
 const MAX_ATTEMPTS = 5;
 const LOCKOUT_MS   = 5 * 60 * 1000;
 
-// PIN hash computed client-side, verified server-side — no hash stored in HTML
 async function sha256(str) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
 }
 
-// Session stores only the hash (not the PIN) — used as auth header for API calls
 let _pinHash = null;
 
-// ── Worker API calls ──
 async function apiAuth(hash) {
   const r = await fetch(`${WORKER}/auth`, {
     method: 'POST',
@@ -447,13 +443,10 @@ async function apiAuth(hash) {
 async function apiGetLinks() {
   setSyncState('syncing');
   try {
-    const r = await fetch(`${WORKER}/links`, {
-      headers: { 'X-Pin-Hash': _pinHash },
-    });
+    const r = await fetch(`${WORKER}/links`, { headers: { 'X-Pin-Hash': _pinHash } });
     if (!r.ok) throw new Error(r.status);
     const data = await r.json();
     setSyncState('ok');
-    // cache locally as fallback
     localStorage.setItem('iq_cache', JSON.stringify(data.links));
     return data.links;
   } catch {
@@ -474,207 +467,235 @@ async function apiSaveLinks(links) {
     if (!r.ok) throw new Error(r.status);
     localStorage.setItem('iq_cache', JSON.stringify(links));
     setSyncState('ok');
-    showToast('Saved ✓');
+    showToast('Saved \u2713');
   } catch {
     setSyncState('error');
     localStorage.setItem('iq_cache', JSON.stringify(links));
-    showToast('Sync failed — saved to cache');
+    showToast('Sync failed \u2014 saved to cache');
   }
 }
 
-// ── UI helpers ──
-function syncHV(i){ i.classList.toggle('hv', i.value.length > 0); }
-function showStep(id){ document.querySelectorAll('.step').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-function shake(){ const c=document.getElementById('g-card'); c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake'); }
-function setBanner(id,msg){
-  const el=document.getElementById(id);
-  if(!el) return;
-  if(msg){
-    const msgEl=el.querySelector('[id$="-msg"]') || el.querySelector('span:last-child');
-    if(msgEl) msgEl.textContent=msg;
+function syncHV(i) { i.classList.toggle('hv', i.value.length > 0); }
+function showStep(id) { document.querySelectorAll('.step').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+function shake() { const c = document.getElementById('g-card'); c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake'); }
+function setBanner(id, msg) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (msg) {
+    const msgEl = document.getElementById(id + '-msg') || el.querySelector('span:last-child');
+    if (msgEl) msgEl.textContent = msg;
     el.classList.add('show');
   } else {
     el.classList.remove('show');
   }
 }
-function togglePw(){ const i=document.getElementById('pw-input'),ic=document.getElementById('eye-icon'); i.type=i.type==='password'?'text':'password'; ic.textContent=i.type==='password'?'visibility':'visibility_off'; }
-function setSyncState(s){ const d=document.getElementById('sync-dot'); if(!d)return; d.className='sync-dot'+(s!=='ok'?' '+s:''); d.title=s==='ok'?'Synced':s==='syncing'?'Syncing…':'Sync error'; }
-let _toastT; function showToast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(_toastT); _toastT=setTimeout(()=>t.classList.remove('show'),2500); }
+function togglePw() { const i = document.getElementById('pw-input'), ic = document.getElementById('eye-icon'); i.type = i.type === 'password' ? 'text' : 'password'; ic.textContent = i.type === 'password' ? 'visibility' : 'visibility_off'; }
+function setSyncState(s) { const d = document.getElementById('sync-dot'); if (!d) return; d.className = 'sync-dot' + (s !== 'ok' ? ' ' + s : ''); d.title = s === 'ok' ? 'Synced' : s === 'syncing' ? 'Syncing\u2026' : 'Sync error'; }
+let _toastT;
+function showToast(m) { const t = document.getElementById('toast'); t.textContent = m; t.classList.add('show'); clearTimeout(_toastT); _toastT = setTimeout(() => t.classList.remove('show'), 2500); }
 
-// ── Auth ──
-function checkEmail(){
+function checkEmail() {
   showStep('step-password');
-  setTimeout(()=>document.getElementById('pw-input').focus(),60);
-  const lu=parseInt(localStorage.getItem(LOCKOUT_KEY)||'0');
-  if(Date.now()<lu) startLockout(lu);
+  setTimeout(() => document.getElementById('pw-input').focus(), 60);
+  const lu = parseInt(localStorage.getItem(LOCKOUT_KEY) || '0');
+  if (Date.now() < lu) startLockout(lu);
 }
 
-function backToEmail(){
-  showStep('step-email'); setBanner('pw-err',null);
-  const pw=document.getElementById('pw-input'); pw.value=''; pw.classList.remove('hv','err');
+function backToEmail() {
+  showStep('step-email');
+  setBanner('pw-err', null);
+  const pw = document.getElementById('pw-input');
+  pw.value = ''; pw.classList.remove('hv', 'err');
 }
 
-async function checkPin(){
-  const lu=parseInt(localStorage.getItem(LOCKOUT_KEY)||'0');
-  if(Date.now()<lu) return;
-  const val=document.getElementById('pw-input').value;
-  if(!val){ setBanner('pw-err','Enter a password'); return; }
-  const btn=document.getElementById('pw-btn'); btn.classList.add('loading');
-  setBanner('pw-err',null);
+async function checkPin() {
+  const lu = parseInt(localStorage.getItem(LOCKOUT_KEY) || '0');
+  if (Date.now() < lu) return;
+  const val = document.getElementById('pw-input').value;
+  if (!val) { setBanner('pw-err', 'Enter a password'); return; }
+  const btn = document.getElementById('pw-btn');
+  btn.classList.add('loading');
+  setBanner('pw-err', null);
 
   let res;
   try {
     const hash = await sha256(val);
     res = await apiAuth(hash);
-    if(res.ok){
-      localStorage.removeItem(ATTEMPT_KEY); localStorage.removeItem(LOCKOUT_KEY);
+    if (res.ok) {
+      localStorage.removeItem(ATTEMPT_KEY);
+      localStorage.removeItem(LOCKOUT_KEY);
       _pinHash = hash;
       btn.classList.remove('loading');
       await unlockApp();
       return;
     }
-  } catch(e) {
-    // Network / Worker unreachable
+  } catch (e) {
     btn.classList.remove('loading');
-    setBanner('pw-err','Could not reach server. Check your connection.');
+    setBanner('pw-err', 'Could not reach server. Check your connection.');
     return;
   }
 
-  // Wrong password path
   btn.classList.remove('loading');
   shake();
-  document.getElementById('pw-input').value='';
+  document.getElementById('pw-input').value = '';
   document.getElementById('pw-input').classList.remove('hv');
-  let att=parseInt(localStorage.getItem(ATTEMPT_KEY)||'0')+1;
-  localStorage.setItem(ATTEMPT_KEY,att);
-  const left=MAX_ATTEMPTS-att;
-  if(att>=MAX_ATTEMPTS){
-    const until=Date.now()+LOCKOUT_MS;
-    localStorage.setItem(LOCKOUT_KEY,until);
-    setBanner('pw-err',null); startLockout(until);
+  let att = parseInt(localStorage.getItem(ATTEMPT_KEY) || '0') + 1;
+  localStorage.setItem(ATTEMPT_KEY, att);
+  const left = MAX_ATTEMPTS - att;
+  if (att >= MAX_ATTEMPTS) {
+    const until = Date.now() + LOCKOUT_MS;
+    localStorage.setItem(LOCKOUT_KEY, until);
+    setBanner('pw-err', null);
+    startLockout(until);
   } else {
-    setBanner('pw-err',`Wrong password — ${left} attempt${left===1?'':'s'} remaining.`);
+    setBanner('pw-err', `Wrong password \u2014 ${left} attempt${left === 1 ? '' : 's'} remaining.`);
   }
 }
 
-let _lockTimer=null;
-function startLockout(until){
-  const btn=document.getElementById('pw-btn'),inp=document.getElementById('pw-input');
-  inp.disabled=true; btn.disabled=true;
-  document.getElementById('pw-lockout').classList.add('show'); setBanner('pw-err',null);
-  function tick(){
-    const rem=Math.ceil((until-Date.now())/1000);
-    if(rem<=0){ clearInterval(_lockTimer); document.getElementById('pw-lockout').classList.remove('show'); inp.disabled=false; btn.disabled=false; localStorage.removeItem(LOCKOUT_KEY); localStorage.removeItem(ATTEMPT_KEY); }
-    else{ const m=String(Math.floor(rem/60)).padStart(2,'0'),s=String(rem%60).padStart(2,'0'); document.getElementById('lockout-msg').textContent=`Too many attempts — try again in ${m}:${s}`; }
+let _lockTimer = null;
+function startLockout(until) {
+  const btn = document.getElementById('pw-btn'), inp = document.getElementById('pw-input');
+  inp.disabled = true; btn.disabled = true;
+  document.getElementById('pw-lockout').classList.add('show');
+  setBanner('pw-err', null);
+  function tick() {
+    const rem = Math.ceil((until - Date.now()) / 1000);
+    if (rem <= 0) {
+      clearInterval(_lockTimer);
+      document.getElementById('pw-lockout').classList.remove('show');
+      inp.disabled = false; btn.disabled = false;
+      localStorage.removeItem(LOCKOUT_KEY);
+      localStorage.removeItem(ATTEMPT_KEY);
+    } else {
+      const m = String(Math.floor(rem / 60)).padStart(2, '0'), s = String(rem % 60).padStart(2, '0');
+      document.getElementById('lockout-msg').textContent = `Too many attempts \u2014 try again in ${m}:${s}`;
+    }
   }
-  tick(); _lockTimer=setInterval(tick,1000);
+  tick(); _lockTimer = setInterval(tick, 1000);
 }
 
-async function unlockApp(){
+async function unlockApp() {
   links = await apiGetLinks();
   document.getElementById('lock-screen').classList.add('hidden');
   document.getElementById('app').classList.add('visible');
-  document.getElementById('fab').style.display='flex';
+  document.getElementById('fab').style.display = 'flex';
+  const today = new Date();
+  document.getElementById('stat-date').textContent = today.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   renderLinks();
 }
 
-function lockApp(){
-  _pinHash = null; // wipe from memory
+function lockApp() {
+  _pinHash = null;
   document.getElementById('app').classList.remove('visible');
   document.getElementById('lock-screen').classList.remove('hidden');
-  document.getElementById('fab').style.display='none';
-  const pw=document.getElementById('pw-input'); pw.value=''; pw.classList.remove('hv','err');
-  setBanner('pw-err',null); showStep('step-email');
+  document.getElementById('fab').style.display = 'none';
+  const pw = document.getElementById('pw-input');
+  pw.value = ''; pw.classList.remove('hv', 'err');
+  setBanner('pw-err', null);
+  showStep('step-email');
 }
 
-async function syncNow(){
-  showToast('Syncing…');
+async function syncNow() {
+  showToast('Syncing\u2026');
   links = await apiGetLinks();
   renderLinks();
 }
 
-// ── Boot ──
-(function(){
-  const lu=parseInt(localStorage.getItem(LOCKOUT_KEY)||'0');
-  if(Date.now()>=lu){ localStorage.removeItem(LOCKOUT_KEY); localStorage.removeItem(ATTEMPT_KEY); }
+(function () {
+  const lu = parseInt(localStorage.getItem(LOCKOUT_KEY) || '0');
+  if (Date.now() >= lu) {
+    localStorage.removeItem(LOCKOUT_KEY);
+    localStorage.removeItem(ATTEMPT_KEY);
+  }
   showStep('step-email');
 })();
 
-// ── Dashboard ──
-let links=[];
-const PT={home:'Overview',links:'Links',settings:'Settings'};
+let links = [];
+const PT = { home: 'Overview', links: 'Links', settings: 'Settings' };
 
-function navigate(page,el){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById('page-'+page).classList.add('active'); el.classList.add('active');
-  document.getElementById('page-title').textContent=PT[page];
-  document.getElementById('fab').style.display=page==='settings'?'none':'flex';
+function navigate(page, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  el.classList.add('active');
+  document.getElementById('page-title').textContent = PT[page];
+  document.getElementById('fab').style.display = page === 'settings' ? 'none' : 'flex';
 }
 
-function renderLinks(){
-  const recent=document.getElementById('recent-links'),all=document.getElementById('all-links');
-  document.getElementById('stat-links').textContent=links.length;
-  document.getElementById('stat-cats').textContent=new Set(links.map(l=>l.cat).filter(Boolean)).size;
-  const empty=`<div class="empty"><span class="material-symbols-rounded">link_off</span><p>No links yet.</p></div>`;
-  if(!links.length){recent.innerHTML=all.innerHTML=empty;return;}
-  const card=(l,i,del)=>`
+function renderLinks() {
+  const recent = document.getElementById('recent-links'), all = document.getElementById('all-links');
+  document.getElementById('stat-links').textContent = links.length;
+  document.getElementById('stat-cats').textContent = new Set(links.map(l => l.cat).filter(Boolean)).size;
+  const empty = `<div class="empty"><span class="material-symbols-rounded">link_off</span><p>No links yet.</p></div>`;
+  if (!links.length) { recent.innerHTML = all.innerHTML = empty; return; }
+  const card = (l, i, del) => `
     <a class="link-row" href="${l.url}" target="_blank" rel="noopener">
-      <div class="l-fav">${l.icon||'🔗'}</div>
+      <div class="l-fav">${l.icon || '\ud83d\udd17'}</div>
       <div class="l-info"><div class="l-title">${l.title}</div><div class="l-url">${l.url}</div></div>
-      ${l.cat?`<span class="l-chip">${l.cat}</span>`:''}
-      ${del?`<button class="t-icon" onclick="deleteLink(event,${i})"><span class="material-symbols-rounded" style="font-size:18px">delete</span></button>`:''}
+      ${l.cat ? `<span class="l-chip">${l.cat}</span>` : ''}
+      ${del ? `<button class="t-icon" onclick="deleteLink(event,${i})"><span class="material-symbols-rounded" style="font-size:18px">delete</span></button>` : ''}
     </a>`;
-  all.innerHTML=links.map((l,i)=>card(l,i,true)).join('');
-  recent.innerHTML=links.slice(-3).reverse().map((l,i)=>card(l,i,false)).join('');
+  all.innerHTML = links.map((l, i) => card(l, i, true)).join('');
+  recent.innerHTML = links.slice(-3).reverse().map((l, i) => card(l, i, false)).join('');
 }
 
-async function deleteLink(e,i){ e.preventDefault(); e.stopPropagation(); links.splice(i,1); renderLinks(); await apiSaveLinks(links); }
-async function clearLinks(){ if(!confirm('Permanently remove all links?'))return; links=[]; renderLinks(); await apiSaveLinks(links); }
-function openModal(){ document.getElementById('modal').classList.add('open'); document.getElementById('f-title').focus(); }
-function closeModal(){ document.getElementById('modal').classList.remove('open'); ['f-title','f-url','f-cat','f-icon'].forEach(id=>document.getElementById(id).value=''); }
+async function deleteLink(e, i) { e.preventDefault(); e.stopPropagation(); links.splice(i, 1); renderLinks(); await apiSaveLinks(links); }
+async function clearLinks() { if (!confirm('Permanently remove all links?')) return; links = []; renderLinks(); await apiSaveLinks(links); }
 
-// ── Reset PIN ──
-function openResetPin(){
+function openModal() { document.getElementById('modal').classList.add('open'); document.getElementById('f-title').focus(); }
+function closeModal() { document.getElementById('modal').classList.remove('open'); ['f-title', 'f-url', 'f-cat', 'f-icon'].forEach(id => document.getElementById(id).value = ''); }
+
+async function saveLink() {
+  const title = document.getElementById('f-title').value.trim();
+  const url   = document.getElementById('f-url').value.trim();
+  if (!title || !url) return;
+  links.push({ title, url, cat: document.getElementById('f-cat').value.trim(), icon: document.getElementById('f-icon').value.trim() });
+  closeModal();
+  renderLinks();
+  await apiSaveLinks(links);
+}
+
+function openResetPin() {
   document.getElementById('reset-pin-modal').classList.add('open');
-  setBanner('rp-err',null);
-  ['rp-current','rp-new','rp-confirm'].forEach(id=>document.getElementById(id).value='');
+  setBanner('rp-err', null);
+  ['rp-current', 'rp-new', 'rp-confirm'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('rp-current').focus();
 }
-function closeResetPin(){
+function closeResetPin() {
   document.getElementById('reset-pin-modal').classList.remove('open');
-  ['rp-current','rp-new','rp-confirm'].forEach(id=>document.getElementById(id).value='');
-  setBanner('rp-err',null);
+  ['rp-current', 'rp-new', 'rp-confirm'].forEach(id => document.getElementById(id).value = '');
+  setBanner('rp-err', null);
 }
-async function submitResetPin(){
-  const current=document.getElementById('rp-current').value;
-  const newPin=document.getElementById('rp-new').value;
-  const confirm=document.getElementById('rp-confirm').value;
-  if(!current||!newPin||!confirm){ setBanner('rp-err','All fields are required.'); return; }
-  if(newPin!==confirm){ setBanner('rp-err','New passwords do not match.'); return; }
-  if(newPin.length<4){ setBanner('rp-err','New password must be at least 4 characters.'); return; }
-  const btn=document.getElementById('rp-btn'); btn.classList.add('loading');
+async function submitResetPin() {
+  const current = document.getElementById('rp-current').value;
+  const newPin  = document.getElementById('rp-new').value;
+  const confirm = document.getElementById('rp-confirm').value;
+  if (!current || !newPin || !confirm) { setBanner('rp-err', 'All fields are required.'); return; }
+  if (newPin !== confirm) { setBanner('rp-err', 'New passwords do not match.'); return; }
+  if (newPin.length < 4) { setBanner('rp-err', 'New password must be at least 4 characters.'); return; }
+  const btn = document.getElementById('rp-btn');
+  btn.classList.add('loading');
   try {
-    const currentHash=await sha256(current);
-    // Verify current PIN first
-    const authRes=await apiAuth(currentHash);
-    if(!authRes.ok) throw new Error('wrong_current');
-    const newHash=await sha256(newPin);
-    // Send new hash to Worker
-    const r=await fetch(`${WORKER}/reset-pin`,{
-      method:'POST',
-      headers:{'Content-Type':'application/json','X-Pin-Hash':_pinHash},
-      body:JSON.stringify({newHash}),
+    const currentHash = await sha256(current);
+    const authRes = await apiAuth(currentHash);
+    if (!authRes.ok) throw new Error('wrong_current');
+    const newHash = await sha256(newPin);
+    const r = await fetch(`${WORKER}/reset-pin`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Pin-Hash': _pinHash },
+      body: JSON.stringify({ newHash }),
     });
-    if(!r.ok) throw new Error('worker_error');
-    _pinHash=newHash;
+    if (!r.ok) throw new Error('worker_error');
+    _pinHash = newHash;
     btn.classList.remove('loading');
     closeResetPin();
-    showToast('PIN updated successfully ✓');
-  } catch(e){
+    showToast('PIN updated successfully \u2713');
+  } catch (e) {
     btn.classList.remove('loading');
-    if(e.message==='wrong_current') setBanner('rp-err','Current password is incorrect.');
-    else setBanner('rp-err','Failed to update PIN. Try again.');
+    if (e.message === 'wrong_current') setBanner('rp-err', 'Current password is incorrect.');
+    else setBanner('rp-err', 'Failed to update PIN. Try again.');
   }
 }
-async function saveLink()
+</script>
+</body>
+</html>
