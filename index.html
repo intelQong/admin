@@ -224,7 +224,7 @@
   <div class="g-heading">Sign in</div>
   <div class="g-sub">to continue to <strong>Intelqong Admin</strong></div>
   <div class="g-field">
-    <input type="email" id="email-input" readonly class="hv"/>
+    <input type="email" id="email-input" placeholder=" " class="hv" autocomplete="off"/>
     <label for="email-input">Email or phone</label>
   </div>
   <div style="margin-bottom:20px">
@@ -738,20 +738,29 @@ async function registerPasskey() {
 
     const resp = cred.response;
 
-    // Extract public key safely — getPublicKey() may exist but return null on Safari/WebKit
-    const pubKeyBuf = (typeof resp.getPublicKey === 'function' && resp.getPublicKey()) || null;
+    // Safely convert a buffer — returns null if input is falsy instead of crashing
+    const safeBuf = (buf) => buf ? bufToB64url(buf) : null;
 
-    // attestationObject must exist; if missing, throw early with a clear message
-    if (!resp.attestationObject) throw new Error('Browser did not provide attestationObject');
+    // Extract public key — getPublicKey() can return null on iOS Safari
+    const pubKeyBuf = (typeof resp.getPublicKey === 'function') ? resp.getPublicKey() : null;
+
+    // Validate all required fields before sending
+    const rawId          = cred.rawId;
+    const clientData     = resp.clientDataJSON;
+    const attestation    = resp.attestationObject;
+
+    if (!rawId)       throw new Error('Missing credentialId');
+    if (!clientData)  throw new Error('Missing clientDataJSON');
+    if (!attestation) throw new Error('Missing attestationObject');
 
     const r = await fetch(WORKER + '/passkey/register', {
       method: 'POST',
       headers: {'Content-Type':'application/json', 'X-Pin-Hash':_pinHash},
       body: JSON.stringify({
-        credentialId:      bufToB64url(cred.rawId),
-        publicKey:         pubKeyBuf ? bufToB64url(pubKeyBuf) : null,
-        clientDataJSON:    bufToB64url(resp.clientDataJSON),
-        attestationObject: bufToB64url(resp.attestationObject),
+        credentialId:      safeBuf(rawId),
+        publicKey:         safeBuf(pubKeyBuf),
+        clientDataJSON:    safeBuf(clientData),
+        attestationObject: safeBuf(attestation),
       })
     });
     const data = await r.json();
@@ -815,9 +824,6 @@ async function checkPasskeyAfterLogin() {
     localStorage.removeItem(LOCKOUT_KEY);
     localStorage.removeItem(ATTEMPT_KEY);
   }
-  // Set email via JS so Cloudflare email obfuscation cannot mangle it
-  const _em = document.getElementById('email-input');
-  if (_em) { _em.value = ['admin','intelqong.link'].join('@'); }
   showStep('step-email');
   initPasskeyButton();
 })();
