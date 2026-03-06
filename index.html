@@ -6,21 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
   <title>Sign in - Intelqong</title>
+  <link rel="stylesheet" href="https://fonts.bunny.net/css?family=inter:300,400,500,600,700&display=swap">
   <script>
     (function(){
-      var h = document.head;
-      ['https://fonts.googleapis.com','https://fonts.gstatic.com'].forEach(function(u,i){
-        var p = document.createElement('link');
-        p.rel = i===1 ? 'preconnect' : 'preconnect';
-        if(i===1) p.crossOrigin = '';
-        p.href = u; h.appendChild(p);
-      });
-      ['Inter:wght@300;400;500;600;700','Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0'].forEach(function(f){
-        var l = document.createElement('link');
-        l.rel = 'stylesheet';
-        l.href = 'https://fonts.googleapis.com/css2?family=' + f + '&display=swap';
-        h.appendChild(l);
-      });
+      var l = document.createElement('link');
+      l.rel = 'stylesheet';
+      l.href = 'https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&display=swap';
+      document.head.appendChild(l);
     })();
   </script>
   <style>
