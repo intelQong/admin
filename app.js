@@ -407,6 +407,9 @@ if (Date.now() >= lu) {
 localStorage.removeItem(LOCKOUT_KEY);
 localStorage.removeItem(ATTEMPT_KEY);
 }
+// Set email via JS so Cloudflare email obfuscation cannot mangle it
+const _em = document.getElementById(‘email-input’);
+if (_em) { _em.value = [‘admin’,‘intelqong.link’].join(’@’); }
 showStep(‘step-email’);
 initPasskeyButton();
 })();
