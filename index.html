@@ -6,22 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Sign in - Intelqong</title>
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@300;400;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&display=swap" rel="stylesheet"/>
-  <!-- Runs before body renders — hides login instantly if share URL detected -->
-  <script>
-    if (/^#\/share\/[a-zA-Z0-9_-]{10,}$/.test(location.hash)) {
-      document.documentElement.classList.add('is-share-page');
-    }
-  </script>
   <style>
-    /* When share page — hide login & app completely before JS runs */
-    html.is-share-page #lock-screen,
-    html.is-share-page #app,
-    html.is-share-page #fab { display:none !important; }
-    html.is-share-page #share-page { display:flex !important; }
     *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
     :root {
-      --brand:#c0392b; --brand-h:#96281b;
-      --red:#d93025;
+      --brand:#c0392b; --brand-h:#96281b; --red:#d93025;
       --bg:#f1f3f4; --surface:#ffffff; --surface2:#f8f9fa;
       --text:#202124; --text2:#5f6368; --border:#dadce0;
       --input-bg:#f1f3f4; --pill-bg:#ffffff;
@@ -29,7 +17,6 @@
       --chip-bg:#fde8e6; --chip-text:#c0392b;
       --nav-bg:#ffffff; --row-hover:#f8f9fa;
       --card-shadow:0 1px 3px rgba(0,0,0,.12),0 2px 6px rgba(0,0,0,.08);
-      --green:#1e8e3e;
     }
     @media(prefers-color-scheme:dark){:root{
       --bg:#131314; --surface:#1e1f20; --surface2:#2a2b2c;
@@ -51,83 +38,16 @@
     @keyframes cardShake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-5px)} 80%{transform:translateX(5px)} }
 
 ```
-/* =====================
-   SHARE PAGE
-===================== */
-#share-page {
-  display:none; min-height:100vh;
-  align-items:center; justify-content:center;
-  padding:24px 16px; flex-direction:column; gap:16px;
-}
-#share-page.visible { display:flex; }
-
-.share-card {
-  background:var(--surface); border:1px solid var(--border);
-  border-radius:24px; box-shadow:var(--card-shadow);
-  width:100%; max-width:440px; overflow:hidden; animation:fadeUp .3s ease;
-}
-.sc-head {
-  background:linear-gradient(135deg,#c0392b,#7b1a11);
-  padding:28px 28px 24px; display:flex; align-items:center; gap:16px;
-}
-.sc-emoji {
-  width:56px; height:56px; border-radius:16px; flex-shrink:0;
-  background:rgba(255,255,255,.2); border:2px solid rgba(255,255,255,.3);
-  display:flex; align-items:center; justify-content:center; font-size:28px;
-}
-.sc-head-info { flex:1; min-width:0; }
-.sc-title { font-family:'Google Sans Display',sans-serif; font-size:20px; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.sc-cat { font-size:12px; color:rgba(255,255,255,.75); margin-top:4px; }
-.sc-body { padding:24px 28px; display:flex; flex-direction:column; gap:14px; }
-.sc-url-row {
-  display:flex; align-items:center; gap:10px;
-  background:var(--surface2); border:1px solid var(--border);
-  border-radius:10px; padding:13px 16px;
-}
-.sc-url-row .material-symbols-rounded { font-size:18px; color:var(--text2); flex-shrink:0; }
-.sc-url-txt { flex:1; font-size:13px; color:var(--text2); word-break:break-all; line-height:1.5; }
-.sc-copy { background:none; border:none; cursor:pointer; color:var(--brand); padding:4px 6px; border-radius:6px; flex-shrink:0; display:flex; align-items:center; transition:background .15s; }
-.sc-copy:hover { background:var(--chip-bg); }
-.sc-timer {
-  display:flex; align-items:center; gap:8px;
-  background:var(--warn-bg); border-radius:10px; padding:10px 14px;
-  font-size:13px; color:var(--warn-text);
-}
-.sc-timer .material-symbols-rounded { font-size:16px; flex-shrink:0; }
-.sc-timer-txt { flex:1; }
-.sc-timer-count { font-weight:700; font-size:15px; letter-spacing:.5px; }
-.sc-visit {
-  width:100%; padding:14px; border:none; border-radius:10px;
-  background:var(--brand); color:#fff;
-  font-family:'Google Sans',sans-serif; font-size:15px; font-weight:600;
-  cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;
-  transition:background .15s;
-}
-.sc-visit:hover { background:var(--brand-h); }
-.sc-expired { display:flex; flex-direction:column; align-items:center; gap:12px; padding:48px 28px; text-align:center; color:var(--text2); }
-.sc-expired .material-symbols-rounded { font-size:48px; color:var(--red); opacity:.6; }
-.sc-expired h3 { font-size:18px; color:var(--text); }
-.sc-expired p { font-size:14px; line-height:1.5; }
-.sc-branding { font-size:12px; color:var(--text2); display:flex; align-items:center; gap:6px; }
-.sc-brand-name { font-weight:700; color:var(--brand); }
-.sc-loading { color:var(--text2); display:flex; align-items:center; gap:10px; font-size:14px; }
-.sc-loading .material-symbols-rounded { animation:spin 1s linear infinite; font-size:24px; }
-
-/* =====================
-   LOCK SCREEN
-===================== */
+/* LOCK SCREEN */
 #lock-screen { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px 16px; }
 #lock-screen.hidden { display:none; }
-
 .g-card { background:var(--surface); border:1px solid var(--border); border-radius:28px; box-shadow:var(--card-shadow); width:100%; max-width:400px; padding:40px 40px 32px; display:flex; flex-direction:column; align-items:center; animation:fadeUp .3s ease; transition:background .3s,border-color .3s; }
 .oiq-logo { display:flex; align-items:center; justify-content:center; margin-bottom:24px; text-decoration:none; }
 .oiq-wordmark { font-family:'Google Sans Display',sans-serif; font-size:32px; font-weight:700; letter-spacing:-.5px; color:#e74c3c; animation:glow 2.5s ease-in-out infinite alternate; }
-
 .g-heading { font-family:'Google Sans Display',sans-serif; font-size:24px; font-weight:400; color:var(--text); margin-bottom:8px; text-align:center; }
 .g-sub { font-size:15px; color:var(--text2); text-align:center; margin-bottom:28px; line-height:1.4; }
 .step { display:none; flex-direction:column; align-items:stretch; width:100%; }
 .step.active { display:flex; }
-
 .g-field { position:relative; width:100%; margin-bottom:20px; }
 .g-field input { width:100%; height:56px; padding:0 44px 0 16px; font-family:'Google Sans',sans-serif; font-size:16px; color:var(--text); background:transparent; border:1px solid var(--border); border-radius:4px; outline:none; transition:border-color .2s; caret-color:var(--brand); }
 .g-field label { position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:16px; color:var(--text2); background:var(--surface); padding:0 4px; pointer-events:none; transition:all .15s ease; line-height:1; }
@@ -137,18 +57,15 @@
 .g-field input[readonly]:focus { border-color:var(--border); border-width:1px; }
 .g-field input[readonly]:focus ~ label { color:var(--text2); }
 .g-field .eye-btn { position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:var(--text2); padding:4px; display:flex; align-items:center; }
-
 .g-banner { border-radius:4px; padding:11px 14px; font-size:13px; display:none; align-items:flex-start; gap:9px; margin-bottom:16px; width:100%; line-height:1.4; }
 .g-banner.show { display:flex; }
 .g-banner.error { background:var(--error-bg); color:var(--red); }
 .g-banner.warn { background:var(--warn-bg); color:var(--warn-text); }
 .g-banner .material-symbols-rounded { font-size:17px; flex-shrink:0; margin-top:1px; }
-
 .g-pill { display:flex; align-items:center; gap:8px; border:1px solid var(--border); border-radius:24px; padding:5px 12px 5px 6px; width:fit-content; margin:0 auto 24px; cursor:pointer; transition:background .15s; background:var(--pill-bg); }
 .g-pill:hover { background:var(--surface2); }
 .pill-av { width:30px; height:30px; border-radius:50%; background:var(--brand); color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; flex-shrink:0; }
 .pill-txt { font-size:13px; color:var(--text); font-weight:500; }
-
 .g-footer { display:flex; align-items:center; justify-content:space-between; width:100%; margin-top:4px; }
 .g-link { font-size:14px; font-weight:600; color:var(--brand); background:none; border:none; padding:10px 12px; border-radius:4px; cursor:pointer; transition:background .15s; }
 .g-link:hover { background:rgba(192,57,43,.08); }
@@ -159,18 +76,14 @@
 .g-btn.loading::after { content:''; position:absolute; top:50%; left:50%; width:16px; height:16px; margin:-8px; border:2px solid rgba(255,255,255,.4); border-top-color:#fff; border-radius:50%; animation:spin .6s linear infinite; }
 .g-note { font-size:11px; color:var(--text2); text-align:center; margin-top:14px; line-height:1.6; }
 .shake { animation:cardShake .4s ease; }
-
 .g-bottom { max-width:400px; width:100%; display:flex; justify-content:space-between; align-items:center; padding:14px 4px 0; font-size:12px; color:var(--text2); }
 .g-bottom a { color:var(--text2); text-decoration:none; }
 .g-bottom a:hover { text-decoration:underline; }
 .g-bottom-links { display:flex; gap:14px; }
 
-/* =====================
-   APP
-===================== */
+/* APP */
 #app { display:none; width:100vw; min-height:100vh; flex-direction:row; background:var(--bg); position:fixed; inset:0; transition:background .3s; }
 #app.visible { display:flex; }
-
 .nav-rail { width:80px; background:var(--nav-bg); display:flex; flex-direction:column; align-items:center; padding:20px 0; gap:4px; position:fixed; top:0; left:0; bottom:0; z-index:100; border-right:1px solid var(--border); transition:background .3s,border-color .3s; }
 .nav-brand { font-family:'Google Sans Display',sans-serif; font-size:7px; font-weight:700; color:var(--brand); letter-spacing:.8px; text-transform:uppercase; writing-mode:vertical-rl; transform:rotate(180deg); margin-bottom:20px; margin-top:8px; }
 .nav-item { display:flex; flex-direction:column; align-items:center; gap:4px; width:72px; padding:10px 0 8px; border-radius:16px; cursor:pointer; text-decoration:none; color:var(--text2); transition:background .15s; }
@@ -182,7 +95,6 @@
 .nav-item:hover .nav-pill { background:rgba(192,57,43,.1); }
 .nav-item .material-symbols-rounded { font-size:22px; }
 .nav-item .nav-label { font-size:11px; font-weight:500; }
-
 .app-main { margin-left:80px; flex:1; display:flex; flex-direction:column; overflow-y:auto; }
 .topbar { background:var(--nav-bg); padding:12px 24px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:90; transition:background .3s,border-color .3s; }
 .topbar-title { font-family:'Google Sans Display',sans-serif; font-size:22px; font-weight:400; color:var(--text); }
@@ -190,22 +102,18 @@
 .t-icon { width:40px; height:40px; border-radius:50%; border:none; background:none; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--text2); transition:background .15s; }
 .t-icon:hover { background:var(--surface2); }
 .t-avatar { width:36px; height:36px; border-radius:50%; background:var(--brand); color:#fff; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; cursor:pointer; flex-shrink:0; }
-
 .sync-dot { width:8px; height:8px; border-radius:50%; background:#1e8e3e; flex-shrink:0; }
 .sync-dot.syncing { background:var(--brand); animation:pulse 1s infinite; }
 .sync-dot.error { background:var(--red); }
-
 .page { padding:24px; display:none; flex-direction:column; gap:20px; animation:fadeUp .2s ease; }
 .page.active { display:flex; }
 .sec-label { font-size:11px; font-weight:600; color:var(--text2); letter-spacing:.8px; text-transform:uppercase; }
-
 .cards-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px; }
 .stat-card { background:var(--surface); border-radius:12px; padding:20px; border:1px solid var(--border); display:flex; flex-direction:column; gap:10px; transition:box-shadow .15s,background .3s,border-color .3s; }
 .stat-card:hover { box-shadow:0 2px 8px rgba(0,0,0,.12); }
 .stat-icon { width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:22px; }
 .stat-val { font-family:'Google Sans Display',sans-serif; font-size:28px; font-weight:400; color:var(--text); }
 .stat-lbl { font-size:13px; color:var(--text2); }
-
 .links-list { display:flex; flex-direction:column; gap:6px; }
 .link-row { background:var(--surface); border-radius:8px; border:1px solid var(--border); padding:13px 16px; display:flex; align-items:center; gap:14px; cursor:pointer; color:inherit; transition:box-shadow .15s,background .15s,border-color .3s; }
 .link-row:hover { box-shadow:0 1px 6px rgba(0,0,0,.1); background:var(--row-hover); }
@@ -214,13 +122,10 @@
 .l-title { font-size:14px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:var(--text); }
 .l-url { font-size:12px; color:var(--text2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .l-chip { font-size:11px; font-weight:500; padding:3px 10px; border-radius:12px; background:var(--chip-bg); color:var(--chip-text); flex-shrink:0; }
-
 .fab { position:fixed; bottom:24px; right:24px; background:var(--brand); color:#fff; border:none; border-radius:16px; padding:16px 20px; display:flex; align-items:center; gap:10px; font-family:'Google Sans',sans-serif; font-size:14px; font-weight:600; cursor:pointer; box-shadow:0 3px 8px rgba(192,57,43,.4); transition:transform .15s; z-index:200; }
 .fab:hover { transform:scale(1.04); }
 
-/* =====================
-   MODALS
-===================== */
+/* MODALS */
 .modal-bg { position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:300; display:none; align-items:center; justify-content:center; backdrop-filter:blur(3px); padding:16px; }
 .modal-bg.open { display:flex; }
 .modal { background:var(--surface); border-radius:28px; padding:28px; width:100%; max-width:420px; display:flex; flex-direction:column; gap:18px; box-shadow:0 8px 24px rgba(0,0,0,.25); animation:fadeUp .2s ease; border:1px solid var(--border); }
@@ -255,25 +160,9 @@
 .pv-copy:hover { background:var(--chip-bg); }
 .pv-warn { display:flex; align-items:flex-start; gap:9px; background:var(--warn-bg); border-radius:8px; padding:10px 13px; font-size:12px; color:var(--warn-text); line-height:1.45; }
 .pv-warn .material-symbols-rounded { font-size:15px; flex-shrink:0; margin-top:1px; }
-
-/* Share result box */
-.pv-share-result { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:12px 14px; display:none; flex-direction:column; gap:8px; }
-.pv-share-result.show { display:flex; }
-.pv-share-result-label { font-size:11px; font-weight:600; color:var(--green); letter-spacing:.5px; display:flex; align-items:center; gap:5px; }
-.pv-share-result-label .material-symbols-rounded { font-size:14px; }
-.pv-share-url-row { display:flex; align-items:center; gap:8px; }
-.pv-share-url { flex:1; font-size:12px; color:var(--text2); word-break:break-all; line-height:1.4; }
-.pv-share-copy { background:none; border:none; cursor:pointer; color:var(--brand); padding:4px; border-radius:6px; display:flex; align-items:center; }
-.pv-share-timer { font-size:11px; color:var(--warn-text); display:flex; align-items:center; gap:4px; }
-.pv-share-timer .material-symbols-rounded { font-size:13px; }
-
 .pv-foot { display:flex; gap:10px; padding:16px 24px 24px; }
 .pv-cancel { flex:1; padding:12px; border:1px solid var(--border); border-radius:10px; background:none; font-family:'Google Sans',sans-serif; font-size:14px; font-weight:600; color:var(--text2); cursor:pointer; transition:background .15s; }
 .pv-cancel:hover { background:var(--surface2); }
-.pv-share { flex:1; padding:12px; border:1px solid var(--brand); border-radius:10px; background:none; color:var(--brand); font-family:'Google Sans',sans-serif; font-size:14px; font-weight:600; cursor:pointer; transition:background .15s; display:flex; align-items:center; justify-content:center; gap:6px; position:relative; }
-.pv-share:hover { background:var(--chip-bg); }
-.pv-share.loading { color:transparent; pointer-events:none; }
-.pv-share.loading::after { content:''; position:absolute; top:50%; left:50%; width:14px; height:14px; margin:-7px; border:2px solid rgba(192,57,43,.3); border-top-color:var(--brand); border-radius:50%; animation:spin .6s linear infinite; }
 .pv-visit { flex:2; padding:12px; border:none; border-radius:10px; background:var(--brand); color:#fff; font-family:'Google Sans',sans-serif; font-size:14px; font-weight:600; cursor:pointer; transition:background .15s; display:flex; align-items:center; justify-content:center; gap:7px; }
 .pv-visit:hover { background:var(--brand-h); }
 
@@ -288,19 +177,15 @@
 .toggle.on { background:var(--brand); }
 .toggle::after { content:''; position:absolute; top:3px; left:3px; width:22px; height:22px; border-radius:50%; background:#fff; transition:transform .2s; box-shadow:0 1px 3px rgba(0,0,0,.3); }
 .toggle.on::after { transform:translateX(20px); }
-
 .empty { display:flex; flex-direction:column; align-items:center; gap:12px; padding:48px; color:var(--text2); text-align:center; }
 .empty .material-symbols-rounded { font-size:44px; opacity:.4; }
 .empty p { font-size:14px; }
-
 .toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px); background:#323232; color:#fff; padding:10px 20px; border-radius:24px; font-size:13px; opacity:0; transition:opacity .2s,transform .2s; z-index:9999; white-space:nowrap; pointer-events:none; }
 .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
-
 @media(max-width:600px){
   .g-card{padding:32px 24px 28px;border-radius:20px;}
   .nav-rail{width:64px;} .app-main{margin-left:64px;}
   .page{padding:14px;gap:16px;} .topbar{padding:12px 16px;}
-  .pv-foot{flex-wrap:wrap;}
 }
 ```
 
@@ -310,59 +195,7 @@
 
 <div class="toast" id="toast"></div>
 
-<!-- =====================
-     PUBLIC SHARE PAGE
-     Shown when URL hash = #/share/TOKEN
-     Login screen is hidden entirely in this case
-===================== -->
-
-<div id="share-page">
-  <div class="sc-loading" id="sp-loading">
-    <span class="material-symbols-rounded">progress_activity</span>
-    Loading share...
-  </div>
-  <div class="share-card" id="sp-card" style="display:none">
-    <div class="sc-head">
-      <div class="sc-emoji" id="sp-emoji">&#128279;</div>
-      <div class="sc-head-info">
-        <div class="sc-title" id="sp-title">Link</div>
-        <div class="sc-cat" id="sp-cat"></div>
-      </div>
-    </div>
-    <div class="sc-body">
-      <div class="sc-url-row">
-        <span class="material-symbols-rounded">link</span>
-        <span class="sc-url-txt" id="sp-url"></span>
-        <button class="sc-copy" onclick="spCopy()">
-          <span class="material-symbols-rounded" style="font-size:18px">content_copy</span>
-        </button>
-      </div>
-      <div class="sc-timer">
-        <span class="material-symbols-rounded">timer</span>
-        <span class="sc-timer-txt">Expires in</span>
-        <span class="sc-timer-count" id="sp-countdown">5:00</span>
-      </div>
-      <button class="sc-visit" onclick="spVisit()">
-        <span class="material-symbols-rounded" style="font-size:18px">open_in_new</span>
-        Visit Link
-      </button>
-    </div>
-  </div>
-  <div class="share-card" id="sp-expired" style="display:none">
-    <div class="sc-expired">
-      <span class="material-symbols-rounded">link_off</span>
-      <h3>Link Expired</h3>
-      <p>This share link has expired or does not exist.<br>Ask the sender to share it again.</p>
-    </div>
-  </div>
-  <div class="sc-branding">
-    Shared via <span class="sc-brand-name">Intelqong Admin</span>
-  </div>
-</div>
-
-<!-- =====================
-     LOCK SCREEN
-===================== -->
+<!-- LOCK SCREEN -->
 
 <div id="lock-screen">
   <div class="g-card" id="g-card">
@@ -389,17 +222,11 @@
   <div class="g-heading">Welcome</div>
   <div class="g-pill" onclick="backToEmail()">
     <div class="pill-av">M</div>
-    <span class="pill-txt"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ef828e87829a8b9a83af86819b8a839e808188c183868184">[email&#160;protected]</a></span>
+    <span class="pill-txt">mahmudul@intelqong.link</span>
     <span class="material-symbols-rounded" style="font-size:17px;color:var(--text2)">arrow_drop_down</span>
   </div>
-  <div class="g-banner error" id="pw-err">
-    <span class="material-symbols-rounded">error</span>
-    <span id="pw-err-msg">Wrong password. Try again.</span>
-  </div>
-  <div class="g-banner warn" id="pw-lockout">
-    <span class="material-symbols-rounded">warning</span>
-    <span id="lockout-msg">Too many attempts.</span>
-  </div>
+  <div class="g-banner error" id="pw-err"><span class="material-symbols-rounded">error</span><span id="pw-err-msg">Wrong password. Try again.</span></div>
+  <div class="g-banner warn" id="pw-lockout"><span class="material-symbols-rounded">warning</span><span id="lockout-msg">Too many attempts.</span></div>
   <div class="g-field">
     <input type="password" id="pw-input" placeholder=" " autocomplete="current-password"
            oninput="syncHV(this)" onkeydown="if(event.key==='Enter')checkPin()"/>
@@ -429,9 +256,7 @@
   </div>
 </div>
 
-<!-- =====================
-     DASHBOARD
-===================== -->
+<!-- DASHBOARD -->
 
 <div id="app">
   <nav class="nav-rail">
@@ -471,8 +296,8 @@
 <div class="page" id="page-settings">
   <span class="sec-label">Account &amp; Sync</span>
   <div class="settings-card">
-    <div class="s-row"><div class="s-info"><div class="s-title">Account</div><div class="s-sub"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="402d21282d3524352c00292e34252c312f2e276e2c292e2b">[email&#160;protected]</a></div></div><span class="material-symbols-rounded" style="color:var(--brand)">verified_user</span></div>
-    <div class="s-row"><div class="s-info"><div class="s-title">Storage</div><div class="s-sub">Private Gist · Cloudflare Worker · KV shares</div></div><span class="material-symbols-rounded" style="color:#1e8e3e">cloud_done</span></div>
+    <div class="s-row"><div class="s-info"><div class="s-title">Account</div><div class="s-sub">mahmudul@intelqong.link</div></div><span class="material-symbols-rounded" style="color:var(--brand)">verified_user</span></div>
+    <div class="s-row"><div class="s-info"><div class="s-title">Storage</div><div class="s-sub">Private Gist · Cloudflare Worker · cross-device</div></div><span class="material-symbols-rounded" style="color:#1e8e3e">cloud_done</span></div>
     <div class="s-row"><div class="s-info"><div class="s-title">Sync now</div><div class="s-sub">Pull latest links from Gist</div></div><button class="m-btn-text" onclick="syncNow()">Sync</button></div>
     <div class="s-row"><div class="s-info"><div class="s-title">Reset PIN</div><div class="s-sub">Change your admin password</div></div><button class="m-btn-text" onclick="openResetPin()">Reset</button></div>
     <div class="s-row"><div class="s-info"><div class="s-title">Sign out</div><div class="s-sub">Return to sign-in screen</div></div><button class="m-btn-text" onclick="lockApp()">Sign out</button></div>
@@ -550,449 +375,222 @@
         <span class="material-symbols-rounded">security</span>
         <span>You are leaving Intelqong Admin. Make sure you trust this link.</span>
       </div>
-      <div class="pv-share-result" id="pv-share-result">
-        <div class="pv-share-result-label"><span class="material-symbols-rounded">check_circle</span>Share link ready — auto-copied!</div>
-        <div class="pv-share-url-row">
-          <span class="pv-share-url" id="pv-share-url"></span>
-          <button class="pv-share-copy" onclick="pvCopyShareUrl()"><span class="material-symbols-rounded" style="font-size:18px">content_copy</span></button>
-        </div>
-        <div class="pv-share-timer"><span class="material-symbols-rounded">timer</span><span id="pv-share-countdown">Expires in 5:00</span></div>
-      </div>
     </div>
     <div class="pv-foot">
-      <button class="pv-cancel" onclick="closePreview()">Close</button>
-      <button class="pv-share" id="pv-share-btn" onclick="pvShare()">
-        <span class="material-symbols-rounded" style="font-size:17px">share</span>
-        Share
-      </button>
+      <button class="pv-cancel" onclick="closePreview()">Cancel</button>
       <button class="pv-visit" onclick="pvVisit()">
         <span class="material-symbols-rounded" style="font-size:17px">open_in_new</span>
-        Visit
+        Visit Link
       </button>
     </div>
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
+'use strict';
 
-‘use strict’;
-
-const WORKER       = ‘https://summer-shadow-2ad9.intelqong.workers.dev’;
-const ATTEMPT_KEY  = ‘iq_att’;
-const LOCKOUT_KEY  = ‘iq_lock’;
+const WORKER       = 'https://summer-shadow-2ad9.intelqong.workers.dev';
+const ATTEMPT_KEY  = 'iq_att';
+const LOCKOUT_KEY  = 'iq_lock';
 const MAX_ATTEMPTS = 5;
 const LOCKOUT_MS   = 5 * 60 * 1000;
 
 async function sha256(str) {
-const buf = await crypto.subtle.digest(‘SHA-256’, new TextEncoder().encode(str));
-return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,‘0’)).join(’’);
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
 }
 let _pinHash = null;
 
-// =====================
-//  SHARE PAGE BOOT
-//  Must run before anything else — hides login if share token found
-// =====================
-(function () {
-const m = location.hash.match(/^#/share/([a-zA-Z0-9_-]{10,})$/);
-if (!m) return;
-
-// It’s a share link — hide login completely, show share page
-document.getElementById(‘lock-screen’).style.display = ‘none’;
-document.getElementById(‘share-page’).classList.add(‘visible’);
-
-loadShare(m[1]);
-})();
-
-let _spUrl = ‘’, _spExpiry = 0, _spTimer = null;
-
-async function loadShare(token) {
-try {
-const r = await fetch(WORKER + ‘/share/’ + token);
-const data = await r.json();
-if (!data.ok) throw new Error(data.error || ‘expired’);
-
-```
-const l = data.link;
-_spUrl    = l.url;
-_spExpiry = data.expiry;
-
-document.getElementById('sp-loading').style.display = 'none';
-document.getElementById('sp-card').style.display    = 'block';
-document.getElementById('sp-emoji').textContent     = l.icon  || '🔗';
-document.getElementById('sp-title').textContent     = l.title || 'Link';
-document.getElementById('sp-url').textContent       = l.url;
-document.getElementById('sp-cat').textContent       = l.cat ? '📁 ' + l.cat : '';
-document.title = (l.title || 'Link') + ' — Intelqong';
-
-function tick() {
-  const rem = Math.max(0, Math.ceil((_spExpiry - Date.now()) / 1000));
-  const mm  = String(Math.floor(rem / 60)).padStart(2,'0');
-  const ss  = String(rem % 60).padStart(2,'0');
-  document.getElementById('sp-countdown').textContent = mm + ':' + ss;
-  if (rem <= 0) {
-    clearInterval(_spTimer);
-    document.getElementById('sp-card').style.display    = 'none';
-    document.getElementById('sp-expired').style.display = 'block';
-  }
-}
-tick();
-_spTimer = setInterval(tick, 1000);
-```
-
-} catch (e) {
-document.getElementById(‘sp-loading’).style.display = ‘none’;
-document.getElementById(‘sp-expired’).style.display = ‘block’;
-}
-}
-
-function spCopy() {
-navigator.clipboard.writeText(_spUrl)
-.then(() => showToast(‘URL copied’))
-.catch(() => {
-// fallback for Safari
-const el = document.createElement(‘textarea’);
-el.value = _spUrl;
-document.body.appendChild(el);
-el.select();
-document.execCommand(‘copy’);
-document.body.removeChild(el);
-showToast(‘URL copied’);
-});
-}
-function spVisit() {
-window.open(_spUrl, ‘_blank’, ‘noopener,noreferrer’);
-}
-
-// =====================
-//  API
-// =====================
+// API
 async function apiAuth(hash) {
-const r = await fetch(WORKER + ‘/auth’, {
-method: ‘POST’,
-headers: {‘Content-Type’:‘application/json’},
-body: JSON.stringify({hash})
-});
-if (!r.ok) return {ok:false};
-return r.json();
+  const r = await fetch(WORKER + '/auth', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({hash}) });
+  if (!r.ok) return {ok:false};
+  return r.json();
 }
 async function apiGetLinks() {
-setSyncState(‘syncing’);
-try {
-const r = await fetch(WORKER + ‘/links’, {headers:{‘X-Pin-Hash’:_pinHash}});
-if (!r.ok) throw new Error(r.status);
-const data = await r.json();
-setSyncState(‘ok’);
-localStorage.setItem(‘iq_cache’, JSON.stringify(data.links));
-return data.links;
-} catch {
-setSyncState(‘error’);
-showToast(‘Sync failed - showing cached data’);
-return JSON.parse(localStorage.getItem(‘iq_cache’) || ‘[]’);
-}
+  setSyncState('syncing');
+  try {
+    const r = await fetch(WORKER + '/links', { headers:{'X-Pin-Hash':_pinHash} });
+    if (!r.ok) throw new Error(r.status);
+    const data = await r.json();
+    setSyncState('ok');
+    localStorage.setItem('iq_cache', JSON.stringify(data.links));
+    return data.links;
+  } catch {
+    setSyncState('error');
+    showToast('Sync failed - showing cached data');
+    return JSON.parse(localStorage.getItem('iq_cache') || '[]');
+  }
 }
 async function apiSaveLinks(links) {
-setSyncState(‘syncing’);
-try {
-const r = await fetch(WORKER + ‘/links’, {
-method: ‘POST’,
-headers: {‘Content-Type’:‘application/json’,‘X-Pin-Hash’:_pinHash},
-body: JSON.stringify({links})
-});
-if (!r.ok) throw new Error(r.status);
-localStorage.setItem(‘iq_cache’, JSON.stringify(links));
-setSyncState(‘ok’);
-showToast(‘Saved’);
-} catch {
-setSyncState(‘error’);
-localStorage.setItem(‘iq_cache’, JSON.stringify(links));
-showToast(‘Sync failed - saved to cache’);
-}
+  setSyncState('syncing');
+  try {
+    const r = await fetch(WORKER + '/links', { method:'POST', headers:{'Content-Type':'application/json','X-Pin-Hash':_pinHash}, body:JSON.stringify({links}) });
+    if (!r.ok) throw new Error(r.status);
+    localStorage.setItem('iq_cache', JSON.stringify(links));
+    setSyncState('ok'); showToast('Saved');
+  } catch {
+    setSyncState('error');
+    localStorage.setItem('iq_cache', JSON.stringify(links));
+    showToast('Sync failed - saved to cache');
+  }
 }
 
-// =====================
-//  UI HELPERS
-// =====================
-function syncHV(i) { i.classList.toggle(‘hv’, i.value.length > 0); }
-function showStep(id) { document.querySelectorAll(’.step’).forEach(s=>s.classList.remove(‘active’)); document.getElementById(id).classList.add(‘active’); }
-function shake() { const c=document.getElementById(‘g-card’); c.classList.remove(‘shake’); void c.offsetWidth; c.classList.add(‘shake’); }
+// UI helpers
+function syncHV(i) { i.classList.toggle('hv', i.value.length > 0); }
+function showStep(id) { document.querySelectorAll('.step').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+function shake() { const c=document.getElementById('g-card'); c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake'); }
 function setBanner(id, msg) {
-const el = document.getElementById(id); if (!el) return;
-if (msg) {
-const s = document.getElementById(id+’-msg’) || el.querySelector(‘span:last-child’);
-if (s) s.textContent = msg;
-el.classList.add(‘show’);
-} else { el.classList.remove(‘show’); }
+  const el=document.getElementById(id); if(!el) return;
+  if(msg){ const s=document.getElementById(id+'-msg')||el.querySelector('span:last-child'); if(s) s.textContent=msg; el.classList.add('show'); }
+  else el.classList.remove('show');
 }
-function togglePw() { const i=document.getElementById(‘pw-input’),ic=document.getElementById(‘eye-icon’); i.type=i.type===‘password’?‘text’:‘password’; ic.textContent=i.type===‘password’?‘visibility’:‘visibility_off’; }
-function setSyncState(s) { const d=document.getElementById(‘sync-dot’); if(!d) return; d.className=‘sync-dot’+(s!==‘ok’?’ ‘+s:’’); }
+function togglePw() { const i=document.getElementById('pw-input'),ic=document.getElementById('eye-icon'); i.type=i.type==='password'?'text':'password'; ic.textContent=i.type==='password'?'visibility':'visibility_off'; }
+function setSyncState(s) { const d=document.getElementById('sync-dot'); if(!d) return; d.className='sync-dot'+(s!=='ok'?' '+s:''); }
 let _toastT;
-function showToast(m) {
-const t=document.getElementById(‘toast’); t.textContent=m; t.classList.add(‘show’);
-clearTimeout(_toastT); _toastT=setTimeout(()=>t.classList.remove(‘show’),2800);
-}
+function showToast(m) { const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(_toastT); _toastT=setTimeout(()=>t.classList.remove('show'),2500); }
 function copyText(text) {
-// Safari-safe clipboard
-if (navigator.clipboard && navigator.clipboard.writeText) {
-return navigator.clipboard.writeText(text).catch(() => execCopy(text));
+  if(navigator.clipboard&&navigator.clipboard.writeText) return navigator.clipboard.writeText(text).catch(()=>execCopy(text));
+  execCopy(text);
 }
-execCopy(text);
-}
-function execCopy(text) {
-const el = document.createElement(‘textarea’);
-el.value = text; el.style.position=‘fixed’; el.style.opacity=‘0’;
-document.body.appendChild(el); el.focus(); el.select();
-try { document.execCommand(‘copy’); } catch(e) {}
-document.body.removeChild(el);
-}
+function execCopy(text) { const el=document.createElement('textarea'); el.value=text; el.style.cssText='position:fixed;opacity:0'; document.body.appendChild(el); el.focus(); el.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(el); }
 
-// =====================
-//  AUTH
-// =====================
+// Auth
 function checkEmail() {
-showStep(‘step-password’);
-setTimeout(()=>document.getElementById(‘pw-input’).focus(), 60);
-const lu = parseInt(localStorage.getItem(LOCKOUT_KEY)||‘0’);
-if (Date.now() < lu) startLockout(lu);
+  showStep('step-password');
+  setTimeout(()=>document.getElementById('pw-input').focus(),60);
+  const lu=parseInt(localStorage.getItem(LOCKOUT_KEY)||'0');
+  if(Date.now()<lu) startLockout(lu);
 }
-function backToEmail() {
-showStep(‘step-email’); setBanner(‘pw-err’, null);
-const pw=document.getElementById(‘pw-input’); pw.value=’’; pw.classList.remove(‘hv’,‘err’);
-}
+function backToEmail() { showStep('step-email'); setBanner('pw-err',null); const pw=document.getElementById('pw-input'); pw.value=''; pw.classList.remove('hv','err'); }
 async function checkPin() {
-const lu = parseInt(localStorage.getItem(LOCKOUT_KEY)||‘0’);
-if (Date.now() < lu) return;
-const val = document.getElementById(‘pw-input’).value;
-if (!val) { setBanner(‘pw-err’,‘Enter a password’); return; }
-const btn = document.getElementById(‘pw-btn’);
-btn.classList.add(‘loading’); setBanner(‘pw-err’, null);
-try {
-const hash = await sha256(val);
-const res  = await apiAuth(hash);
-if (res.ok) {
-localStorage.removeItem(ATTEMPT_KEY); localStorage.removeItem(LOCKOUT_KEY);
-_pinHash = hash; btn.classList.remove(‘loading’);
-await unlockApp(); return;
+  const lu=parseInt(localStorage.getItem(LOCKOUT_KEY)||'0');
+  if(Date.now()<lu) return;
+  const val=document.getElementById('pw-input').value;
+  if(!val){ setBanner('pw-err','Enter a password'); return; }
+  const btn=document.getElementById('pw-btn'); btn.classList.add('loading'); setBanner('pw-err',null);
+  try {
+    const hash=await sha256(val);
+    const res=await apiAuth(hash);
+    if(res.ok){ localStorage.removeItem(ATTEMPT_KEY); localStorage.removeItem(LOCKOUT_KEY); _pinHash=hash; btn.classList.remove('loading'); await unlockApp(); return; }
+  } catch { btn.classList.remove('loading'); setBanner('pw-err','Could not reach server. Check your connection.'); return; }
+  btn.classList.remove('loading'); shake();
+  document.getElementById('pw-input').value=''; document.getElementById('pw-input').classList.remove('hv');
+  let att=parseInt(localStorage.getItem(ATTEMPT_KEY)||'0')+1; localStorage.setItem(ATTEMPT_KEY,att);
+  const left=MAX_ATTEMPTS-att;
+  if(att>=MAX_ATTEMPTS){ localStorage.setItem(LOCKOUT_KEY,Date.now()+LOCKOUT_MS); setBanner('pw-err',null); startLockout(Date.now()+LOCKOUT_MS); }
+  else setBanner('pw-err','Wrong password - '+left+' attempt'+(left===1?'':'s')+' remaining.');
 }
-} catch {
-btn.classList.remove(‘loading’);
-setBanner(‘pw-err’,‘Could not reach server. Check your connection.’); return;
-}
-btn.classList.remove(‘loading’); shake();
-document.getElementById(‘pw-input’).value = ‘’;
-document.getElementById(‘pw-input’).classList.remove(‘hv’);
-let att = parseInt(localStorage.getItem(ATTEMPT_KEY)||‘0’) + 1;
-localStorage.setItem(ATTEMPT_KEY, att);
-const left = MAX_ATTEMPTS - att;
-if (att >= MAX_ATTEMPTS) {
-localStorage.setItem(LOCKOUT_KEY, Date.now()+LOCKOUT_MS);
-setBanner(‘pw-err’, null); startLockout(Date.now()+LOCKOUT_MS);
-} else {
-setBanner(‘pw-err’, ‘Wrong password - ’ + left + ’ attempt’ + (left===1?’’:‘s’) + ’ remaining.’);
-}
-}
-let _lockTimer = null;
+let _lockTimer=null;
 function startLockout(until) {
-const btn=document.getElementById(‘pw-btn’), inp=document.getElementById(‘pw-input’);
-inp.disabled=true; btn.disabled=true;
-document.getElementById(‘pw-lockout’).classList.add(‘show’); setBanner(‘pw-err’,null);
-function tick() {
-const rem = Math.ceil((until-Date.now())/1000);
-if (rem <= 0) {
-clearInterval(_lockTimer);
-document.getElementById(‘pw-lockout’).classList.remove(‘show’);
-inp.disabled=false; btn.disabled=false;
-localStorage.removeItem(LOCKOUT_KEY); localStorage.removeItem(ATTEMPT_KEY);
-} else {
-const mm=String(Math.floor(rem/60)).padStart(2,‘0’), ss=String(rem%60).padStart(2,‘0’);
-document.getElementById(‘lockout-msg’).textContent = ‘Too many attempts - try again in ’ + mm + ‘:’ + ss;
-}
-}
-tick(); _lockTimer = setInterval(tick, 1000);
+  const btn=document.getElementById('pw-btn'),inp=document.getElementById('pw-input');
+  inp.disabled=true; btn.disabled=true;
+  document.getElementById('pw-lockout').classList.add('show'); setBanner('pw-err',null);
+  function tick(){ const rem=Math.ceil((until-Date.now())/1000); if(rem<=0){ clearInterval(_lockTimer); document.getElementById('pw-lockout').classList.remove('show'); inp.disabled=false; btn.disabled=false; localStorage.removeItem(LOCKOUT_KEY); localStorage.removeItem(ATTEMPT_KEY); } else { const mm=String(Math.floor(rem/60)).padStart(2,'0'),ss=String(rem%60).padStart(2,'0'); document.getElementById('lockout-msg').textContent='Too many attempts - try again in '+mm+':'+ss; } }
+  tick(); _lockTimer=setInterval(tick,1000);
 }
 async function unlockApp() {
-links = await apiGetLinks();
-document.getElementById(‘lock-screen’).classList.add(‘hidden’);
-document.getElementById(‘app’).classList.add(‘visible’);
-document.getElementById(‘fab’).style.display = ‘flex’;
-document.getElementById(‘stat-date’).textContent = new Date().toLocaleDateString(‘en-US’,{month:‘short’,day:‘numeric’});
-renderLinks();
+  links=await apiGetLinks();
+  document.getElementById('lock-screen').classList.add('hidden');
+  document.getElementById('app').classList.add('visible');
+  document.getElementById('fab').style.display='flex';
+  document.getElementById('stat-date').textContent=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  renderLinks();
 }
 function lockApp() {
-_pinHash = null;
-document.getElementById(‘app’).classList.remove(‘visible’);
-document.getElementById(‘lock-screen’).classList.remove(‘hidden’);
-document.getElementById(‘fab’).style.display = ‘none’;
-const pw=document.getElementById(‘pw-input’); pw.value=’’; pw.classList.remove(‘hv’,‘err’);
-setBanner(‘pw-err’,null); showStep(‘step-email’);
+  _pinHash=null;
+  document.getElementById('app').classList.remove('visible');
+  document.getElementById('lock-screen').classList.remove('hidden');
+  document.getElementById('fab').style.display='none';
+  const pw=document.getElementById('pw-input'); pw.value=''; pw.classList.remove('hv','err');
+  setBanner('pw-err',null); showStep('step-email');
 }
-async function syncNow() { showToast(‘Syncing…’); links=await apiGetLinks(); renderLinks(); }
+async function syncNow() { showToast('Syncing...'); links=await apiGetLinks(); renderLinks(); }
 
-(function(){
-const lu=parseInt(localStorage.getItem(LOCKOUT_KEY)||‘0’);
-if(Date.now()>=lu){ localStorage.removeItem(LOCKOUT_KEY); localStorage.removeItem(ATTEMPT_KEY); }
-showStep(‘step-email’);
-})();
+(function(){ const lu=parseInt(localStorage.getItem(LOCKOUT_KEY)||'0'); if(Date.now()>=lu){ localStorage.removeItem(LOCKOUT_KEY); localStorage.removeItem(ATTEMPT_KEY); } showStep('step-email'); })();
 
-// =====================
-//  DASHBOARD
-// =====================
-let links = [];
-const PT = {home:‘Overview’,links:‘Links’,settings:‘Settings’};
-
-function navigate(page, el) {
-document.querySelectorAll(’.page’).forEach(p=>p.classList.remove(‘active’));
-document.querySelectorAll(’.nav-item’).forEach(n=>n.classList.remove(‘active’));
-document.getElementById(‘page-’+page).classList.add(‘active’);
-el.classList.add(‘active’);
-document.getElementById(‘page-title’).textContent = PT[page];
-document.getElementById(‘fab’).style.display = page===‘settings’?‘none’:‘flex’;
-}
+// Dashboard
+let links=[];
+const PT={home:'Overview',links:'Links',settings:'Settings'};
+function navigate(page,el){ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); document.getElementById('page-'+page).classList.add('active'); el.classList.add('active'); document.getElementById('page-title').textContent=PT[page]; document.getElementById('fab').style.display=page==='settings'?'none':'flex'; }
 
 function renderLinks() {
-const recent=document.getElementById(‘recent-links’), all=document.getElementById(‘all-links’);
-document.getElementById(‘stat-links’).textContent = links.length;
-document.getElementById(‘stat-cats’).textContent  = new Set(links.map(l=>l.cat).filter(Boolean)).size;
-const empty = ‘<div class="empty"><span class="material-symbols-rounded">link_off</span><p>No links yet.</p></div>’;
-if (!links.length) { recent.innerHTML=all.innerHTML=empty; return; }
-const card = (l, i, del) =>
-‘<div class="link-row" onclick="openPreview('+i+')">’ +
-‘<div class="l-fav">’+(l.icon||‘🔗’)+’</div>’ +
-‘<div class="l-info"><div class="l-title">’+l.title+’</div><div class="l-url">’+l.url+’</div></div>’ +
-(l.cat ? ‘<span class="l-chip">’+l.cat+’</span>’ : ‘’) +
-(del ? ‘<button class="t-icon" onclick="editLink(event,'+i+')" title="Edit"><span class="material-symbols-rounded" style="font-size:18px">edit</span></button>’ : ‘’) +
-(del ? ‘<button class="t-icon" onclick="deleteLink(event,'+i+')" title="Delete"><span class="material-symbols-rounded" style="font-size:18px">delete</span></button>’ : ‘’) +
-‘</div>’;
-all.innerHTML    = links.map((l,i)=>card(l,i,true)).join(’’);
-recent.innerHTML = links.slice(-3).reverse().map(l=>card(l,links.indexOf(l),false)).join(’’);
+  const recent=document.getElementById('recent-links'),all=document.getElementById('all-links');
+  document.getElementById('stat-links').textContent=links.length;
+  document.getElementById('stat-cats').textContent=new Set(links.map(l=>l.cat).filter(Boolean)).size;
+  const empty='<div class="empty"><span class="material-symbols-rounded">link_off</span><p>No links yet.</p></div>';
+  if(!links.length){ recent.innerHTML=all.innerHTML=empty; return; }
+  const card=(l,i,del)=>
+    '<div class="link-row" onclick="openPreview('+i+')">' +
+    '<div class="l-fav">'+(l.icon||'🔗')+'</div>' +
+    '<div class="l-info"><div class="l-title">'+l.title+'</div><div class="l-url">'+l.url+'</div></div>' +
+    (l.cat?'<span class="l-chip">'+l.cat+'</span>':'') +
+    (del?'<button class="t-icon" onclick="editLink(event,'+i+')" title="Edit"><span class="material-symbols-rounded" style="font-size:18px">edit</span></button>':'') +
+    (del?'<button class="t-icon" onclick="deleteLink(event,'+i+')" title="Delete"><span class="material-symbols-rounded" style="font-size:18px">delete</span></button>':'') +
+    '</div>';
+  all.innerHTML=links.map((l,i)=>card(l,i,true)).join('');
+  recent.innerHTML=links.slice(-3).reverse().map(l=>card(l,links.indexOf(l),false)).join('');
 }
 
-// =====================
-//  PREVIEW MODAL
-// =====================
-let _pvIdx=-1, _pvShareTimer=null, _pvShareUrl=’’;
-
+// Preview modal
+let _pvIdx=-1;
 function openPreview(i) {
-_pvIdx = i;
-const l = links[i];
-document.getElementById(‘pv-emoji’).textContent    = l.icon || ‘🔗’;
-document.getElementById(‘pv-name’).textContent     = l.title;
-document.getElementById(‘pv-url’).textContent      = l.url;
-document.getElementById(‘pv-category’).textContent = l.cat ? ‘📁 ‘+l.cat : ‘Uncategorised’;
-document.getElementById(‘pv-share-result’).classList.remove(‘show’);
-// Reset share button
-const btn = document.getElementById(‘pv-share-btn’);
-btn.classList.remove(‘loading’); btn.disabled = false;
-btn.innerHTML = ‘<span class="material-symbols-rounded" style="font-size:17px">share</span> Share’;
-_pvShareUrl = ‘’;
-if (_pvShareTimer) { clearInterval(_pvShareTimer); _pvShareTimer=null; }
-document.getElementById(‘preview-modal’).classList.add(‘open’);
+  _pvIdx=i; const l=links[i];
+  document.getElementById('pv-emoji').textContent    = l.icon||'🔗';
+  document.getElementById('pv-name').textContent     = l.title;
+  document.getElementById('pv-url').textContent      = l.url;
+  document.getElementById('pv-category').textContent = l.cat?'📁 '+l.cat:'Uncategorised';
+  document.getElementById('preview-modal').classList.add('open');
 }
-function closePreview() {
-document.getElementById(‘preview-modal’).classList.remove(‘open’);
-if (_pvShareTimer) { clearInterval(_pvShareTimer); _pvShareTimer=null; }
-_pvIdx=-1; _pvShareUrl=’’;
-}
-function pvVisit() {
-if (_pvIdx<0) return;
-window.open(links[_pvIdx].url, ‘_blank’, ‘noopener,noreferrer’);
-closePreview();
-}
-function pvCopy() {
-if (_pvIdx<0) return;
-copyText(links[_pvIdx].url);
-showToast(‘URL copied’);
-}
-function pvCopyShareUrl() {
-copyText(_pvShareUrl);
-showToast(‘Share link copied’);
-}
+function closePreview() { document.getElementById('preview-modal').classList.remove('open'); _pvIdx=-1; }
+function pvVisit() { if(_pvIdx<0) return; window.open(links[_pvIdx].url,'_blank','noopener,noreferrer'); closePreview(); }
+function pvCopy() { if(_pvIdx<0) return; copyText(links[_pvIdx].url); showToast('URL copied'); }
 
-async function pvShare() {
-if (_pvIdx<0) return;
-const btn = document.getElementById(‘pv-share-btn’);
-btn.classList.add(‘loading’);
-try {
-const r = await fetch(WORKER + ‘/share’, {
-method: ‘POST’,
-headers: {‘Content-Type’:‘application/json’,‘X-Pin-Hash’:_pinHash},
-body: JSON.stringify({link: links[_pvIdx]})
-});
-const data = await r.json();
-if (!data.ok) throw new Error(data.error);
-
-```
-// Build share URL using hash routing
-_pvShareUrl = location.origin + location.pathname + '#/share/' + data.token;
-
-btn.classList.remove('loading');
-btn.innerHTML = '<span class="material-symbols-rounded" style="font-size:17px">check</span> Shared!';
-btn.disabled = true;
-
-// Show share result
-document.getElementById('pv-share-url').textContent = _pvShareUrl;
-document.getElementById('pv-share-result').classList.add('show');
-
-// Auto-copy to clipboard
-copyText(_pvShareUrl);
-showToast('Share link copied! Expires in 5 min');
-
-// Live countdown inside preview
-const expiry = data.expiry;
-function tick() {
-  const rem = Math.max(0, Math.ceil((expiry-Date.now())/1000));
-  const mm=String(Math.floor(rem/60)).padStart(2,'0'), ss=String(rem%60).padStart(2,'0');
-  document.getElementById('pv-share-countdown').textContent = 'Expires in ' + mm + ':' + ss;
-  if (rem<=0) { clearInterval(_pvShareTimer); document.getElementById('pv-share-countdown').textContent='Expired'; }
-}
-tick(); _pvShareTimer = setInterval(tick, 1000);
-```
-
-} catch(e) {
-btn.classList.remove(‘loading’);
-showToast(‘Failed to create share link - update Worker first’);
-}
-}
-
-// =====================
-//  LINK CRUD
-// =====================
+// Link CRUD
 async function deleteLink(e,i) { e.stopPropagation(); links.splice(i,1); renderLinks(); await apiSaveLinks(links); }
-async function clearLinks() { if(!confirm(‘Permanently remove all links?’)) return; links=[]; renderLinks(); await apiSaveLinks(links); }
+async function clearLinks() { if(!confirm('Permanently remove all links?')) return; links=[]; renderLinks(); await apiSaveLinks(links); }
 let _editIndex=-1;
-function openModal() { _editIndex=-1; document.getElementById(‘modal-title-text’).textContent=‘Add a link’; document.getElementById(‘modal-save-btn’).textContent=‘Save’; document.getElementById(‘modal’).classList.add(‘open’); document.getElementById(‘f-title’).focus(); }
-function closeModal() { document.getElementById(‘modal’).classList.remove(‘open’); [‘f-title’,‘f-url’,‘f-cat’,‘f-icon’].forEach(id=>document.getElementById(id).value=’’); _editIndex=-1; }
+function openModal() { _editIndex=-1; document.getElementById('modal-title-text').textContent='Add a link'; document.getElementById('modal-save-btn').textContent='Save'; document.getElementById('modal').classList.add('open'); document.getElementById('f-title').focus(); }
+function closeModal() { document.getElementById('modal').classList.remove('open'); ['f-title','f-url','f-cat','f-icon'].forEach(id=>document.getElementById(id).value=''); _editIndex=-1; }
 function editLink(e,i) {
-e.stopPropagation(); _editIndex=i;
-const l=links[i];
-document.getElementById(‘f-title’).value=l.title||’’; document.getElementById(‘f-url’).value=l.url||’’;
-document.getElementById(‘f-cat’).value=l.cat||’’; document.getElementById(‘f-icon’).value=l.icon||’’;
-document.getElementById(‘modal-title-text’).textContent=‘Edit link’; document.getElementById(‘modal-save-btn’).textContent=‘Update’;
-document.getElementById(‘modal’).classList.add(‘open’); document.getElementById(‘f-title’).focus();
+  e.stopPropagation(); _editIndex=i; const l=links[i];
+  document.getElementById('f-title').value=l.title||''; document.getElementById('f-url').value=l.url||'';
+  document.getElementById('f-cat').value=l.cat||''; document.getElementById('f-icon').value=l.icon||'';
+  document.getElementById('modal-title-text').textContent='Edit link'; document.getElementById('modal-save-btn').textContent='Update';
+  document.getElementById('modal').classList.add('open'); document.getElementById('f-title').focus();
 }
 async function saveLink() {
-const title=document.getElementById(‘f-title’).value.trim(), url=document.getElementById(‘f-url’).value.trim();
-if (!title||!url) return;
-const entry={title,url,cat:document.getElementById(‘f-cat’).value.trim(),icon:document.getElementById(‘f-icon’).value.trim()};
-if (_editIndex>=0) links[_editIndex]=entry; else links.push(entry);
-closeModal(); renderLinks(); await apiSaveLinks(links);
+  const title=document.getElementById('f-title').value.trim(),url=document.getElementById('f-url').value.trim();
+  if(!title||!url) return;
+  const entry={title,url,cat:document.getElementById('f-cat').value.trim(),icon:document.getElementById('f-icon').value.trim()};
+  if(_editIndex>=0) links[_editIndex]=entry; else links.push(entry);
+  closeModal(); renderLinks(); await apiSaveLinks(links);
 }
 
-// =====================
-//  RESET PIN
-// =====================
-function openResetPin() { document.getElementById(‘reset-pin-modal’).classList.add(‘open’); setBanner(‘rp-err’,null); [‘rp-current’,‘rp-new’,‘rp-confirm’].forEach(id=>document.getElementById(id).value=’’); document.getElementById(‘rp-current’).focus(); }
-function closeResetPin() { document.getElementById(‘reset-pin-modal’).classList.remove(‘open’); [‘rp-current’,‘rp-new’,‘rp-confirm’].forEach(id=>document.getElementById(id).value=’’); setBanner(‘rp-err’,null); }
+// Reset PIN
+function openResetPin() { document.getElementById('reset-pin-modal').classList.add('open'); setBanner('rp-err',null); ['rp-current','rp-new','rp-confirm'].forEach(id=>document.getElementById(id).value=''); document.getElementById('rp-current').focus(); }
+function closeResetPin() { document.getElementById('reset-pin-modal').classList.remove('open'); ['rp-current','rp-new','rp-confirm'].forEach(id=>document.getElementById(id).value=''); setBanner('rp-err',null); }
 async function submitResetPin() {
-const current=document.getElementById(‘rp-current’).value, newPin=document.getElementById(‘rp-new’).value, conf=document.getElementById(‘rp-confirm’).value;
-if(!current||!newPin||!conf){ setBanner(‘rp-err’,‘All fields are required.’); return; }
-if(newPin!==conf){ setBanner(‘rp-err’,‘New passwords do not match.’); return; }
-if(newPin.length<4){ setBanner(‘rp-err’,‘New password must be at least 4 characters.’); return; }
-const btn=document.getElementById(‘rp-btn’); btn.classList.add(‘loading’);
-try {
-const currentHash=await sha256(current);
-const authRes=await apiAuth(currentHash);
-if(!authRes.ok) throw new Error(‘wrong_current’);
-const newHash=await sha256(newPin);
-const r=await fetch(WORKER+’/reset-pin’,{method:‘POST’,headers:{‘Content-Type’:‘application/json’,‘X-Pin-Hash’:_pinHash},body:JSON.stringify({newHash})});
-if(!r.ok) throw new
+  const current=document.getElementById('rp-current').value,newPin=document.getElementById('rp-new').value,conf=document.getElementById('rp-confirm').value;
+  if(!current||!newPin||!conf){ setBanner('rp-err','All fields are required.'); return; }
+  if(newPin!==conf){ setBanner('rp-err','New passwords do not match.'); return; }
+  if(newPin.length<4){ setBanner('rp-err','New password must be at least 4 characters.'); return; }
+  const btn=document.getElementById('rp-btn'); btn.classList.add('loading');
+  try {
+    const currentHash=await sha256(current);
+    const authRes=await apiAuth(currentHash);
+    if(!authRes.ok) throw new Error('wrong_current');
+    const newHash=await sha256(newPin);
+    const r=await fetch(WORKER+'/reset-pin',{method:'POST',headers:{'Content-Type':'application/json','X-Pin-Hash':_pinHash},body:JSON.stringify({newHash})});
+    if(!r.ok) throw new Error('worker_error');
+    _pinHash=newHash; btn.classList.remove('loading'); closeResetPin(); showToast('PIN updated');
+  } catch(e) {
+    btn.classList.remove('loading');
+    if(e.message==='wrong_current') setBanner('rp-err','Current password is incorrect.');
+    else setBanner('rp-err','Failed to update PIN. Try again.');
+  }
+}
+</script>
+
+</body>
+</html>
