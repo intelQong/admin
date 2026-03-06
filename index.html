@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <!-- Disable Cloudflare email obfuscation and rocket loader -->
   <meta name="cf-2fa-verify" content="none"/>
+  <!-- Tell Cloudflare not to obfuscate emails on this page -->
+  <meta http-equiv="x-no-email-obfuscation" content="true"/>
   <title>Sign in - Intelqong</title>
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@300;400;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&display=swap" rel="stylesheet"/>
   <style>
@@ -222,7 +224,7 @@
   <div class="g-heading">Sign in</div>
   <div class="g-sub">to continue to <strong>Intelqong Admin</strong></div>
   <div class="g-field">
-    <input type="email" id="email-input" value="admin@intelqong.link" readonly class="hv"/>
+    <input type="email" id="email-input" readonly class="hv"/>
     <label for="email-input">Email or phone</label>
   </div>
   <div style="margin-bottom:20px">
