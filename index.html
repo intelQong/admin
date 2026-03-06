@@ -81,10 +81,6 @@
 .g-btn.loading { color:transparent; pointer-events:none; }
 .g-btn.loading::after { content:''; position:absolute; top:50%; left:50%; width:16px; height:16px; margin:-8px; border:2px solid rgba(255,255,255,.4); border-top-color:#fff; border-radius:50%; animation:spin .6s linear infinite; }
 .g-note { font-size:11px; color:var(--text2); text-align:center; margin-top:14px; line-height:1.6; }
-.passkey-btn { width:100%; padding:14px; border:1.5px solid var(--border); border-radius:10px; background:var(--surface); color:var(--text); font-family:'Google Sans',sans-serif; font-size:15px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; transition:border-color .15s,background .15s; margin-bottom:16px; position:relative; }
-.passkey-btn:hover { border-color:var(--brand); background:var(--chip-bg); color:var(--brand); }
-.passkey-btn.loading { color:transparent; pointer-events:none; }
-.passkey-btn.loading::after { content:''; position:absolute; top:50%; left:50%; width:18px; height:18px; margin:-9px; border:2px solid var(--border); border-top-color:var(--brand); border-radius:50%; animation:spin .6s linear infinite; }
 .g-divider { display:flex; align-items:center; gap:12px; margin-bottom:20px; color:var(--text2); font-size:12px; }
 .g-divider::before,.g-divider::after { content:''; flex:1; height:1px; background:var(--border); }
 .shake { animation:cardShake .4s ease; }
@@ -230,11 +226,6 @@
   <div style="margin-bottom:20px">
     <button class="g-link" style="padding-left:0">Forgot email?</button>
   </div>
-  <button class="passkey-btn" id="passkey-login-btn" onclick="passkeyLogin()" style="display:none">
-    <svg class="passkey-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="4"/><path d="M14 8h2a4 4 0 0 1 4 4v1h-3"/><path d="M18 17l2 2 4-4"/></svg>
-    Sign in with Passkey
-  </button>
-  <div class="g-divider" id="passkey-divider" style="display:none">or use password</div>
   <div class="g-footer">
     <button class="g-link" onclick="alert('Only one account is configured.')">Create account</button>
     <button class="g-btn" onclick="checkEmail()">Next</button>
@@ -275,11 +266,9 @@
   </div>
   <div class="g-bottom">
     <span>English (United States)</span>
-    <div class="g-bottom-links"><span style="cursor:default">Help</span><span style="cursor:default">Privacy</span><span style="cursor:default">Terms</span></div>
+    <div class="g-bottom-links"><span>Help</span><span>Privacy</span><span>Terms</span></div>
   </div>
 </div>
-
-<!-- DASHBOARD -->
 
 <div id="app">
   <nav class="nav-rail">
@@ -292,57 +281,48 @@
     <header class="topbar">
       <span class="topbar-title" id="page-title">Overview</span>
       <div class="topbar-right">
-        <div class="sync-dot" id="sync-dot" title="Synced"></div>
-        <button class="t-icon" onclick="syncNow()" title="Sync now"><span class="material-symbols-rounded">sync</span></button>
-        <button class="t-icon" onclick="lockApp()" title="Sign out"><span class="material-symbols-rounded">logout</span></button>
+        <div class="sync-dot" id="sync-dot"></div>
+        <button class="t-icon" onclick="syncNow()"><span class="material-symbols-rounded">sync</span></button>
+        <button class="t-icon" onclick="lockApp()"><span class="material-symbols-rounded">logout</span></button>
         <div class="t-avatar">M</div>
       </div>
     </header>
-
-```
-<div class="page active" id="page-home">
-  <span class="sec-label">At a glance</span>
-  <div class="cards-grid">
-    <div class="stat-card"><div class="stat-icon" style="background:var(--chip-bg);color:var(--brand)"><span class="material-symbols-rounded">link</span></div><div class="stat-val" id="stat-links">0</div><div class="stat-lbl">Saved Links</div></div>
-    <div class="stat-card"><div class="stat-icon" style="background:#e6f4ea;color:#1e8e3e"><span class="material-symbols-rounded">category</span></div><div class="stat-val" id="stat-cats">0</div><div class="stat-lbl">Categories</div></div>
-    <div class="stat-card"><div class="stat-icon" style="background:#fef7e0;color:#f29900"><span class="material-symbols-rounded">calendar_today</span></div><div class="stat-val" id="stat-date">-</div><div class="stat-lbl">Today</div></div>
-  </div>
-  <span class="sec-label">Recent</span>
-  <div id="recent-links" class="links-list"></div>
-</div>
-
-<div class="page" id="page-links">
-  <span class="sec-label">All links</span>
-  <div id="all-links" class="links-list"></div>
-</div>
-
-<div class="page" id="page-settings">
-  <span class="sec-label">Account &amp; Sync</span>
-  <div class="settings-card">
-    <div class="s-row"><div class="s-info"><div class="s-title">Account</div><div class="s-sub">Intelqong Admin</div></div><span class="material-symbols-rounded" style="color:var(--brand)">verified_user</span></div>
-    <div class="s-row"><div class="s-info"><div class="s-title">Storage</div><div class="s-sub">Private Gist · Cloudflare Worker · cross-device</div></div><span class="material-symbols-rounded" style="color:#1e8e3e">cloud_done</span></div>
-    <div class="s-row"><div class="s-info"><div class="s-title">Sync now</div><div class="s-sub">Pull latest links from Gist</div></div><button class="m-btn-text" onclick="syncNow()">Sync</button></div>
-    <div class="s-row"><div class="s-info"><div class="s-title">Reset PIN</div><div class="s-sub">Change your admin password</div></div><button class="m-btn-text" onclick="openResetPin()">Reset</button></div>
-    <div class="s-row" id="passkey-settings-row"><div class="s-info"><div class="s-title">Passkey</div><div class="s-sub" id="passkey-status-txt">Checking...</div></div><button class="m-btn-text" id="passkey-settings-btn" onclick="passkeySettingsAction()">Setup</button></div>
-    <div class="s-row"><div class="s-info"><div class="s-title">Sign out</div><div class="s-sub">Return to sign-in screen</div></div><button class="m-btn-text" onclick="lockApp()">Sign out</button></div>
-  </div>
-  <span class="sec-label">Preferences</span>
-  <div class="settings-card">
-    <div class="s-row"><div class="s-info"><div class="s-title">Accent colour</div><div class="s-sub">Choose the app's brand colour</div></div><div class="theme-picker" id="theme-picker"></div></div>
-    <div class="s-row"><div class="s-info"><div class="s-title">Show categories</div><div class="s-sub">Display category chips on links</div></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
-    <div class="s-row"><div class="s-info"><div class="s-title">Clear all links</div><div class="s-sub">Permanently removes all saved links</div></div><button class="m-btn-text" style="color:var(--red)" onclick="clearLinks()">Clear</button></div>
-  </div>
-</div>
-```
-
+    <div class="page active" id="page-home">
+      <span class="sec-label">At a glance</span>
+      <div class="cards-grid">
+        <div class="stat-card"><div class="stat-icon" style="background:var(--chip-bg);color:var(--brand)"><span class="material-symbols-rounded">link</span></div><div class="stat-val" id="stat-links">0</div><div class="stat-lbl">Saved Links</div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:#e6f4ea;color:#1e8e3e"><span class="material-symbols-rounded">category</span></div><div class="stat-val" id="stat-cats">0</div><div class="stat-lbl">Categories</div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:#fef7e0;color:#f29900"><span class="material-symbols-rounded">calendar_today</span></div><div class="stat-val" id="stat-date">-</div><div class="stat-lbl">Today</div></div>
+      </div>
+      <span class="sec-label">Recent</span>
+      <div id="recent-links" class="links-list"></div>
+    </div>
+    <div class="page" id="page-links">
+      <span class="sec-label">All links</span>
+      <div id="all-links" class="links-list"></div>
+    </div>
+    <div class="page" id="page-settings">
+      <span class="sec-label">Account &amp; Sync</span>
+      <div class="settings-card">
+        <div class="s-row"><div class="s-info"><div class="s-title">Account</div><div class="s-sub">Intelqong Admin</div></div><span class="material-symbols-rounded" style="color:var(--brand)">verified_user</span></div>
+        <div class="s-row"><div class="s-info"><div class="s-title">Storage</div><div class="s-sub">Cloudflare Worker · cross-device</div></div><span class="material-symbols-rounded" style="color:#1e8e3e">cloud_done</span></div>
+        <div class="s-row"><div class="s-info"><div class="s-title">Sync now</div><div class="s-sub">Pull latest links from Worker</div></div><button class="m-btn-text" onclick="syncNow()">Sync</button></div>
+        <div class="s-row"><div class="s-info"><div class="s-title">Reset PIN</div><div class="s-sub">Change your admin password</div></div><button class="m-btn-text" onclick="openResetPin()">Reset</button></div>
+        <div class="s-row"><div class="s-info"><div class="s-title">Sign out</div><div class="s-sub">Return to sign-in screen</div></div><button class="m-btn-text" onclick="lockApp()">Sign out</button></div>
+      </div>
+      <span class="sec-label">Preferences</span>
+      <div class="settings-card">
+        <div class="s-row"><div class="s-info"><div class="s-title">Accent colour</div><div class="s-sub">Choose the app's brand colour</div></div><div class="theme-picker" id="theme-picker"></div></div>
+        <div class="s-row"><div class="s-info"><div class="s-title">Show categories</div><div class="s-sub">Display category chips on links</div></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
+        <div class="s-row"><div class="s-info"><div class="s-title">Clear all links</div><div class="s-sub">Permanently removes all saved links</div></div><button class="m-btn-text" style="color:var(--red)" onclick="clearLinks()">Clear</button></div>
+      </div>
+    </div>
   </div>
 </div>
 
 <button class="fab" id="fab" style="display:none" onclick="openModal()">
   <span class="material-symbols-rounded">add</span>Add Link
 </button>
-
-<!-- ADD/EDIT MODAL -->
 
 <div class="modal-bg" id="modal" onclick="if(event.target===this)closeModal()">
   <div class="modal">
@@ -360,8 +340,6 @@
   </div>
 </div>
 
-<!-- RESET PIN MODAL -->
-
 <div class="modal-bg" id="reset-pin-modal" onclick="if(event.target===this)closeResetPin()">
   <div class="modal">
     <div class="modal-title">Reset PIN</div>
@@ -377,8 +355,6 @@
     </div>
   </div>
 </div>
-
-<!-- PREVIEW MODAL -->
 
 <div class="modal-bg" id="preview-modal" onclick="if(event.target===this)closePreview()">
   <div class="preview-card">
@@ -620,7 +596,6 @@ async function unlockApp() {
   document.getElementById('fab').style.display = 'flex';
   document.getElementById('stat-date').textContent = new Date().toLocaleDateString('en-US', {month:'short', day:'numeric'});
   renderLinks();
-  checkPasskeyAfterLogin();
 }
 
 function lockApp() {
@@ -637,185 +612,6 @@ function lockApp() {
 
 async function syncNow() { showToast('Syncing...'); links = await apiGetLinks(); renderLinks(); }
 
-// ── PASSKEY ──────────────────────────────────────────────────────────────────
-
-function bufToB64url(buf) {
-  return btoa(String.fromCharCode(...new Uint8Array(buf)))
-    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
-}
-
-function b64urlToBuf(b64) {
-  const s = atob(b64.replace(/-/g, '+').replace(/_/g, '/'));
-  return Uint8Array.from(s, c => c.charCodeAt(0)).buffer;
-}
-
-async function checkPasskeySupport() {
-  if (!window.PublicKeyCredential) return false;
-  try {
-    return await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
-  } catch { return false; }
-}
-
-async function initPasskeyButton() {
-  const supported = await checkPasskeySupport();
-  const r = await fetch(WORKER + '/passkey/status').catch(() => null);
-  const status = r ? await r.json().catch(() => ({registered:false})) : {registered:false};
-  const btn = document.getElementById('passkey-login-btn');
-  const div = document.getElementById('passkey-divider');
-  if (supported && status.registered) {
-    btn.style.display = 'flex';
-    div.style.display = 'flex';
-  }
-}
-
-async function passkeyLogin() {
-  const btn = document.getElementById('passkey-login-btn');
-  btn.classList.add('loading');
-  try {
-    const cr = await fetch(WORKER + '/passkey/challenge', {method:'POST'});
-    const { challenge } = await cr.json();
-
-    const assertion = await navigator.credentials.get({
-      publicKey: {
-        challenge: b64urlToBuf(challenge),
-        rpId: 'admin.intelqong.link',
-        userVerification: 'required',
-        timeout: 60000,
-      }
-    });
-
-    const resp = assertion.response;
-    const result = await fetch(WORKER + '/passkey/authenticate', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({
-        credentialId: bufToB64url(assertion.rawId),
-        clientDataJSON: bufToB64url(resp.clientDataJSON),
-        authenticatorData: bufToB64url(resp.authenticatorData),
-        signature: bufToB64url(resp.signature),
-      })
-    });
-    const data = await result.json();
-    if (!data.ok) throw new Error(data.error);
-
-    _pinHash = data.pinHash;
-    btn.classList.remove('loading');
-    await unlockApp();
-  } catch(e) {
-    btn.classList.remove('loading');
-    if (e.name === 'NotAllowedError') showToast('Passkey cancelled');
-    else showToast('Passkey failed - try password');
-  }
-}
-
-async function registerPasskey() {
-  if (!_pinHash) { showToast('Sign in with PIN first'); return; }
-  const supported = await checkPasskeySupport();
-  if (!supported) { showToast('Passkeys not supported on this device'); return; }
-
-  try {
-    const cr = await fetch(WORKER + '/passkey/challenge', {method:'POST'});
-    const { challenge } = await cr.json();
-
-    const cred = await navigator.credentials.create({
-      publicKey: {
-        challenge: b64urlToBuf(challenge),
-        rp: { id: 'admin.intelqong.link', name: 'Intelqong Admin' },
-        user: { id: new TextEncoder().encode('intelqong-admin'), name: 'admin', displayName: 'Admin' },
-        pubKeyCredParams: [
-          { type:'public-key', alg:-7   }, // ES256
-          { type:'public-key', alg:-257 }, // RS256
-        ],
-        authenticatorSelection: {
-          authenticatorAttachment: 'platform',
-          userVerification: 'required',
-          residentKey: 'required',
-        },
-        timeout: 60000,
-        attestation: 'none',
-      }
-    });
-
-    const resp = cred.response;
-
-    // Safely convert a buffer — returns null if input is falsy instead of crashing
-    const safeBuf = (buf) => buf ? bufToB64url(buf) : null;
-
-    // Extract public key — getPublicKey() can return null on iOS Safari
-    const pubKeyBuf = (typeof resp.getPublicKey === 'function') ? resp.getPublicKey() : null;
-
-    // Validate all required fields before sending
-    const rawId          = cred.rawId;
-    const clientData     = resp.clientDataJSON;
-    const attestation    = resp.attestationObject;
-
-    if (!rawId)       throw new Error('Missing credentialId');
-    if (!clientData)  throw new Error('Missing clientDataJSON');
-    if (!attestation) throw new Error('Missing attestationObject');
-
-    const r = await fetch(WORKER + '/passkey/register', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json', 'X-Pin-Hash':_pinHash},
-      body: JSON.stringify({
-        credentialId:      safeBuf(rawId),
-        publicKey:         safeBuf(pubKeyBuf),
-        clientDataJSON:    safeBuf(clientData),
-        attestationObject: safeBuf(attestation),
-      })
-    });
-    const data = await r.json();
-    if (!data.ok) throw new Error(data.error);
-
-    localStorage.setItem('iq_passkey', '1');
-    showToast('Passkey registered! Use Face ID / fingerprint next time');
-    updatePasskeySettingsRow(true);
-  } catch(e) {
-    if (e.name === 'NotAllowedError') showToast('Passkey setup cancelled');
-    else showToast('Passkey setup failed: ' + e.message);
-  }
-}
-
-async function removePasskey() {
-  if (!_pinHash) return;
-  const r = await fetch(WORKER + '/passkey', { method:'DELETE', headers:{'X-Pin-Hash':_pinHash} });
-  const data = await r.json();
-  if (data.ok) {
-    localStorage.removeItem('iq_passkey');
-    showToast('Passkey removed');
-    updatePasskeySettingsRow(false);
-  }
-}
-
-function updatePasskeySettingsRow(registered) {
-  const txt = document.getElementById('passkey-status-txt');
-  const btn = document.getElementById('passkey-settings-btn');
-  if (!txt || !btn) return;
-  if (registered) {
-    txt.textContent = 'Active - Face ID / fingerprint login enabled';
-    btn.textContent = 'Remove';
-  } else {
-    txt.textContent = 'Not set up';
-    btn.textContent = 'Setup';
-  }
-}
-
-async function passkeySettingsAction() {
-  const btn = document.getElementById('passkey-settings-btn');
-  if (btn.textContent.trim() === 'Remove') {
-    if (confirm('Remove passkey? You will need to use your PIN to sign in.')) removePasskey();
-  } else {
-    registerPasskey();
-  }
-}
-
-async function checkPasskeyAfterLogin() {
-  const supported = await checkPasskeySupport();
-  if (!supported) return;
-  const r = await fetch(WORKER + '/passkey/status').catch(() => null);
-  const status = r ? await r.json().catch(() => ({registered:false})) : {registered:false};
-  updatePasskeySettingsRow(status.registered);
-}
-
 // ── INIT ─────────────────────────────────────────────────────────────────────
 
 (function () {
@@ -825,7 +621,6 @@ async function checkPasskeyAfterLogin() {
     localStorage.removeItem(ATTEMPT_KEY);
   }
   showStep('step-email');
-  initPasskeyButton();
 })();
 
 // ── DASHBOARD ────────────────────────────────────────────────────────────────
@@ -1003,6 +798,7 @@ function initThemePicker() {
 
 // call on DOM ready
 initThemePicker();
+
 
 </script>
 
