@@ -327,13 +327,20 @@ const cred = await navigator.credentials.create({
 });
 
 const resp = cred.response;
+
+// Extract public key safely — getPublicKey() may exist but return null on Safari/WebKit
+const pubKeyBuf = (typeof resp.getPublicKey === 'function' && resp.getPublicKey()) || null;
+
+// attestationObject must exist; if missing, throw early with a clear message
+if (!resp.attestationObject) throw new Error('Browser did not provide attestationObject');
+
 const r = await fetch(WORKER + '/passkey/register', {
   method: 'POST',
   headers: {'Content-Type':'application/json', 'X-Pin-Hash':_pinHash},
   body: JSON.stringify({
-    credentialId: bufToB64url(cred.rawId),
-    publicKey: bufToB64url((resp.getPublicKey && resp.getPublicKey()) || resp.attestationObject),
-    clientDataJSON: bufToB64url(resp.clientDataJSON),
+    credentialId:      bufToB64url(cred.rawId),
+    publicKey:         pubKeyBuf ? bufToB64url(pubKeyBuf) : null,
+    clientDataJSON:    bufToB64url(resp.clientDataJSON),
     attestationObject: bufToB64url(resp.attestationObject),
   })
 });
