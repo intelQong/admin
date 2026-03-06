@@ -119,21 +119,6 @@ document.body.removeChild(el);
 
 // ── AUTH ─────────────────────────────────────────────────────────────────────
 
-function checkEmail() {
-showStep(‘step-password’);
-setTimeout(() => document.getElementById(‘pw-input’).focus(), 60);
-const lu = parseInt(localStorage.getItem(LOCKOUT_KEY) || ‘0’);
-if (Date.now() < lu) startLockout(lu);
-}
-
-function backToEmail() {
-showStep(‘step-email’);
-setBanner(‘pw-err’, null);
-const pw = document.getElementById(‘pw-input’);
-pw.value = ‘’;
-pw.classList.remove(‘hv’, ‘err’);
-}
-
 async function checkPin() {
 const lu = parseInt(localStorage.getItem(LOCKOUT_KEY) || ‘0’);
 if (Date.now() < lu) return;
@@ -204,9 +189,7 @@ links = await apiGetLinks();
 document.getElementById(‘lock-screen’).classList.add(‘hidden’);
 document.getElementById(‘app’).classList.add(‘visible’);
 document.getElementById(‘fab’).style.display = ‘flex’;
-document.getElementById(‘stat-date’).textContent = new Date().toLocaleDateString(‘en-US’, {month:‘short’, day:‘numeric’});
 renderLinks();
-checkPasskeyAfterLogin();
 }
 
 function lockApp() {
@@ -218,186 +201,11 @@ const pw = document.getElementById(‘pw-input’);
 pw.value = ‘’;
 pw.classList.remove(‘hv’, ‘err’);
 setBanner(‘pw-err’, null);
-showStep(‘step-email’);
+showStep(‘step-password’);
+setTimeout(() => document.getElementById(‘pw-input’).focus(), 60);
 }
 
 async function syncNow() { showToast(‘Syncing…’); links = await apiGetLinks(); renderLinks(); }
-
-// ── PASSKEY ──────────────────────────────────────────────────────────────────
-
-function bufToB64url(buf) {
-return btoa(String.fromCharCode(…new Uint8Array(buf)))
-.replace(/+/g, ‘-’).replace(///g, ‘_’).replace(/=/g, ‘’);
-}
-
-function b64urlToBuf(b64) {
-const s = atob(b64.replace(/-/g, ‘+’).replace(/_/g, ‘/’));
-return Uint8Array.from(s, c => c.charCodeAt(0)).buffer;
-}
-
-async function checkPasskeySupport() {
-if (!window.PublicKeyCredential) return false;
-try {
-return await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
-} catch { return false; }
-}
-
-async function initPasskeyButton() {
-const supported = await checkPasskeySupport();
-const r = await fetch(WORKER + ‘/passkey/status’).catch(() => null);
-const status = r ? await r.json().catch(() => ({registered:false})) : {registered:false};
-const btn = document.getElementById(‘passkey-login-btn’);
-const div = document.getElementById(‘passkey-divider’);
-if (supported && status.registered) {
-btn.style.display = ‘flex’;
-div.style.display = ‘flex’;
-}
-}
-
-async function passkeyLogin() {
-const btn = document.getElementById(‘passkey-login-btn’);
-btn.classList.add(‘loading’);
-try {
-const cr = await fetch(WORKER + ‘/passkey/challenge’, {method:‘POST’});
-const { challenge } = await cr.json();
-
-```
-const assertion = await navigator.credentials.get({
-  publicKey: {
-    challenge: b64urlToBuf(challenge),
-    rpId: 'admin.intelqong.link',
-    userVerification: 'required',
-    timeout: 60000,
-  }
-});
-
-const resp = assertion.response;
-const result = await fetch(WORKER + '/passkey/authenticate', {
-  method: 'POST',
-  headers: {'Content-Type':'application/json'},
-  body: JSON.stringify({
-    credentialId: bufToB64url(assertion.rawId),
-    clientDataJSON: bufToB64url(resp.clientDataJSON),
-    authenticatorData: bufToB64url(resp.authenticatorData),
-    signature: bufToB64url(resp.signature),
-  })
-});
-const data = await result.json();
-if (!data.ok) throw new Error(data.error);
-
-_pinHash = data.pinHash;
-btn.classList.remove('loading');
-await unlockApp();
-```
-
-} catch(e) {
-btn.classList.remove(‘loading’);
-if (e.name === ‘NotAllowedError’) showToast(‘Passkey cancelled’);
-else showToast(‘Passkey failed - try password’);
-}
-}
-
-async function registerPasskey() {
-if (!_pinHash) { showToast(‘Sign in with PIN first’); return; }
-const supported = await checkPasskeySupport();
-if (!supported) { showToast(‘Passkeys not supported on this device’); return; }
-
-try {
-const cr = await fetch(WORKER + ‘/passkey/challenge’, {method:‘POST’});
-const { challenge } = await cr.json();
-
-```
-const cred = await navigator.credentials.create({
-  publicKey: {
-    challenge: b64urlToBuf(challenge),
-    rp: { id: 'admin.intelqong.link', name: 'Intelqong Admin' },
-    user: { id: new TextEncoder().encode('intelqong-admin'), name: 'admin', displayName: 'Admin' },
-    pubKeyCredParams: [
-      { type:'public-key', alg:-7   }, // ES256
-      { type:'public-key', alg:-257 }, // RS256
-    ],
-    authenticatorSelection: {
-      authenticatorAttachment: 'platform',
-      userVerification: 'required',
-      residentKey: 'required',
-    },
-    timeout: 60000,
-    attestation: 'none',
-  }
-});
-
-const resp = cred.response;
-
-// Extract public key safely — getPublicKey() may exist but return null on Safari/WebKit
-const pubKeyBuf = (typeof resp.getPublicKey === 'function' && resp.getPublicKey()) || null;
-
-// attestationObject must exist; if missing, throw early with a clear message
-if (!resp.attestationObject) throw new Error('Browser did not provide attestationObject');
-
-const r = await fetch(WORKER + '/passkey/register', {
-  method: 'POST',
-  headers: {'Content-Type':'application/json', 'X-Pin-Hash':_pinHash},
-  body: JSON.stringify({
-    credentialId:      bufToB64url(cred.rawId),
-    publicKey:         pubKeyBuf ? bufToB64url(pubKeyBuf) : null,
-    clientDataJSON:    bufToB64url(resp.clientDataJSON),
-    attestationObject: bufToB64url(resp.attestationObject),
-  })
-});
-const data = await r.json();
-if (!data.ok) throw new Error(data.error);
-
-localStorage.setItem('iq_passkey', '1');
-showToast('Passkey registered! Use Face ID / fingerprint next time');
-updatePasskeySettingsRow(true);
-```
-
-} catch(e) {
-if (e.name === ‘NotAllowedError’) showToast(‘Passkey setup cancelled’);
-else showToast(’Passkey setup failed: ’ + e.message);
-}
-}
-
-async function removePasskey() {
-if (!_pinHash) return;
-const r = await fetch(WORKER + ‘/passkey’, { method:‘DELETE’, headers:{‘X-Pin-Hash’:_pinHash} });
-const data = await r.json();
-if (data.ok) {
-localStorage.removeItem(‘iq_passkey’);
-showToast(‘Passkey removed’);
-updatePasskeySettingsRow(false);
-}
-}
-
-function updatePasskeySettingsRow(registered) {
-const txt = document.getElementById(‘passkey-status-txt’);
-const btn = document.getElementById(‘passkey-settings-btn’);
-if (!txt || !btn) return;
-if (registered) {
-txt.textContent = ‘Active - Face ID / fingerprint login enabled’;
-btn.textContent = ‘Remove’;
-} else {
-txt.textContent = ‘Not set up’;
-btn.textContent = ‘Setup’;
-}
-}
-
-async function passkeySettingsAction() {
-const btn = document.getElementById(‘passkey-settings-btn’);
-if (btn.textContent.trim() === ‘Remove’) {
-if (confirm(‘Remove passkey? You will need to use your PIN to sign in.’)) removePasskey();
-} else {
-registerPasskey();
-}
-}
-
-async function checkPasskeyAfterLogin() {
-const supported = await checkPasskeySupport();
-if (!supported) return;
-const r = await fetch(WORKER + ‘/passkey/status’).catch(() => null);
-const status = r ? await r.json().catch(() => ({registered:false})) : {registered:false};
-updatePasskeySettingsRow(status.registered);
-}
 
 // ── INIT ─────────────────────────────────────────────────────────────────────
 
@@ -407,11 +215,11 @@ if (Date.now() >= lu) {
 localStorage.removeItem(LOCKOUT_KEY);
 localStorage.removeItem(ATTEMPT_KEY);
 }
-// Set email via JS so Cloudflare email obfuscation cannot mangle it
-const _em = document.getElementById(‘email-input’);
-if (_em) { _em.value = [‘admin’,‘intelqong.link’].join(’@’); }
-showStep(‘step-email’);
-initPasskeyButton();
+showStep(‘step-password’);
+setTimeout(() => document.getElementById(‘pw-input’).focus(), 60);
+if (Date.now() < parseInt(localStorage.getItem(LOCKOUT_KEY) || ‘0’)) {
+startLockout(parseInt(localStorage.getItem(LOCKOUT_KEY)));
+}
 })();
 
 // ── DASHBOARD ────────────────────────────────────────────────────────────────
@@ -428,22 +236,46 @@ document.getElementById(‘page-title’).textContent = PT[page];
 document.getElementById(‘fab’).style.display = page === ‘settings’ ? ‘none’ : ‘flex’;
 }
 
-function renderLinks() {
-const recent = document.getElementById(‘recent-links’), all = document.getElementById(‘all-links’);
-document.getElementById(‘stat-links’).textContent = links.length;
-document.getElementById(‘stat-cats’).textContent = new Set(links.map(l => l.cat).filter(Boolean)).size;
-const empty = ‘<div class="empty"><span class="material-symbols-rounded">link_off</span><p>No links yet.</p></div>’;
-if (!links.length) { recent.innerHTML = all.innerHTML = empty; return; }
-const card = (l, i, del) =>
-‘<div class="link-row" onclick="openPreview(' + i + ')">’ +
+function card(l, i, del) {
+return ‘<div class="link-row" onclick="openPreview(' + i + ')">’ +
 ‘<div class="l-fav">’ + (l.icon || ‘🔗’) + ‘</div>’ +
 ‘<div class="l-info"><div class="l-title">’ + l.title + ‘</div><div class="l-url">’ + l.url + ‘</div></div>’ +
 (l.cat ? ‘<span class="l-chip">’ + l.cat + ‘</span>’ : ‘’) +
 (del ? ‘<button class="t-icon" onclick="editLink(event,' + i + ')" title="Edit"><span class="material-symbols-rounded" style="font-size:18px">edit</span></button>’ : ‘’) +
 (del ? ‘<button class="t-icon" onclick="deleteLink(event,' + i + ')" title="Delete"><span class="material-symbols-rounded" style="font-size:18px">delete</span></button>’ : ‘’) +
 ‘</div>’;
-all.innerHTML = links.map((l, i) => card(l, i, true)).join(’’);
-recent.innerHTML = links.slice(-3).reverse().map(l => card(l, links.indexOf(l), false)).join(’’);
+}
+
+function filterHomeLinks(q) {
+const label = document.getElementById(‘home-list-label’);
+const clearBtn = document.getElementById(‘search-clear’);
+clearBtn.style.display = q ? ‘flex’ : ‘none’;
+if (!q) { label.textContent = ‘Recent’; renderLinks(); return; }
+label.textContent = ‘Results’;
+const results = links.filter(l =>
+(l.title || ‘’).toLowerCase().includes(q.toLowerCase()) ||
+(l.url || ‘’).toLowerCase().includes(q.toLowerCase()) ||
+(l.cat || ‘’).toLowerCase().includes(q.toLowerCase())
+);
+const recent = document.getElementById(‘recent-links’);
+const empty = ‘<div class="empty"><span class="material-symbols-rounded">search_off</span><p>No results for “’ + q + ‘”</p></div>’;
+if (!results.length) { recent.innerHTML = empty; return; }
+recent.innerHTML = results.map((l) => card(l, links.indexOf(l), false)).join(’’);
+}
+
+function clearSearch() {
+const input = document.getElementById(‘home-search’);
+input.value = ‘’;
+filterHomeLinks(’’);
+input.focus();
+}
+
+function renderLinks() {
+const recent = document.getElementById(‘recent-links’), all = document.getElementById(‘all-links’);
+const empty = ‘<div class="empty"><span class="material-symbols-rounded">link_off</span><p>No links yet.</p></div>’;
+if (!links.length) { if(recent) recent.innerHTML = empty; if(all) all.innerHTML = empty; return; }
+if(all) all.innerHTML = links.map((l, i) => card(l, i, true)).join(’’);
+if(recent) recent.innerHTML = links.slice(-5).reverse().map(l => card(l, links.indexOf(l), false)).join(’’);
 }
 
 // ── PREVIEW MODAL ────────────────────────────────────────────────────────────
@@ -562,9 +394,7 @@ r.setProperty(’–brand’,     t.brand);
 r.setProperty(’–brand-h’,   t.brandH);
 r.setProperty(’–chip-bg’,   t.chip);
 r.setProperty(’–chip-text’, t.chipText);
-// keep red as destructive error color regardless of theme
 localStorage.setItem(THEME_KEY, t.id);
-// update active swatch
 document.querySelectorAll(’.theme-swatch’).forEach(s => {
 s.classList.toggle(‘active’, s.dataset.theme === t.id);
 });
@@ -583,9 +413,7 @@ btn.setAttribute(‘aria-label’, t.label + ’ theme’);
 btn.onclick = () => applyTheme(t.id);
 picker.appendChild(btn);
 });
-// restore saved theme
 applyTheme(localStorage.getItem(THEME_KEY) || ‘red’);
 }
 
-// call on DOM ready
 initThemePicker();
