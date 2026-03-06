@@ -538,3 +538,51 @@ if (e.message === ‘wrong_current’) setBanner(‘rp-err’, ‘Current passwo
 else setBanner(‘rp-err’, ‘Failed to update password. Try again.’);
 }
 }
+
+// ── THEME ────────────────────────────────────────────────────────────────────
+
+const THEMES = [
+{ id:‘red’,    label:‘Red’,    brand:’#c0392b’, brandH:’#96281b’, chip:’#fde8e6’, chipText:’#c0392b’ },
+{ id:‘blue’,   label:‘Blue’,   brand:’#1a73e8’, brandH:’#1557b0’, chip:’#e8f0fe’, chipText:’#1a73e8’ },
+{ id:‘green’,  label:‘Green’,  brand:’#1e8e3e’, brandH:’#157a32’, chip:’#e6f4ea’, chipText:’#1e8e3e’ },
+{ id:‘purple’, label:‘Purple’, brand:’#7c4dff’, brandH:’#5e35b1’, chip:’#ede7f6’, chipText:’#7c4dff’ },
+{ id:‘orange’, label:‘Orange’, brand:’#e65100’, brandH:’#bf360c’, chip:’#fbe9e7’, chipText:’#e65100’ },
+{ id:‘teal’,   label:‘Teal’,   brand:’#00796b’, brandH:’#004d40’, chip:’#e0f2f1’, chipText:’#00796b’ },
+];
+
+const THEME_KEY = ‘iq_theme’;
+
+function applyTheme(id) {
+const t = THEMES.find(x => x.id === id) || THEMES[0];
+const r = document.documentElement.style;
+r.setProperty(’–brand’,     t.brand);
+r.setProperty(’–brand-h’,   t.brandH);
+r.setProperty(’–chip-bg’,   t.chip);
+r.setProperty(’–chip-text’, t.chipText);
+// keep red as destructive error color regardless of theme
+localStorage.setItem(THEME_KEY, t.id);
+// update active swatch
+document.querySelectorAll(’.theme-swatch’).forEach(s => {
+s.classList.toggle(‘active’, s.dataset.theme === t.id);
+});
+}
+
+function initThemePicker() {
+const picker = document.getElementById(‘theme-picker’);
+if (!picker) return;
+THEMES.forEach(t => {
+const btn = document.createElement(‘button’);
+btn.className = ‘theme-swatch’;
+btn.dataset.theme = t.id;
+btn.title = t.label;
+btn.style.background = t.brand;
+btn.setAttribute(‘aria-label’, t.label + ’ theme’);
+btn.onclick = () => applyTheme(t.id);
+picker.appendChild(btn);
+});
+// restore saved theme
+applyTheme(localStorage.getItem(THEME_KEY) || ‘red’);
+}
+
+// call on DOM ready
+initThemePicker();
