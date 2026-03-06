@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <!-- Disable Cloudflare email obfuscation and rocket loader -->
+  <meta name="cf-2fa-verify" content="none"/>
   <title>Sign in - Intelqong</title>
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@300;400;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&display=swap" rel="stylesheet"/>
   <style>
@@ -41,7 +43,9 @@
 /* LOCK SCREEN */
 #lock-screen { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px 16px; }
 #lock-screen.hidden { display:none; }
-.g-card { background:var(--surface); border:1px solid var(--border); border-radius:28px; box-shadow:var(--card-shadow); width:100%; max-width:400px; padding:40px 40px 32px; display:flex; flex-direction:column; align-items:center; animation:fadeUp .3s ease; transition:background .3s,border-color .3s; overflow:hidden; }
+.g-card { background:var(--surface); border:1px solid var(--border); border-radius:28px; box-shadow:var(--card-shadow); width:100%; max-width:400px; padding:40px 40px 32px; display:flex; flex-direction:column; align-items:center; animation:fadeUp .3s ease; transition:background .3s,border-color .3s; }
+/* Prevent Safari from rendering stray ellipsis dots */
+.g-card *, .page * { text-overflow:clip; }
 .oiq-logo { display:flex; align-items:center; justify-content:center; margin-bottom:24px; text-decoration:none; }
 .oiq-wordmark { font-family:'Google Sans Display',sans-serif; font-size:32px; font-weight:700; letter-spacing:-.5px; color:#e74c3c; animation:glow 2.5s ease-in-out infinite alternate; }
 .g-heading { font-family:'Google Sans Display',sans-serif; font-size:24px; font-weight:400; color:var(--text); margin-bottom:8px; text-align:center; }
@@ -75,6 +79,12 @@
 .g-btn.loading { color:transparent; pointer-events:none; }
 .g-btn.loading::after { content:''; position:absolute; top:50%; left:50%; width:16px; height:16px; margin:-8px; border:2px solid rgba(255,255,255,.4); border-top-color:#fff; border-radius:50%; animation:spin .6s linear infinite; }
 .g-note { font-size:11px; color:var(--text2); text-align:center; margin-top:14px; line-height:1.6; }
+.passkey-btn { width:100%; padding:14px; border:1.5px solid var(--border); border-radius:10px; background:var(--surface); color:var(--text); font-family:'Google Sans',sans-serif; font-size:15px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; transition:border-color .15s,background .15s; margin-bottom:16px; position:relative; }
+.passkey-btn:hover { border-color:var(--brand); background:var(--chip-bg); color:var(--brand); }
+.passkey-btn.loading { color:transparent; pointer-events:none; }
+.passkey-btn.loading::after { content:''; position:absolute; top:50%; left:50%; width:18px; height:18px; margin:-9px; border:2px solid var(--border); border-top-color:var(--brand); border-radius:50%; animation:spin .6s linear infinite; }
+.g-divider { display:flex; align-items:center; gap:12px; margin-bottom:20px; color:var(--text2); font-size:12px; }
+.g-divider::before,.g-divider::after { content:''; flex:1; height:1px; background:var(--border); }
 .shake { animation:cardShake .4s ease; }
 .g-bottom { max-width:400px; width:100%; display:flex; justify-content:space-between; align-items:center; padding:14px 4px 0; font-size:12px; color:var(--text2); }
 .g-bottom a { color:var(--text2); text-decoration:none; }
@@ -107,7 +117,7 @@
 .sync-dot.error { background:var(--red); }
 .page { padding:24px; display:none; flex-direction:column; gap:20px; animation:fadeUp .2s ease; }
 .page.active { display:flex; }
-.sec-label { font-size:11px; font-weight:600; color:var(--text2); letter-spacing:.8px; text-transform:uppercase; overflow:hidden; display:block; }
+.sec-label { font-size:11px; font-weight:600; color:var(--text2); letter-spacing:.8px; text-transform:uppercase; display:block; }
 .cards-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px; }
 .stat-card { background:var(--surface); border-radius:12px; padding:20px; border:1px solid var(--border); display:flex; flex-direction:column; gap:10px; transition:box-shadow .15s,background .3s,border-color .3s; }
 .stat-card:hover { box-shadow:0 2px 8px rgba(0,0,0,.12); }
@@ -206,12 +216,17 @@
   <div class="g-heading">Sign in</div>
   <div class="g-sub">to continue to <strong>Intelqong Admin</strong></div>
   <div class="g-field">
-    <input type="email" id="email-input" value="mahmudul@intelqong.link" readonly class="hv"/>
+    <input type="email" id="email-input" value="admin@intelqong.link" readonly class="hv"/>
     <label for="email-input">Email or phone</label>
   </div>
   <div style="margin-bottom:20px">
     <button class="g-link" style="padding-left:0">Forgot email?</button>
   </div>
+  <button class="passkey-btn" id="passkey-login-btn" onclick="passkeyLogin()" style="display:none">
+    <svg class="passkey-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="4"/><path d="M14 8h2a4 4 0 0 1 4 4v1h-3"/><path d="M18 17l2 2 4-4"/></svg>
+    Sign in with Passkey
+  </button>
+  <div class="g-divider" id="passkey-divider" style="display:none">or use password</div>
   <div class="g-footer">
     <button class="g-link" onclick="alert('Only one account is configured.')">Create account</button>
     <button class="g-btn" onclick="checkEmail()">Next</button>
@@ -222,7 +237,7 @@
   <div class="g-heading">Welcome</div>
   <div class="g-pill" onclick="backToEmail()">
     <div class="pill-av">M</div>
-    <span class="pill-txt"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5f323e37322a3b2a331f36312b3a332e3031387133363134">[email&#160;protected]</a></span>
+    <span class="pill-txt">Admin Account</span>
     <span class="material-symbols-rounded" style="font-size:17px;color:var(--text2)">arrow_drop_down</span>
   </div>
   <div class="g-banner error" id="pw-err"><span class="material-symbols-rounded">error</span><span id="pw-err-msg">Wrong password. Try again.</span></div>
@@ -296,10 +311,11 @@
 <div class="page" id="page-settings">
   <span class="sec-label">Account &amp; Sync</span>
   <div class="settings-card">
-    <div class="s-row"><div class="s-info"><div class="s-title">Account</div><div class="s-sub"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="036e626b6e7667766f436a6d77666f726c6d642d6f6a6d68">[email&#160;protected]</a></div></div><span class="material-symbols-rounded" style="color:var(--brand)">verified_user</span></div>
+    <div class="s-row"><div class="s-info"><div class="s-title">Account</div><div class="s-sub">Intelqong Admin</div></div><span class="material-symbols-rounded" style="color:var(--brand)">verified_user</span></div>
     <div class="s-row"><div class="s-info"><div class="s-title">Storage</div><div class="s-sub">Private Gist · Cloudflare Worker · cross-device</div></div><span class="material-symbols-rounded" style="color:#1e8e3e">cloud_done</span></div>
     <div class="s-row"><div class="s-info"><div class="s-title">Sync now</div><div class="s-sub">Pull latest links from Gist</div></div><button class="m-btn-text" onclick="syncNow()">Sync</button></div>
     <div class="s-row"><div class="s-info"><div class="s-title">Reset PIN</div><div class="s-sub">Change your admin password</div></div><button class="m-btn-text" onclick="openResetPin()">Reset</button></div>
+    <div class="s-row" id="passkey-settings-row"><div class="s-info"><div class="s-title">Passkey</div><div class="s-sub" id="passkey-status-txt">Checking...</div></div><button class="m-btn-text" id="passkey-settings-btn" onclick="passkeySettingsAction()">Setup</button></div>
     <div class="s-row"><div class="s-info"><div class="s-title">Sign out</div><div class="s-sub">Return to sign-in screen</div></div><button class="m-btn-text" onclick="lockApp()">Sign out</button></div>
   </div>
   <span class="sec-label">Preferences</span>
@@ -386,7 +402,7 @@
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false">
 
 ‘use strict’;
 
@@ -497,6 +513,7 @@ document.getElementById(‘app’).classList.add(‘visible’);
 document.getElementById(‘fab’).style.display=‘flex’;
 document.getElementById(‘stat-date’).textContent=new Date().toLocaleDateString(‘en-US’,{month:‘short’,day:‘numeric’});
 renderLinks();
+checkPasskeyAfterLogin();
 }
 function lockApp() {
 _pinHash=null;
@@ -508,7 +525,180 @@ setBanner(‘pw-err’,null); showStep(‘step-email’);
 }
 async function syncNow() { showToast(‘Syncing…’); links=await apiGetLinks(); renderLinks(); }
 
-(function(){ const lu=parseInt(localStorage.getItem(LOCKOUT_KEY)||‘0’); if(Date.now()>=lu){ localStorage.removeItem(LOCKOUT_KEY); localStorage.removeItem(ATTEMPT_KEY); } showStep(‘step-email’); })();
+// ── PASSKEY HELPERS ──
+function bufToB64url(buf) {
+return btoa(String.fromCharCode(…new Uint8Array(buf))).replace(/+/g,’-’).replace(///g,’*’).replace(/=/g,’’);
+}
+function b64urlToBuf(b64) {
+const s = atob(b64.replace(/-/g,’+’).replace(/*/g,’/’));
+return Uint8Array.from(s, c=>c.charCodeAt(0)).buffer;
+}
+
+async function checkPasskeySupport() {
+if (!window.PublicKeyCredential) return false;
+try {
+return await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+} catch { return false; }
+}
+
+async function initPasskeyButton() {
+const supported = await checkPasskeySupport();
+const r = await fetch(WORKER + ‘/passkey/status’).catch(()=>null);
+const status = r ? await r.json().catch(()=>({registered:false})) : {registered:false};
+const btn = document.getElementById(‘passkey-login-btn’);
+const div = document.getElementById(‘passkey-divider’);
+if (supported && status.registered) {
+btn.style.display = ‘flex’;
+div.style.display = ‘flex’;
+}
+}
+
+async function passkeyLogin() {
+const btn = document.getElementById(‘passkey-login-btn’);
+btn.classList.add(‘loading’);
+try {
+// Get challenge
+const cr = await fetch(WORKER + ‘/passkey/challenge’, {method:‘POST’});
+const { challenge } = await cr.json();
+
+```
+// Get credential
+const assertion = await navigator.credentials.get({
+  publicKey: {
+    challenge: b64urlToBuf(challenge),
+    rpId: 'admin.intelqong.link',
+    userVerification: 'required',
+    timeout: 60000,
+  }
+});
+
+const resp = assertion.response;
+const result = await fetch(WORKER + '/passkey/authenticate', {
+  method: 'POST',
+  headers: {'Content-Type':'application/json'},
+  body: JSON.stringify({
+    credentialId: bufToB64url(assertion.rawId),
+    clientDataJSON: bufToB64url(resp.clientDataJSON),
+    authenticatorData: bufToB64url(resp.authenticatorData),
+    signature: bufToB64url(resp.signature),
+  })
+});
+const data = await result.json();
+if (!data.ok) throw new Error(data.error);
+
+_pinHash = data.pinHash;
+btn.classList.remove('loading');
+await unlockApp();
+```
+
+} catch(e) {
+btn.classList.remove(‘loading’);
+if (e.name === ‘NotAllowedError’) showToast(‘Passkey cancelled’);
+else showToast(‘Passkey failed - try password’);
+}
+}
+
+async function registerPasskey() {
+if (!_pinHash) { showToast(‘Sign in with PIN first’); return; }
+const supported = await checkPasskeySupport();
+if (!supported) { showToast(‘Passkeys not supported on this device’); return; }
+
+try {
+const cr = await fetch(WORKER + ‘/passkey/challenge’, {method:‘POST’});
+const { challenge } = await cr.json();
+
+```
+const cred = await navigator.credentials.create({
+  publicKey: {
+    challenge: b64urlToBuf(challenge),
+    rp: { id: 'admin.intelqong.link', name: 'Intelqong Admin' },
+    user: { id: new TextEncoder().encode('intelqong-admin'), name: 'admin', displayName: 'Admin' },
+    pubKeyCredParams: [
+      { type:'public-key', alg:-7  },  // ES256
+      { type:'public-key', alg:-257 }, // RS256
+    ],
+    authenticatorSelection: {
+      authenticatorAttachment: 'platform',
+      userVerification: 'required',
+      residentKey: 'required',
+    },
+    timeout: 60000,
+    attestation: 'none',
+  }
+});
+
+const resp = cred.response;
+const r = await fetch(WORKER + '/passkey/register', {
+  method: 'POST',
+  headers: {'Content-Type':'application/json', 'X-Pin-Hash':_pinHash},
+  body: JSON.stringify({
+    credentialId: bufToB64url(cred.rawId),
+    publicKey: bufToB64url(resp.getPublicKey ? resp.getPublicKey() : resp.attestationObject),
+    clientDataJSON: bufToB64url(resp.clientDataJSON),
+    attestationObject: bufToB64url(resp.attestationObject),
+  })
+});
+const data = await r.json();
+if (!data.ok) throw new Error(data.error);
+
+localStorage.setItem('iq_passkey', '1');
+showToast('Passkey registered! Use Face ID / fingerprint next time');
+updatePasskeySettingsRow(true);
+```
+
+} catch(e) {
+if (e.name === ‘NotAllowedError’) showToast(‘Passkey setup cancelled’);
+else showToast(’Passkey setup failed: ’ + e.message);
+}
+}
+
+async function removePasskey() {
+if (!_pinHash) return;
+const r = await fetch(WORKER + ‘/passkey’, { method:‘DELETE’, headers:{‘X-Pin-Hash’:_pinHash} });
+const data = await r.json();
+if (data.ok) {
+localStorage.removeItem(‘iq_passkey’);
+showToast(‘Passkey removed’);
+updatePasskeySettingsRow(false);
+}
+}
+
+function updatePasskeySettingsRow(registered) {
+const txt = document.getElementById(‘passkey-status-txt’);
+const btn = document.getElementById(‘passkey-settings-btn’);
+if (!txt||!btn) return;
+if (registered) {
+txt.textContent = ‘Active - Face ID / fingerprint login enabled’;
+btn.textContent = ‘Remove’;
+} else {
+txt.textContent = ‘Not set up’;
+btn.textContent = ‘Setup’;
+}
+}
+
+async function passkeySettingsAction() {
+const btn = document.getElementById(‘passkey-settings-btn’);
+if (btn.textContent.trim() === ‘Remove’) {
+if (confirm(‘Remove passkey? You will need to use your PIN to sign in.’)) removePasskey();
+} else {
+registerPasskey();
+}
+}
+
+async function checkPasskeyAfterLogin() {
+const supported = await checkPasskeySupport();
+if (!supported) return;
+const r = await fetch(WORKER + ‘/passkey/status’).catch(()=>null);
+const status = r ? await r.json().catch(()=>({registered:false})) : {registered:false};
+updatePasskeySettingsRow(status.registered);
+// Registration only via Settings
+}
+
+(function(){
+const lu=parseInt(localStorage.getItem(LOCKOUT_KEY)||‘0’); if(Date.now()>=lu){ localStorage.removeItem(LOCKOUT_KEY); localStorage.removeItem(ATTEMPT_KEY); }
+showStep(‘step-email’);
+initPasskeyButton();
+})();
 
 // Dashboard
 let links=[];
