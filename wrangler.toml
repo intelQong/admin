@@ -1,0 +1,7 @@
+name = "summer-shadow-2ad9"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+[[kv_namespaces]]
+binding = "SHARES"
+id = "b3c470451fc9467792783effe0b743ce"
